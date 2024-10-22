@@ -1,0 +1,7 @@
+<resources>
+    <string-array name="history_watering">
+        <item>Item 1</item>
+        <item>Item 2</item>
+        <item>Item 3</item>
+    </string-array>
+</resources>
