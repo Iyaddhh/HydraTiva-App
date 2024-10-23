@@ -125,7 +125,8 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/> <!-- Use your string-array for months -->
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:entries="@array/history_watering" /> <!-- Use your string-array for months -->
 
                 <!-- RecyclerView to display the history list -->
                 <androidx.recyclerview.widget.RecyclerView
