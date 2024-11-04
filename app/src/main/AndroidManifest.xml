@@ -13,17 +13,13 @@
         android:theme="@style/Theme.HydraTiva"
         tools:targetApi="31">
         <activity
-<<<<<<< Updated upstream
             android:name=".notifikasi"
-=======
+            android:exported="false"/>
+        <activity
             android:name=".getstarted"
->>>>>>> Stashed changes
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".history"
-            android:exported="false" />
-        <activity
-            android:name=".test"
             android:exported="false" />
         <activity
             android:name=".Setting2"
