@@ -118,7 +118,6 @@
                         android:text="Bogor, Soka 6"
                         android:textSize="16sp"
                         android:textColor="@color/primary" />
-
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -166,7 +165,7 @@
                     app:layout_constraintBaseline_toBaselineOf="@id/market"
                     android:layout_marginEnd="30dp" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
+            
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
