@@ -41,7 +41,7 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         // Inisialisasi loginService
-        loginService = RetrofitClient.getRetrofitInstance().create(LoginService.class);
+        loginService = RetrofitClient.getRetrofitInstance(getApplicationContext()).create(LoginService.class);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
