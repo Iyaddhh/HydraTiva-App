@@ -3,6 +3,9 @@ package com.example.hydrativa.retrofit;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -20,14 +23,19 @@ public class RetrofitClient {
         if (retrofit == null) {
             synchronized (RetrofitClient.class) {
                 if (retrofit == null) {
+                    // Create a Gson instance with lenient parsing
+                    Gson gson = new GsonBuilder()
+                            .setLenient() // Enable lenient mode
+                            .create();
+
                     OkHttpClient client = new OkHttpClient.Builder()
-                            .addInterceptor(new AuthInterceptor(context))  // Pass context here
+                            .addInterceptor(new AuthInterceptor(context)) // Pass context here
                             .build();
 
                     retrofit = new Retrofit.Builder()
                             .baseUrl(BASE_URL)
                             .client(client)
-                            .addConverterFactory(GsonConverterFactory.create())
+                            .addConverterFactory(GsonConverterFactory.create(gson)) // Use the custom Gson instance
                             .build();
                 }
             }
