@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">HydraTiva</string>
     <string-array name="history_watering">
         <item>Item 1</item>
         <item>Item 2</item>
