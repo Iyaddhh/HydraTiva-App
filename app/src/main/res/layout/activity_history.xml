@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".history">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -117,16 +117,6 @@
                 tools:context=".MainActivity">
 
                 <!-- Spinner for month selection -->
-                <Spinner
-                    android:id="@+id/spinnerMonth"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:entries="@array/history_watering" /> <!-- Use your string-array for months -->
 
                 <!-- RecyclerView to display the history list -->
                 <androidx.recyclerview.widget.RecyclerView
@@ -134,7 +124,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginTop="10dp"
-                    app:layout_constraintTop_toBottomOf="@id/spinnerMonth"
                     app:layout_constraintBottom_toTopOf="@id/bottomView"
                     tools:listitem="@layout/item_history_card" />
 
