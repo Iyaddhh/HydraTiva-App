@@ -16,13 +16,10 @@
             android:name=".notifikasi"
             android:exported="false" />
         <activity
+            android:name=".getstarted"
+            android:exported="false" />
+        <activity
             android:name=".history"
-            android:exported="false" />
-        <activity
-            android:name=".test"
-            android:exported="false" />
-        <activity
-            android:name=".Setting2"
             android:exported="false" />
         <activity
             android:name=".Profile"
