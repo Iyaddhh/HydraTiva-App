@@ -83,10 +83,15 @@ public class Login extends AppCompatActivity {
                     // Login berhasil
                     LoginResponse loginResponse = response.body();
 
+                    // Get the token and split it to get the actual token part
+                    String fullToken = loginResponse.getToken(); // Assuming this returns the string with |
+                    String[] tokenParts = fullToken.split("\\|");
+                    String actualToken = tokenParts.length > 1 ? tokenParts[1] : fullToken; // Get the token part after |
+
                     // Simpan token di SharedPreferences
                     SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("auth_token", loginResponse.getToken());
+                    editor.putString("auth_token", actualToken); // Save only the actual token
                     editor.apply();
 
                     Toast.makeText(Login.this, "Login Successful!", Toast.LENGTH_SHORT).show();
@@ -113,4 +118,5 @@ public class Login extends AppCompatActivity {
             }
         });
     }
+
 }
