@@ -181,12 +181,12 @@
                         android:id="@+id/titleText2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Periksa Sapi Kamu Sekarang..."
-                        android:textSize="16sp"
-                        android:textColor="@color/black"
                         android:fontFamily="@font/poppins_bold"
+                        android:text="Periksa Sapi Kamu Sekarang..."
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toStartOf="@+id/timeText2"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <!-- Teks Deskripsi -->
@@ -195,15 +195,15 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Jangan lupa untuk tetap mengawasi dan memeriksa sapi-sapi kamu dengan Mas-Tion..."
-                        android:textSize="14sp"
-                        android:textColor="@color/grey"
-                        android:maxLines="2"
                         android:ellipsize="end"
                         android:fontFamily="@font/poppins"
-                        app:layout_constraintTop_toBottomOf="@id/titleText2"
+                        android:maxLines="2"
+                        android:text="Jangan lupa untuk tetap mengawasi dan memeriksa sapi-sapi kamu dengan Mas-Tion..."
+                        android:textColor="@color/grey"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="@+id/titleText2"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@id/titleText2" />
 
                     <!-- Waktu -->
                     <TextView
@@ -211,6 +211,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="07.30"
+                        android:layout_marginEnd="40dp"
                         android:textSize="12sp"
                         android:textColor="@color/grey"
                         android:fontFamily="@font/poppins"
@@ -222,7 +223,7 @@
                         android:id="@+id/deleteIcon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_delete"
+                        android:src="@drawable/baseline_delete_24"
                         android:tint="@color/red"
                         app:layout_constraintTop_toBottomOf="@id/timeText2"
                         app:layout_constraintEnd_toEndOf="parent"
