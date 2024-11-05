@@ -90,7 +90,7 @@ public class tambah_kebun extends AppCompatActivity {
         if (imageUri != null) {
             File file = new File(getRealPathFromURI(imageUri));
             RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
-            imagePart = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
+            imagePart = MultipartBody.Part.createFormData("gambar", file.getName(), requestFile); // Pastikan nama parameternya "gambar"
         }
 
         // Panggil API
@@ -104,7 +104,7 @@ public class tambah_kebun extends AppCompatActivity {
                     Toast.makeText(tambah_kebun.this, "Kebun berhasil ditambah", Toast.LENGTH_LONG).show();
                     clearInputFields();
                 } else {
-                    Toast.makeText(tambah_kebun.this, "Gagal menambah kebun" + response.code(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(tambah_kebun.this, "Gagal menambah kebun: " + response.message(), Toast.LENGTH_LONG).show(); // Memperbaiki pesan error
                 }
             }
 
@@ -137,6 +137,4 @@ public class tambah_kebun extends AppCompatActivity {
         uploadedImage.setImageResource(R.drawable.tambah_gambar); // Reset gambar ke default
         imageUri = null;
     }
-
-
 }

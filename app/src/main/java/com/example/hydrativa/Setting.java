@@ -1,7 +1,9 @@
 package com.example.hydrativa;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +45,10 @@ public class Setting extends AppCompatActivity {
             }
             return false;
         });
+        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String name = sharedPreferences.getString("name", "User");
 
+        TextView nameText = findViewById(R.id.usernameText);
+        nameText.setText(name);
     }
 }
