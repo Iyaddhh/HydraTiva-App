@@ -2,6 +2,8 @@ package com.example.hydrativa;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +14,8 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class Watering extends AppCompatActivity {
+
+    Button addButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,18 +29,18 @@ public class Watering extends AppCompatActivity {
         });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomView);
-        bottomNavigationView.setSelectedItemId(R.id.nav_watering);
+        bottomNavigationView.setSelectedItemId(R.id.nav_home); // Optional, to set a default selection
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_home) {
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                return true;
+            } else if (item.getItemId() == R.id.nav_watering) {
+                startActivity(new Intent(Watering.this, Watering.class));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
                 return true;
-            } else if (item.getItemId() == R.id.nav_watering) {
-                return true;
             } else if (item.getItemId() == R.id.nav_settings) {
-                startActivity(new Intent(getApplicationContext(), Setting.class));
+                startActivity(new Intent(Watering.this, Setting.class));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
                 return true;
@@ -44,5 +48,13 @@ public class Watering extends AppCompatActivity {
             return false;
         });
 
+        addButton = findViewById(R.id.addKebunButton);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent add = new Intent(Watering.this, tambah_kebun.class);
+                startActivity(add);
+            }
+        });
     }
 }

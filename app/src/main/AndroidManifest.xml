@@ -17,6 +17,9 @@
             android:name=".notifikasi"
             android:exported="false" />
         <activity
+            android:name=".tambah_kebun"
+            android:exported="false" />
+        <activity
             android:name=".getstarted"
             android:exported="false" />
         <activity
