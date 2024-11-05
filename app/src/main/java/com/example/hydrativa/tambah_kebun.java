@@ -104,7 +104,7 @@ public class tambah_kebun extends AppCompatActivity {
                     Toast.makeText(tambah_kebun.this, "Kebun berhasil ditambah", Toast.LENGTH_LONG).show();
                     clearInputFields();
                 } else {
-                    Toast.makeText(tambah_kebun.this, "Gagal menambah kebun", Toast.LENGTH_LONG).show();
+                    Toast.makeText(tambah_kebun.this, "Gagal menambah kebun" + response.code(), Toast.LENGTH_LONG).show();
                 }
             }
 
