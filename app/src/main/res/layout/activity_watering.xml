@@ -44,7 +44,6 @@
                             android:layout_marginTop="4dp"
                             android:src="@drawable/daun"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.924"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -94,9 +93,8 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp">
 
-                <!-- TextView for Marketplace -->
                 <TextView
-                    android:id="@+id/market"
+                    android:id="@+id/pilihkebun"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Pilih Kebun"
@@ -108,10 +106,11 @@
                     android:layout_marginStart="30dp" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!-- RecyclerView for displaying Kebun list -->
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/recyclerViewKebun"/>
+                android:layout_height="wrap_content" />
 
             <!-- Add Kebun Button -->
             <Button
