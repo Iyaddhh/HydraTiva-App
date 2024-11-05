@@ -34,8 +34,8 @@ public class KebunAdapter extends RecyclerView.Adapter<KebunAdapter.KebunViewHol
     @Override
     public void onBindViewHolder(@NonNull KebunViewHolder holder, int position) {
         Kebun kebun = kebunList.get(position);
-        holder.title.setText(kebun.getNamaKebun());
-        holder.title.setText(kebun.getLokasiKebun());
+        holder.title.setText(kebun.getNama_kebun());
+        holder.location.setText(kebun.getLokasi_kebun());
     }
 
     @Override
