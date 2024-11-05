@@ -13,6 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.zerobranch.layout.SwipeLayout;
 
 public class Watering extends AppCompatActivity {
 
@@ -23,12 +24,15 @@ public class Watering extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_watering);
+
+        // Setup for Edge-to-Edge display
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
+        // Setup Button
         addButton = findViewById(R.id.addKebunButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,12 +42,17 @@ public class Watering extends AppCompatActivity {
             }
         });
 
-        androidx.cardview.widget.CardView kebunCardView = findViewById(R.id.kebunCardview1);
-        kebunCardView.setOnClickListener(view -> {
-            Intent detail = new Intent(Watering.this, detail_watering.class);
-            startActivity(detail);
+        // Menambahkan OnClickListener ke ConstraintLayout di dalam SwipeLayout
+        View contentLayout = findViewById(R.id.drag_item);
+        contentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Watering.this, detail_watering.class); // Ganti dengan Activity tujuan Anda
+                startActivity(intent);
+            }
         });
 
+        // Bottom Navigation Setup
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomView);
         bottomNavigationView.setSelectedItemId(R.id.nav_watering);
 
