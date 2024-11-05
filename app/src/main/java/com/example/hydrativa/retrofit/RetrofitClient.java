@@ -13,6 +13,8 @@ import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import com.example.hydrativa.models.LoginResponse;
+
 import java.io.IOException;
 
 public class RetrofitClient {
@@ -23,19 +25,19 @@ public class RetrofitClient {
         if (retrofit == null) {
             synchronized (RetrofitClient.class) {
                 if (retrofit == null) {
-                    // Create a Gson instance with lenient parsing
+                    // Create a simple Gson instance
                     Gson gson = new GsonBuilder()
-                            .setLenient() // Enable lenient mode
+                            .setLenient()
                             .create();
 
                     OkHttpClient client = new OkHttpClient.Builder()
-                            .addInterceptor(new AuthInterceptor(context)) // Pass context here
+                            .addInterceptor(new AuthInterceptor(context))
                             .build();
 
                     retrofit = new Retrofit.Builder()
                             .baseUrl(BASE_URL)
                             .client(client)
-                            .addConverterFactory(GsonConverterFactory.create(gson)) // Use the custom Gson instance
+                            .addConverterFactory(GsonConverterFactory.create(gson))
                             .build();
                 }
             }
@@ -46,15 +48,12 @@ public class RetrofitClient {
     private static class AuthInterceptor implements Interceptor {
         private final SharedPreferences sharedPreferences;
 
-        // Constructor that accepts a context
         public AuthInterceptor(Context context) {
-            // Initialize SharedPreferences here
             this.sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
         }
 
         @Override
         public Response intercept(Chain chain) throws IOException {
-            // Get the token from SharedPreferences
             String token = sharedPreferences.getString("auth_token", null);
 
             Request originalRequest = chain.request();

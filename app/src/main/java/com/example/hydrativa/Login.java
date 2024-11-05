@@ -80,35 +80,28 @@ public class Login extends AppCompatActivity {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    // Login berhasil
+                    // Login succeeded, retrieve the token from LoginResponse
                     LoginResponse loginResponse = response.body();
+                    String token = loginResponse.getToken();
 
-                    // Get the token and split it to get the actual token part
-                    String fullToken = loginResponse.getToken(); // Assuming this returns the string with |
-                    String[] tokenParts = fullToken.split("\\|");
-                    String actualToken = tokenParts.length > 1 ? tokenParts[1] : fullToken; // Get the token part after |
-
-                    // Simpan token di SharedPreferences
+                    // Save token in SharedPreferences
                     SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("auth_token", actualToken); // Save only the actual token
+                    editor.putString("auth_token", token);
+                    editor.putString("username", loginResponse.getUser().getUsername());
+                    editor.putString("name", loginResponse.getUser().getName());
+                    editor.putString("email", loginResponse.getUser().getEmail());
                     editor.apply();
 
                     Toast.makeText(Login.this, "Login Successful!", Toast.LENGTH_SHORT).show();
 
-                    // Pergi ke Dashboard
+                    // Navigate to the Dashboard
                     Intent intent = new Intent(Login.this, Dashboard.class);
                     startActivity(intent);
                     finish();
                 } else {
-                    // Tangani respons error
-                    try {
-                        JSONObject errorBody = new JSONObject(response.errorBody().string());
-                        String errorMessage = errorBody.getString("message");
-                        Toast.makeText(Login.this, "Login Failed: " + errorMessage, Toast.LENGTH_SHORT).show();
-                    } catch (Exception e) {
-                        Toast.makeText(Login.this, "Login Failed", Toast.LENGTH_SHORT).show();
-                    }
+                    // Handle unsuccessful response
+                    Toast.makeText(Login.this, "Login Failed", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -118,5 +111,4 @@ public class Login extends AppCompatActivity {
             }
         });
     }
-
 }
