@@ -108,93 +108,10 @@
                     android:layout_marginStart="30dp" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- Kebun 1 -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/kebunCardview1"
+            <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                app:cardElevation="4dp">
-                <com.zerobranch.layout.SwipeLayout
-                    android:id="@+id/swipe_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:draggedItem="@+id/drag_item"
-                    app:rightItem="@+id/right_view"
-                    app:swipeDirection="left">
-                    <!-- Right View for Delete Action -->
-                    <ImageView
-                        android:id="@+id/right_view"
-                        android:layout_width="50dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="end"
-                        android:background="@color/red"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:src="@drawable/baseline_delete_24"/>
-                    <!-- Content of CardView -->
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/drag_item"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/white"
-                        android:padding="16dp">
-                        <!-- Image or Icon -->
-                        <FrameLayout
-                            android:id="@+id/frameLayout"
-                            android:layout_width="70dp"
-                            android:layout_height="60dp"
-                            android:background="@drawable/rounded_watering"
-                            android:clipToOutline="true">
-                            <ImageView
-                                android:id="@+id/kebunImage1"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:scaleType="centerCrop"
-                                android:src="@drawable/stevia"/>
-                        </FrameLayout>
-                        <!-- Text Content -->
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical"
-                            android:layout_marginStart="15dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/arrowRight1"
-                            app:layout_constraintStart_toEndOf="@+id/frameLayout"
-                            app:layout_constraintTop_toTopOf="parent">
-                            <TextView
-                                android:id="@+id/kebunTitle1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/poppins_bold"
-                                android:text="Kebun 1"
-                                android:textColor="@color/primary"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
-                            <TextView
-                                android:id="@+id/kebunLocation1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Bogor, Soka 6"
-                                android:textColor="@color/primary"
-                                android:textSize="14sp" />
-                        </LinearLayout>
-                        <ImageView
-                            android:id="@+id/arrowRight1"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/arrow_right"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </com.zerobranch.layout.SwipeLayout>
-            </androidx.cardview.widget.CardView>
-
+                android:id="@+id/recyclerViewKebun"/>
 
             <!-- Add Kebun Button -->
             <Button

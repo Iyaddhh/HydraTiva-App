@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.content.CursorLoader;
 
 import com.example.hydrativa.retrofit.KebunService;
 import com.example.hydrativa.retrofit.RetrofitClient;
@@ -68,6 +69,16 @@ public class tambah_kebun extends AppCompatActivity {
         }
     }
 
+    private String getRealPathFromURI(Uri contentUri) {
+        String[] proj = { MediaStore.Images.Media.DATA };
+        CursorLoader loader = new CursorLoader(getApplicationContext(), contentUri, proj, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
+
+
     private void saveData() {
         String nama = namaKebun.getText().toString().trim();
         String lokasi = lokasiKebun.getText().toString().trim();
@@ -115,26 +126,12 @@ public class tambah_kebun extends AppCompatActivity {
         });
     }
 
-    // Fungsi untuk mendapatkan path file dari URI
-    private String getRealPathFromURI(Uri uri) {
-        String path = null;
-        String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(uri, proj, null, null, null);
-        if (cursor != null) {
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            path = cursor.getString(column_index);
-            cursor.close();
-        }
-        return path;
+    private void clearInputFields() {
+        namaKebun.setText(""); // Mengosongkan field nama kebun
+        lokasiKebun.setText(""); // Mengosongkan field lokasi kebun
+        luasLahan.setText(""); // Mengosongkan field luas lahan
+        idAlat.setText(""); // Mengosongkan field ID alat
+        uploadedImage.setImageURI(null); // Menghapus gambar yang ditampilkan
     }
 
-    private void clearInputFields() {
-        namaKebun.setText("");
-        lokasiKebun.setText("");
-        luasLahan.setText("");
-        idAlat.setText("");
-        uploadedImage.setImageResource(R.drawable.tambah_gambar); // Reset gambar ke default
-        imageUri = null;
-    }
 }
