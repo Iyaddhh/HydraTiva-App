@@ -13,11 +13,16 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.hydrativa.retrofit.LoginService;
+import com.example.hydrativa.retrofit.RegisterService;
+import com.example.hydrativa.retrofit.RetrofitClient;
+
 public class MainActivity extends AppCompatActivity {
 
     EditText userEditText, nameEditText, passEditText, EmailAdd, NoTelepon;
     Button registerButton;
     TextView linkLogin;
+    private RegisterService registerService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,19 +35,26 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        userEditText = findViewById(R.id.userlayout);
-        nameEditText = findViewById(R.id.nama);
-        passEditText = findViewById(R.id.password);
-        EmailAdd = findViewById(R.id.email);
-        NoTelepon = findViewById(R.id.telepon);
+        registerService = RetrofitClient.getRetrofitInstance(getApplicationContext()).create(registerService.class);
+
+
+        EditText register_user = findViewById(R.id.userlayout);
+        EditText register_name = findViewById(R.id.nama);
+        EditText pass_user = findViewById(R.id.password);
+        EditText register_email = findViewById(R.id.email);
+        EditText NoTelepon = findViewById(R.id.telepon);
 
         registerButton = findViewById(R.id.registerButton);
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, Login.class);
-                startActivity(i);
+                String username = register_user.getText().toString().trim();
+                String email = register_email.getText().toString().trim();
+                String password = pass_user.getText().toString().trim();
+                String nama = register_name.getText().toString().trim();
+                String telp = NoTelepon.getText().toString().trim();
+                registerUser(username, email, password, nama, telp);
             }
         });
 
