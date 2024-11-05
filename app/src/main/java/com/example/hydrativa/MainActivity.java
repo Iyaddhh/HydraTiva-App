@@ -86,6 +86,10 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(MainActivity.this, "Registration failed!", Toast.LENGTH_SHORT).show();
                 }
+                // Navigate to the Dashboard
+                Intent intent = new Intent(MainActivity.this, Dashboard.class);
+                startActivity(intent);
+                finish();
             }
 
             @Override
