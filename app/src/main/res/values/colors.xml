@@ -5,4 +5,7 @@
     <color name="grey">#868686</color>
     <color name="primary">#1A5319</color>
     <color name="red">#D30101</color>
+    <color name="startcolor">#164D1B</color>
+    <color name="endcolor">#508D4E</color>
+    <color name="palewhite">#FAFBFAFA</color>
 </resources>

@@ -13,6 +13,12 @@
         android:theme="@style/Theme.HydraTiva"
         tools:targetApi="31">
         <activity
+            android:name=".detail_watering"
+            android:exported="false" />
+        <activity
+            android:name=".tambah_kebun"
+            android:exported="false" />
+        <activity
             android:name=".notifikasi"
             android:exported="false" />
         <activity
