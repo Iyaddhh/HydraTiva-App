@@ -17,7 +17,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.hydrativa.models.LoginRequest;
 import com.example.hydrativa.models.LoginResponse;
+import com.example.hydrativa.models.RegisterRequest;
 import com.example.hydrativa.retrofit.LoginService;
+import com.example.hydrativa.retrofit.RegisterService;
 import com.example.hydrativa.retrofit.RetrofitClient;
 
 import retrofit2.Call;
@@ -33,6 +35,7 @@ public class Login extends AppCompatActivity {
     EditText login_user, pass_user;
     Button btn_login;
     TextView linkRegister;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
