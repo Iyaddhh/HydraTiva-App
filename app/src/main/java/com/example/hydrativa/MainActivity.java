@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,13 +14,18 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.hydrativa.retrofit.LoginService;
+import com.example.hydrativa.models.RegisterRequest;
+import com.example.hydrativa.models.RegisterResponse;
 import com.example.hydrativa.retrofit.RegisterService;
 import com.example.hydrativa.retrofit.RetrofitClient;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity {
 
-    EditText userEditText, nameEditText, passEditText, EmailAdd, NoTelepon;
+    EditText register_user, register_name, pass_user, register_email, NoTelepon;
     Button registerButton;
     TextView linkLogin;
     private RegisterService registerService;
@@ -35,14 +41,13 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        registerService = RetrofitClient.getRetrofitInstance(getApplicationContext()).create(registerService.class);
+        registerService = RetrofitClient.getRetrofitInstance(getApplicationContext()).create(RegisterService.class);
 
-
-        EditText register_user = findViewById(R.id.userlayout);
-        EditText register_name = findViewById(R.id.nama);
-        EditText pass_user = findViewById(R.id.password);
-        EditText register_email = findViewById(R.id.email);
-        EditText NoTelepon = findViewById(R.id.telepon);
+        register_user = findViewById(R.id.userlayout);
+        register_name = findViewById(R.id.nama);
+        pass_user = findViewById(R.id.password);
+        register_email = findViewById(R.id.email);
+        NoTelepon = findViewById(R.id.telepon);
 
         registerButton = findViewById(R.id.registerButton);
 
@@ -59,12 +64,33 @@ public class MainActivity extends AppCompatActivity {
         });
 
         linkLogin = findViewById(R.id.loginLink);
-
         linkLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, Login.class);
                 startActivity(i);
+            }
+        });
+    }
+
+    private void registerUser(String username, String email, String password, String nama, String telp) {
+        RegisterRequest registerRequest = new RegisterRequest(username, password, email, nama, telp);
+
+        Call<RegisterResponse> call = registerService.registerUser(registerRequest);
+        call.enqueue(new Callback<RegisterResponse>() {
+            @Override
+            public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Toast.makeText(MainActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
+                    // Navigate to another activity if needed
+                } else {
+                    Toast.makeText(MainActivity.this, "Registration failed!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RegisterResponse> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
