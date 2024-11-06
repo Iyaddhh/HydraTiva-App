@@ -13,15 +13,9 @@ import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import com.example.hydrativa.models.LoginResponseDeserializer;
 import com.example.hydrativa.models.LoginResponse;
 
 import java.io.IOException;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
     private static Retrofit retrofit;
@@ -31,9 +25,8 @@ public class RetrofitClient {
         if (retrofit == null) {
             synchronized (RetrofitClient.class) {
                 if (retrofit == null) {
-                    // Configure Gson with the custom deserializer
+                    // Create a simple Gson instance
                     Gson gson = new GsonBuilder()
-                            .registerTypeAdapter(LoginResponse.class, new LoginResponseDeserializer())
                             .setLenient()
                             .create();
 
@@ -75,4 +68,3 @@ public class RetrofitClient {
         }
     }
 }
-

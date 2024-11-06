@@ -1,7 +1,9 @@
 package com.example.hydrativa;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,19 +32,23 @@ public class Setting extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_home) {
                 startActivity(new Intent(getApplicationContext(), Dashboard.class));
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
+                overridePendingTransition(0, 0);
                 return true;
             } else if (item.getItemId() == R.id.nav_watering) {
                 startActivity(new Intent(getApplicationContext(), Watering.class));
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
+                overridePendingTransition(0, 0);
                 return true;
             } else if (item.getItemId() == R.id.nav_settings) {
-                return true; // Do nothing, already on this activity
+                return true;
             }
             return false;
         });
+        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String name = sharedPreferences.getString("name", "User");
 
+        TextView nameText = findViewById(R.id.usernameText);
+        nameText.setText(name);
     }
 }

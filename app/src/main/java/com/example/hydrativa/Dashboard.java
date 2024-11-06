@@ -1,6 +1,8 @@
 package com.example.hydrativa;
 
+import android.content.SharedPreferences;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -52,6 +55,39 @@ public class Dashboard extends AppCompatActivity {
             return insets;
         });
 
+        androidx.cardview.widget.CardView gridKebun1 = findViewById(R.id.grid1);
+        androidx.cardview.widget.CardView gridKebun2 = findViewById(R.id.grid2);
+        androidx.cardview.widget.CardView gridKebun3 = findViewById(R.id.grid3);
+        androidx.cardview.widget.CardView gridKebun4 = findViewById(R.id.grid4);
+
+        gridKebun1.setOnClickListener(view -> {
+            String url = "https://www.youtube.com/";
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(url));
+            startActivity(intent);
+        });
+
+        gridKebun2.setOnClickListener(view -> {
+            String url = "https://www.youtube.com/";
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(url));
+            startActivity(intent);
+        });
+
+        gridKebun3.setOnClickListener(view -> {
+            String url = "https://www.youtube.com/";
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(url));
+            startActivity(intent);
+        });
+
+        gridKebun4.setOnClickListener(view -> {
+            String url = "https://www.youtube.com/";
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(url));
+            startActivity(intent);
+        });
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomView);
         bottomNavigationView.setSelectedItemId(R.id.nav_home); // Optional, to set a default selection
 
@@ -60,17 +96,23 @@ public class Dashboard extends AppCompatActivity {
                 return true;
             } else if (item.getItemId() == R.id.nav_watering) {
                 startActivity(new Intent(Dashboard.this, Watering.class));
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
+                overridePendingTransition(0, 0);
                 return true;
             } else if (item.getItemId() == R.id.nav_settings) {
                 startActivity(new Intent(Dashboard.this, Setting.class));
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
+                overridePendingTransition(0, 0);
                 return true;
             }
             return false;
         });
+
+        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String name = sharedPreferences.getString("name", "User");
+
+        TextView nameText = findViewById(R.id.nameText);
+        nameText.setText(name);
 
         viewPage = findViewById(R.id.viewpager);
         LinearLayout slideDot = findViewById(R.id.slider);

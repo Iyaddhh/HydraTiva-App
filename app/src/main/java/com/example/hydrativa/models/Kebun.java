@@ -8,8 +8,9 @@ public class Kebun {
     private int moisture;
     private Float pH;
     private String status;
+    private String gambar;
 
-    public Kebun(int kebun_id, String nama_kebun, int luas_lahan, String lokasi_kebun, int moisture, Float pH, String status) {
+    public Kebun(int kebun_id, String nama_kebun, int luas_lahan, String lokasi_kebun, int moisture, Float pH, String status, String kodeAlat) {
         this.kebun_id = kebun_id;
         this.nama_kebun = nama_kebun;
         this.luas_lahan = luas_lahan;
@@ -17,6 +18,7 @@ public class Kebun {
         this.moisture = moisture;
         this.pH = pH;
         this.status = status;
+        this.gambar = gambar;
     }
 
     public int getKebun_id() {
@@ -73,5 +75,13 @@ public class Kebun {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getGambar() {
+        return gambar;
+    }
+
+    public void setGambar(String gambar) {
+        this.gambar = gambar;
     }
 }
