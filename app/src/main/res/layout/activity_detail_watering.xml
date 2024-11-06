@@ -183,7 +183,7 @@
                                 android:textColor="@color/primary" />
 
                             <TextView
-                                android:id="@+id/TanggalPenyiraman"
+                                android:id="@+id/TanggalKebun"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"

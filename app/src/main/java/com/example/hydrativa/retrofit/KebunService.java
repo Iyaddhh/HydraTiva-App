@@ -30,7 +30,7 @@ public interface KebunService {
     Call<List<Kebun>> getKebun();
 
     @GET("kebun/detail/{id}")
-    Call<List<Kebun>> getKebunDetail();
+    Call<Kebun> getKebunDetail(@Path("id") int id);
 
     @DELETE("kebun/{id}")
     Call<Void> deleteKebun(@Path("id") int kebun_id);
