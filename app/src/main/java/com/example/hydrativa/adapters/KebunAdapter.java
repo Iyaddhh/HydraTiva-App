@@ -1,6 +1,7 @@
 package com.example.hydrativa.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.hydrativa.detail_watering;
 import com.example.hydrativa.R;
 import com.example.hydrativa.models.Kebun;
 import com.example.hydrativa.retrofit.KebunService;
@@ -49,6 +51,15 @@ public class KebunAdapter extends RecyclerView.Adapter<KebunAdapter.KebunViewHol
 
         // Menangani klik pada ikon delete
         holder.deleteIcon.setOnClickListener(v -> deleteKebun(kebun.getKebun_id(), position));
+
+        // Menangani klik pada arrowRight1 untuk berpindah ke detail_watering
+        holder.arrowRight1.setOnClickListener(v -> {
+            Intent intent = new Intent(context, detail_watering.class);
+            intent.putExtra("KEBUN_ID", kebun.getKebun_id());
+            intent.putExtra("KEBUN_TITLE", kebun.getNama_kebun());
+            intent.putExtra("KEBUN_LOCATION", kebun.getLokasi_kebun());
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -79,7 +90,7 @@ public class KebunAdapter extends RecyclerView.Adapter<KebunAdapter.KebunViewHol
 
     public static class KebunViewHolder extends RecyclerView.ViewHolder {
         TextView title, location;
-        ImageView deleteIcon;
+        ImageView deleteIcon, arrowRight1;
         SwipeLayout swipeLayout;
 
         public KebunViewHolder(@NonNull View itemView) {
@@ -88,6 +99,7 @@ public class KebunAdapter extends RecyclerView.Adapter<KebunAdapter.KebunViewHol
             location = itemView.findViewById(R.id.kebunLocation1);
             deleteIcon = itemView.findViewById(R.id.right_view);
             swipeLayout = itemView.findViewById(R.id.swipe_layout);
+            arrowRight1 = itemView.findViewById(R.id.arrowRight1); // Tambahkan ini
         }
     }
 }
