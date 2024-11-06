@@ -21,13 +21,16 @@ public interface KebunService {
     Call<Void> tambahKebun(
             @Part("nama_kebun") RequestBody namaKebun,
             @Part("luas_lahan") RequestBody luasLahan,
-            @Part("lokasi_kebun") RequestBody lokasiKebun,
+            @Part("lokasi_kebun")    RequestBody lokasiKebun,
             @Part("kode_alat") RequestBody kodeAlat,
             @Part MultipartBody.Part image
     );
 
     @GET("kebun/list") // Ganti dengan endpoint yang sesuai
-    Call<List<Kebun>> getKebun(); // Mengembalikan daftar objek Kebun
+    Call<List<Kebun>> getKebun();
+
+    @GET("kebun/detail/{id}")
+    Call<List<Kebun>> getKebunDetail();
 
     @DELETE("kebun/{id}")
     Call<Void> deleteKebun(@Path("id") int kebun_id);

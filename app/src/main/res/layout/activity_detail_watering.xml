@@ -183,6 +183,7 @@
                                 android:textColor="@color/primary" />
 
                             <TextView
+                                android:id="@+id/TanggalPenyiraman"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
@@ -205,6 +206,7 @@
                                 android:textColor="@color/primary" />
 
                             <TextView
+                                android:id="@+id/Status"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
@@ -234,6 +236,7 @@
                                 android:textColor="@color/primary" />
 
                             <TextView
+                                android:id="@+id/Moisture"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
@@ -257,6 +260,7 @@
                                 android:textColor="@color/primary" />
 
                             <TextView
+                                android:id="@+id/PH"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
