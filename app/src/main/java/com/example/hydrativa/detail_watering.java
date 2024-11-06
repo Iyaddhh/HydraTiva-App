@@ -69,8 +69,6 @@ public class detail_watering extends AppCompatActivity {
             public void onResponse(Call<Kebun> call, Response<Kebun> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     kebunDetail = response.body();
-
-                    Log.d("WKWK", "bang: " + kebunDetail.getGambar());
                     tvTitle.setText(kebunDetail.getNama_kebun());
                     tvLocation.setText(kebunDetail.getLokasi_kebun());
                     tvMoisture.setText("Moisture: " + kebunDetail.getMoisture());
@@ -85,7 +83,7 @@ public class detail_watering extends AppCompatActivity {
 
 
                 } else {
-                    Toast.makeText(detail_watering.this, "Gagal memuat data alat", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(detail_watering.this, "Gagal memuat data kebun", Toast.LENGTH_SHORT).show();
                 }
             }
 
