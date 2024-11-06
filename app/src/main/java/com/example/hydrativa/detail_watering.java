@@ -47,19 +47,19 @@ public class detail_watering extends AppCompatActivity {
         kebunId = getIntent().getIntExtra("KEBUN_ID", -1);
 
         // Inisialisasi KebunService
-        kebunService = RetrofitClient.getRetrofitInstance().create(KebunService.class);
+        kebunService = RetrofitClient.getRetrofitInstance(this).create(KebunService.class);
 
         // Memanggil API untuk mendapatkan detail alat
         getKebunDetail(kebunId);
     }
 
     private void getKebunDetail(int kebunId) {
-        Call<List<Kebun>> call = kebunService.getKebunDetail();
-        call.enqueue(new Callback<KebunResponse>() {
+        Call<DetailKebunResponse> call = kebunService.getKebunDetail(kebunId);
+        call.enqueue(new Callback<DetailKebunResponse>() {
             @Override
             public void onResponse(Call<DetailKebunResponse> call, Response<DetailKebunResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    DetailKebun kebunDetail = response.body().getKebunDetail();
+                    DetailKebun kebunDetail = response.body().getDetailKebun();
 
                     // Menampilkan data alat di TextView
                     tvMoisture.setText("Moisture: " + kebunDetail.getMoisture());
