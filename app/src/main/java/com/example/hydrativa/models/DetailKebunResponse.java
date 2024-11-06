@@ -1,13 +1,27 @@
 package com.example.hydrativa.models;
 
 public class DetailKebunResponse {
-    private DetailKebun detailKebun;
+    private Kebun kebun;
+    private String status;
 
-    public DetailKebun getDetailKebun() {
-        return detailKebun;
+    public DetailKebunResponse(Kebun kebun, String status) {
+        this.kebun = kebun;
+        this.status = status;
     }
 
-    public void setDetailKebun(DetailKebun detailKebun) {
-        this.detailKebun = detailKebun;
+    public Kebun getKebun() {
+        return kebun;
+    }
+
+    public void setKebun(Kebun kebun) {
+        this.kebun = kebun;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

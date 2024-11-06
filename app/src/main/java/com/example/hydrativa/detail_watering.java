@@ -2,6 +2,7 @@ package com.example.hydrativa;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,7 +13,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.hydrativa.models.DetailKebun;
+
 import com.example.hydrativa.models.DetailKebunResponse;
 import com.example.hydrativa.models.Kebun;
 import com.example.hydrativa.models.KebunResponse;
@@ -20,6 +21,8 @@ import com.example.hydrativa.retrofit.KebunService;
 import com.example.hydrativa.retrofit.RetrofitClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -28,8 +31,9 @@ import retrofit2.Response;
 
 public class detail_watering extends AppCompatActivity {
 
-    private TextView tvMoisture, tvPH, tvStatus, tvTanggalPenyiraman;
+    private TextView tvMoisture, tvPH, tvStatus, tvTanggal, tvTitle, tvLocation;
     private KebunService kebunService;
+    private Kebun kebunDetail;
     private int kebunId;
 
     @Override
@@ -37,43 +41,44 @@ public class detail_watering extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_watering);
 
-        // Inisialisasi TextView
+        kebunService = RetrofitClient.getRetrofitInstance(getApplicationContext()).create(KebunService.class);
+
+        tvTitle = findViewById(R.id.Title);
+        tvLocation = findViewById(R.id.Location);
         tvMoisture = findViewById(R.id.Moisture);
         tvPH = findViewById(R.id.PH);
         tvStatus = findViewById(R.id.Status);
-        tvTanggalPenyiraman = findViewById(R.id.TanggalPenyiraman);
+        tvTanggal = findViewById(R.id.TanggalKebun);
 
-        // Mendapatkan kebunId dari Intent
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE, d MMM yyyy");
+        String currentDate = formatter.format(date);
+
+
         kebunId = getIntent().getIntExtra("KEBUN_ID", -1);
-
-        // Inisialisasi KebunService
-        kebunService = RetrofitClient.getRetrofitInstance(this).create(KebunService.class);
-
-        // Memanggil API untuk mendapatkan detail alat
-        getKebunDetail(kebunId);
-    }
-
-    private void getKebunDetail(int kebunId) {
-        Call<DetailKebunResponse> call = kebunService.getKebunDetail(kebunId);
-        call.enqueue(new Callback<DetailKebunResponse>() {
+        Call<Kebun> call = kebunService.getKebunDetail(kebunId);
+        call.enqueue(new Callback<Kebun>() {
             @Override
-            public void onResponse(Call<DetailKebunResponse> call, Response<DetailKebunResponse> response) {
+            public void onResponse(Call<Kebun> call, Response<Kebun> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    DetailKebun kebunDetail = response.body().getDetailKebun();
+                    kebunDetail = response.body();
 
-                    // Menampilkan data alat di TextView
+                    Log.d("WKWK", "bang: " + response);
+                    tvTitle.setText(kebunDetail.getNama_kebun());
+                    tvLocation.setText(kebunDetail.getLokasi_kebun());
                     tvMoisture.setText("Moisture: " + kebunDetail.getMoisture());
-                    tvPH.setText("pH: " + kebunDetail.getPh());
+                    tvPH.setText(kebunDetail.getpH() + " pH");
                     tvStatus.setText("Status: " + kebunDetail.getStatus());
-                    tvTanggalPenyiraman.setText("Tanggal Penyiraman: " + kebunDetail.getTanggalPenyiraman());
+                    tvTanggal.setText(currentDate);
                 } else {
                     Toast.makeText(detail_watering.this, "Gagal memuat data alat", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<DetailKebunResponse> call, Throwable t) {
-                Toast.makeText(detail_watering.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<Kebun> call, Throwable throwable) {
+                Toast.makeText(detail_watering.this, "Error: " + throwable.toString(), Toast.LENGTH_SHORT).show();
+                Log.d("Error", "Error occurred: " + throwable);
             }
         });
     }

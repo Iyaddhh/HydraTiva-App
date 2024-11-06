@@ -1,6 +1,5 @@
 package com.example.hydrativa.retrofit;
 
-import com.example.hydrativa.models.DetailKebunResponse;
 import com.example.hydrativa.models.Kebun;
 import com.example.hydrativa.models.KebunResponse;
 
@@ -31,7 +30,7 @@ public interface KebunService {
     Call<List<Kebun>> getKebun();
 
     @GET("kebun/detail/{id}")
-    Call<DetailKebunResponse> getKebunDetail(@Path("id") int kebun_id);
+    Call<Kebun> getKebunDetail(@Path("id") int id);
 
     @DELETE("kebun/{id}")
     Call<Void> deleteKebun(@Path("id") int kebun_id);
