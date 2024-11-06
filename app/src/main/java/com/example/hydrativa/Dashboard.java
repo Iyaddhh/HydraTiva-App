@@ -21,11 +21,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 import com.example.hydrativa.adapters.ImageAdapter;
 import com.example.hydrativa.models.ImageItem;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -86,16 +89,14 @@ public class Dashboard extends AppCompatActivity {
             startActivity(intent);
         });
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomView);
-        bottomNavigationView.setSelectedItemId(R.id.nav_home); // Optional, to set a default selection
+        BottomAppBar bottomAppBar = findViewById(R.id.bottomView);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
+
+        bottomNavigationView.setSelectedItemId(R.id.nav_home);
+        FloatingActionButton fab = findViewById(R.id.fab);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_home) {
-                return true;
-            } else if (item.getItemId() == R.id.nav_watering) {
-                startActivity(new Intent(Dashboard.this, Watering.class));
-                finish();
-                overridePendingTransition(0, 0);
                 return true;
             } else if (item.getItemId() == R.id.nav_settings) {
                 startActivity(new Intent(Dashboard.this, Setting.class));
@@ -104,6 +105,11 @@ public class Dashboard extends AppCompatActivity {
                 return true;
             }
             return false;
+        });
+
+        fab.setOnClickListener(view -> {
+            startActivity(new Intent(Dashboard.this, Watering.class));
+            overridePendingTransition(0, 0);
         });
 
         viewPage = findViewById(R.id.viewpager);

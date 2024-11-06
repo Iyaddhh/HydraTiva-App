@@ -11,8 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottomView">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -147,13 +146,17 @@
                             android:layout_width="70dp"
                             android:layout_height="60dp"
                             android:background="@drawable/rounded_watering"
-                            android:clipToOutline="true">
+                            android:clipToOutline="true"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent">
+
                             <ImageView
                                 android:id="@+id/kebunImage1"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:scaleType="centerCrop"
-                                android:src="@drawable/stevia"/>
+                                android:src="@drawable/stevia" />
                         </FrameLayout>
                         <!-- Text Content -->
                         <LinearLayout
@@ -205,24 +208,66 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:backgroundTint="@color/primary"
+                style="@style/GradientButtonStyle"
                 android:fontFamily="@font/poppins"
                 android:textStyle="bold"
                 android:text="+ Tambah Kebun"
                 android:textColor="@android:color/white"
                 app:cornerRadius="8dp" />
-
         </LinearLayout>
     </ScrollView>
 
-    <!-- Bottom Navigation View -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomView"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:itemIconSize="40dp"
-        app:menu="@menu/bottom_nav_menu"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:layout_height="match_parent">
+
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottomView"
+            android:layout_width="match_parent"
+            android:layout_height="95dp"
+            android:layout_gravity="bottom"
+            app:fabAlignmentMode="center"
+            app:fabAnchorMode="cradle"
+            app:fabCradleMargin="0dp"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/watering"
+            app:layout_anchor="@id/bottomView"
+            app:fabCustomSize="90dp"
+            app:maxImageSize="50dp"
+            style="@style/NavBar"
+            android:contentDescription="watering"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="25dp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Penyiraman"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppins"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="8dp"
+            android:paddingTop="20dp"/>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:menu="@menu/bottom_nav_menu"
+            app:itemIconSize="35dp"
+            android:background="@android:color/transparent"
+            android:elevation="8dp"
+            android:layout_gravity="bottom"
+            app:itemIconPadding="0dp"/>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
