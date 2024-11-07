@@ -1,5 +1,6 @@
 package com.example.hydrativa;
 
+import android.content.SharedPreferences;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -106,6 +108,12 @@ public class Dashboard extends AppCompatActivity {
             }
             return false;
         });
+
+        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String name = sharedPreferences.getString("name", "User");
+
+        TextView nameText = findViewById(R.id.nameText);
+        nameText.setText(name);
 
         fab.setOnClickListener(view -> {
             startActivity(new Intent(Dashboard.this, Watering.class));
