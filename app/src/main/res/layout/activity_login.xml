@@ -132,4 +132,20 @@
         app:layout_constraintStart_toEndOf="@id/register"
         app:layout_constraintTop_toTopOf="@id/register"
         android:layout_marginStart="4dp"/>
+
+    <TextView
+        android:id="@+id/lupapassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Forgot Password?"
+        android:textColor="@color/primary"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="54dp"
+        android:fontFamily="@font/poppins"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/loginButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
