@@ -16,6 +16,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 
+import com.bumptech.glide.Glide;
 import com.example.hydrativa.models.DetailKebunResponse;
 import com.example.hydrativa.models.Kebun;
 import com.example.hydrativa.models.KebunResponse;
@@ -35,8 +36,10 @@ public class detail_watering extends AppCompatActivity {
 
     private TextView tvMoisture, tvPH, tvStatus, tvTanggal, tvTitle, tvLocation;
     private KebunService kebunService;
+    private ImageView gambarKebun;
     private Kebun kebunDetail;
     private int kebunId;
+    String imageUrl;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,12 +48,15 @@ public class detail_watering extends AppCompatActivity {
 
         kebunService = RetrofitClient.getRetrofitInstance(getApplicationContext()).create(KebunService.class);
 
+        gambarKebun = findViewById(R.id.kebunImage1);
         tvTitle = findViewById(R.id.Title);
         tvLocation = findViewById(R.id.Location);
         tvMoisture = findViewById(R.id.Moisture);
         tvPH = findViewById(R.id.PH);
         tvStatus = findViewById(R.id.Status);
         tvTanggal = findViewById(R.id.TanggalKebun);
+
+
 
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("EEE, d MMM yyyy");
@@ -64,16 +70,21 @@ public class detail_watering extends AppCompatActivity {
             public void onResponse(Call<Kebun> call, Response<Kebun> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     kebunDetail = response.body();
-
-                    Log.d("WKWK", "bang: " + response);
                     tvTitle.setText(kebunDetail.getNama_kebun());
                     tvLocation.setText(kebunDetail.getLokasi_kebun());
                     tvMoisture.setText("Moisture: " + kebunDetail.getMoisture());
                     tvPH.setText(kebunDetail.getpH() + " pH");
                     tvStatus.setText("Status: " + kebunDetail.getStatus());
                     tvTanggal.setText(currentDate);
+                    imageUrl = "http://10.0.2.2:8000/storage/" + kebunDetail.getGambar();
+                    Glide.with(detail_watering.this)
+                            .load(imageUrl)
+                            .error(R.drawable.tehdia)
+                            .into(gambarKebun);
+
+
                 } else {
-                    Toast.makeText(detail_watering.this, "Gagal memuat data alat", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(detail_watering.this, "Gagal memuat data kebun", Toast.LENGTH_SHORT).show();
                 }
             }
 

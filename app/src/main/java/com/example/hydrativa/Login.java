@@ -15,6 +15,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.hydrativa.models.ForgotRequest;
 import com.example.hydrativa.models.LoginRequest;
 import com.example.hydrativa.models.LoginResponse;
 import com.example.hydrativa.models.RegisterRequest;
@@ -113,5 +114,26 @@ public class Login extends AppCompatActivity {
                 Toast.makeText(Login.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public class ForgotActivity extends AppCompatActivity {
+        private ForgotRequest forgotPasswordManager;
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_login);
+
+            forgotPasswordManager = new ForgotRequest();
+            TextView lupaPasswordTextView = findViewById(R.id.lupapassword);
+
+            lupaPasswordTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String email = "pyrobackupacc@gmail.com"; // Update this to get user email dynamically
+                    forgotPasswordManager.sendResetPasswordLink(Login.this, email);
+                }
+            });
+        }
     }
 }

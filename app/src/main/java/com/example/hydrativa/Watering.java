@@ -65,7 +65,6 @@ public class Watering extends AppCompatActivity {
             public void onResponse(Call<List<Kebun>> call, Response<List<Kebun>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     kebunList = response.body();
-                    Log.d("String", "onResponse: " + kebunList);
                     KebunAdapter kebunAdapter = new KebunAdapter(Watering.this, kebunList, kebunService);
                     recyclerView.setAdapter(kebunAdapter);
                 } else {
@@ -76,7 +75,6 @@ public class Watering extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Kebun>> call, Throwable throwable) {
                 Toast.makeText(Watering.this, "Error: " + throwable.toString(), Toast.LENGTH_SHORT).show();
-                Log.d("Error", "Error occurred: " + throwable);
             }
         });
 

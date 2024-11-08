@@ -16,6 +16,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.hydrativa.models.ForgotRequest;
 import com.example.hydrativa.models.RegisterRequest;
 import com.example.hydrativa.models.RegisterResponse;
 import com.example.hydrativa.retrofit.RegisterService;
@@ -120,3 +121,4 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 }
+
