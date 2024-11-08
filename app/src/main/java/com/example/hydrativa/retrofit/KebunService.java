@@ -21,8 +21,8 @@ public interface KebunService {
     Call<Void> tambahKebun(
             @Part("nama_kebun") RequestBody namaKebun,
             @Part("luas_lahan") RequestBody luasLahan,
-            @Part("lokasi_kebun")    RequestBody lokasiKebun,
-            @Part("kode_alat") RequestBody kodeAlat,
+            @Part("lokasi_kebun") RequestBody lokasiKebun,
+            @Part("alat_id") RequestBody idAlat,
             @Part MultipartBody.Part image
     );
 
@@ -31,6 +31,9 @@ public interface KebunService {
 
     @GET("kebun/detail/{id}")
     Call<Kebun> getKebunDetail(@Path("id") int id);
+
+    @POST("kebun/{id}")
+    Call<Kebun> editKebun(@Path("id") int kebun_id);
 
     @DELETE("kebun/{id}")
     Call<Void> deleteKebun(@Path("id") int kebun_id);

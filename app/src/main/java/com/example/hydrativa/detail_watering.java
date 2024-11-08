@@ -1,8 +1,10 @@
 package com.example.hydrativa;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -80,6 +82,19 @@ public class detail_watering extends AppCompatActivity {
                 Toast.makeText(detail_watering.this, "Error: " + throwable.toString(), Toast.LENGTH_SHORT).show();
                 Log.d("Error", "Error occurred: " + throwable);
             }
+        });
+
+        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String name = sharedPreferences.getString("name", "User");
+
+        TextView nameText = findViewById(R.id.usernameText);
+        nameText.setText(name);
+
+        ImageView arrowRight3 = findViewById(R.id.arrowRight3);
+        arrowRight3.setOnClickListener(v -> {
+            Intent intent = new Intent(detail_watering.this, edit_kebun.class);
+            intent.putExtra("KEBUN_ID", kebunId);  // Pass kebunId if needed in the edit activity
+            startActivity(intent);
         });
     }
 }

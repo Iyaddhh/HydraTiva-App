@@ -94,7 +94,7 @@ public class tambah_kebun extends AppCompatActivity {
         RequestBody namaKebun = RequestBody.create(MediaType.parse("text/plain"), nama);
         RequestBody lokasiKebun = RequestBody.create(MediaType.parse("text/plain"), lokasi);
         RequestBody luasLahan = RequestBody.create(MediaType.parse("text/plain"), luas);
-        RequestBody kodeAlat = RequestBody.create(MediaType.parse("text/plain"), id);
+        RequestBody idAlat = RequestBody.create(MediaType.parse("text/plain"), id);
 
         // Konversi URI gambar ke MultipartBody
         MultipartBody.Part imagePart = null;
@@ -106,7 +106,7 @@ public class tambah_kebun extends AppCompatActivity {
 
         // Panggil API
         KebunService apiService = RetrofitClient.getRetrofitInstance(this).create(KebunService.class);
-        Call<Void> call = apiService.tambahKebun(namaKebun, luasLahan, lokasiKebun, kodeAlat, imagePart);
+        Call<Void> call = apiService.tambahKebun(namaKebun, luasLahan, lokasiKebun, idAlat, imagePart);
 
         call.enqueue(new Callback<Void>() {
             @Override
