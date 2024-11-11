@@ -55,8 +55,8 @@ public class tambah_kebun extends AppCompatActivity {
 
     public void openImagePicker(View view) {
         Intent intent = new Intent();
-        intent.setType("image/*"); // Menentukan tipe file yang dipilih
-        intent.setAction(Intent.ACTION_GET_CONTENT); // Mengambil konten dari galeri
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Pilih Gambar"), PICK_IMAGE_REQUEST);
     }
 
@@ -64,8 +64,8 @@ public class tambah_kebun extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData(); // Mengambil URI gambar yang dipilih
-            uploadedImage.setImageURI(imageUri); // Menampilkan gambar yang dipilih di ImageView
+            imageUri = data.getData();
+            uploadedImage.setImageURI(imageUri);
         }
     }
 
@@ -78,7 +78,6 @@ public class tambah_kebun extends AppCompatActivity {
         return cursor.getString(column_index);
     }
 
-
     private void saveData() {
         String nama = namaKebun.getText().toString().trim();
         String lokasi = lokasiKebun.getText().toString().trim();
@@ -90,13 +89,11 @@ public class tambah_kebun extends AppCompatActivity {
             return;
         }
 
-        // Konversi data ke RequestBody
         RequestBody namaKebun = RequestBody.create(MediaType.parse("text/plain"), nama);
         RequestBody lokasiKebun = RequestBody.create(MediaType.parse("text/plain"), lokasi);
         RequestBody luasLahan = RequestBody.create(MediaType.parse("text/plain"), luas);
-        RequestBody idAlat = RequestBody.create(MediaType.parse("text/plain"), id);
+        RequestBody kodeAlat = RequestBody.create(MediaType.parse("text/plain"), id);
 
-        // Konversi URI gambar ke MultipartBody
         MultipartBody.Part imagePart = null;
         if (imageUri != null) {
             File file = new File(getRealPathFromURI(imageUri));
@@ -104,9 +101,8 @@ public class tambah_kebun extends AppCompatActivity {
             imagePart = MultipartBody.Part.createFormData("gambar", file.getName(), requestFile); // Pastikan nama parameternya "gambar"
         }
 
-        // Panggil API
         KebunService apiService = RetrofitClient.getRetrofitInstance(this).create(KebunService.class);
-        Call<Void> call = apiService.tambahKebun(namaKebun, luasLahan, lokasiKebun, idAlat, imagePart);
+        Call<Void> call = apiService.tambahKebun(namaKebun, luasLahan, lokasiKebun, kodeAlat, imagePart);
 
         call.enqueue(new Callback<Void>() {
             @Override
@@ -127,11 +123,11 @@ public class tambah_kebun extends AppCompatActivity {
     }
 
     private void clearInputFields() {
-        namaKebun.setText(""); // Mengosongkan field nama kebun
-        lokasiKebun.setText(""); // Mengosongkan field lokasi kebun
-        luasLahan.setText(""); // Mengosongkan field luas lahan
-        idAlat.setText(""); // Mengosongkan field ID alat
-        uploadedImage.setImageURI(null); // Menghapus gambar yang ditampilkan
+        namaKebun.setText("");
+        lokasiKebun.setText("");
+        luasLahan.setText("");
+        idAlat.setText("");
+        uploadedImage.setImageURI(null);
     }
 
 }

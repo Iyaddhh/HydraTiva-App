@@ -13,8 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.hydrativa.detail_watering;
 import com.example.hydrativa.R;
+import com.example.hydrativa.detail_watering;
 import com.example.hydrativa.models.Kebun;
 import com.example.hydrativa.retrofit.KebunService;
 import com.zerobranch.layout.SwipeLayout;
@@ -49,8 +49,16 @@ public class KebunAdapter extends RecyclerView.Adapter<KebunAdapter.KebunViewHol
         Kebun kebun = kebunList.get(position);
         holder.title.setText(kebun.getNama_kebun());
         holder.location.setText(kebun.getLokasi_kebun());
+
+        String baseUrl = "http://10.0.2.2:8000/storage/images/kebun/";
+        String imageFileName = kebun.getGambar();
+
+        String imageUrl = imageFileName.contains("http") ? imageFileName : baseUrl + imageFileName;
+
         Glide.with(context)
-                .load("http://10.0.2.2:8000/storage/" + kebun.getGambar())
+                .load(imageUrl)
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.error_image)
                 .into(holder.gambarKebun);
 
         holder.deleteIcon.setOnClickListener(v -> deleteKebun(kebun.getKebun_id(), position));
