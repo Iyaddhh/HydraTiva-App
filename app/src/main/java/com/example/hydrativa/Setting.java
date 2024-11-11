@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -23,7 +24,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Setting extends AppCompatActivity {
-    private Button logoutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +61,7 @@ public class Setting extends AppCompatActivity {
         TextView nameText = findViewById(R.id.usernameText);
         nameText.setText(name);
 
-        logoutButton = findViewById(R.id.logoutButton);
+        Button logoutButton = findViewById(R.id.logoutButton);
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,13 +78,12 @@ public class Setting extends AppCompatActivity {
 
         call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(Setting.this, "Logout successful", Toast.LENGTH_SHORT).show();
-                    // Redirect to the login layout
                     Intent intent = new Intent(Setting.this, Login.class);
                     startActivity(intent);
-                    finish(); // Close LogoutFunction
+                    finish();
                 } else {
                     Toast.makeText(Setting.this, "Logout failed", Toast.LENGTH_SHORT).show();
                 }

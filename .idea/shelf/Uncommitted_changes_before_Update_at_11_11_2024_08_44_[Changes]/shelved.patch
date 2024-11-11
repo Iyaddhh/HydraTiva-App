@@ -1,0 +1,430 @@
+Index: app/src/main/java/com/example/hydrativa/Setting.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.hydrativa;\r\n\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\nimport android.widget.TextView;\r\n\r\nimport androidx.activity.EdgeToEdge;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.core.graphics.Insets;\r\nimport androidx.core.view.ViewCompat;\r\nimport androidx.core.view.WindowInsetsCompat;\r\n\r\nimport com.google.android.material.bottomnavigation.BottomNavigationView;\r\n\r\npublic class Setting extends AppCompatActivity {\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        EdgeToEdge.enable(this);\r\n        setContentView(R.layout.activity_setting);\r\n        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {\r\n            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());\r\n            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);\r\n            return insets;\r\n        });\r\n\r\n        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomView);\r\n        bottomNavigationView.setSelectedItemId(R.id.nav_settings); // Set the default selected item\r\n\r\n        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {\r\n            if (item.getItemId() == R.id.nav_home) {\r\n                startActivity(new Intent(getApplicationContext(), Dashboard.class));\r\n                finish();\r\n                overridePendingTransition(0, 0);\r\n                return true;\r\n            } else if (item.getItemId() == R.id.nav_watering) {\r\n                startActivity(new Intent(getApplicationContext(), Watering.class));\r\n                finish();\r\n                overridePendingTransition(0, 0);\r\n                return true;\r\n            } else if (item.getItemId() == R.id.nav_settings) {\r\n                return true;\r\n            }\r\n            return false;\r\n        });\r\n        SharedPreferences sharedPreferences = getSharedPreferences(\"user_prefs\", MODE_PRIVATE);\r\n        String name = sharedPreferences.getString(\"name\", \"User\");\r\n\r\n        TextView nameText = findViewById(R.id.usernameText);\r\n        nameText.setText(name);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hydrativa/Setting.java b/app/src/main/java/com/example/hydrativa/Setting.java
+--- a/app/src/main/java/com/example/hydrativa/Setting.java	(revision 17951d83ba7b40f0c4b01f320ba3902cdce7183f)
++++ b/app/src/main/java/com/example/hydrativa/Setting.java	(date 1731288813837)
+@@ -3,7 +3,10 @@
+ import android.content.Intent;
+ import android.content.SharedPreferences;
+ import android.os.Bundle;
++import android.view.View;
++import android.widget.Button;
+ import android.widget.TextView;
++import android.widget.Toast;
+ 
+ import androidx.activity.EdgeToEdge;
+ import androidx.appcompat.app.AppCompatActivity;
+@@ -11,8 +14,15 @@
+ import androidx.core.view.ViewCompat;
+ import androidx.core.view.WindowInsetsCompat;
+ 
++
++import com.example.hydrativa.retrofit.LogoutService;
++import com.example.hydrativa.retrofit.RetrofitClient;
+ import com.google.android.material.bottomnavigation.BottomNavigationView;
+ 
++import retrofit2.Call;
++import retrofit2.Callback;
++import retrofit2.Response;
++
+ public class Setting extends AppCompatActivity {
+ 
+     @Override
+@@ -51,4 +61,53 @@
+         TextView nameText = findViewById(R.id.usernameText);
+         nameText.setText(name);
+     }
+-}
+\ No newline at end of file
++
++    public class LogoutFunction extends AppCompatActivity {
++
++        private Button logoutButton;
++
++        @Override
++        protected void onCreate(Bundle savedInstanceState) {
++            super.onCreate(savedInstanceState);
++            setContentView(R.layout.activity_setting);  // Load the layout containing logoutButton
++
++            logoutButton = findViewById(R.id.logoutButton);
++
++            logoutButton.setOnClickListener(new View.OnClickListener() {
++                @Override
++                public void onClick(View v) {
++                    performLogout();
++                }
++            });
++        }
++
++        private void performLogout() {
++            // Pass the current context (LogoutFunction) to the RetrofitClient
++            LogoutService apiService = RetrofitClient.getRetrofitInstance(LogoutFunction.this).create(LogoutService.class);
++            Call<Void> call = apiService.logout();
++
++            call.enqueue(new Callback<Void>() {
++                @Override
++                public void onResponse(Call<Void> call, Response<Void> response) {
++                    if (response.isSuccessful()) {
++                        Toast.makeText(LogoutFunction.this, "Logout successful", Toast.LENGTH_SHORT).show();
++                        // Redirect to the login layout
++                        Intent intent = new Intent(LogoutFunction.this, Login.class);
++                        startActivity(intent);
++                        finish(); // Close LogoutFunction
++                    } else {
++                        Toast.makeText(LogoutFunction.this, "Logout failed", Toast.LENGTH_SHORT).show();
++                    }
++                }
++
++                @Override
++                public void onFailure(Call<Void> call, Throwable t) {
++                    Toast.makeText(LogoutFunction.this, "An error occurred", Toast.LENGTH_SHORT).show();
++                }
++            });
++        }
++    }
++}
++
++
++
+Index: app/src/main/java/com/example/hydrativa/LogoutFunction.java
+===================================================================
+diff --git a/app/src/main/java/com/example/hydrativa/LogoutFunction.java b/app/src/main/java/com/example/hydrativa/LogoutFunction.java
+deleted file mode 100644
+--- a/app/src/main/java/com/example/hydrativa/LogoutFunction.java	(revision 17951d83ba7b40f0c4b01f320ba3902cdce7183f)
++++ /dev/null	(revision 17951d83ba7b40f0c4b01f320ba3902cdce7183f)
+@@ -1,61 +0,0 @@
+-package com.example.hydrativa;
+-
+-import android.content.Intent;
+-import android.os.Bundle;
+-import android.view.View;
+-import android.widget.Button;
+-import android.widget.Toast;
+-import androidx.appcompat.app.AppCompatActivity;
+-
+-import com.example.hydrativa.retrofit.LogoutService;
+-import com.example.hydrativa.retrofit.RetrofitClient;
+-
+-import retrofit2.Call;
+-import retrofit2.Callback;
+-import retrofit2.Response;
+-
+-public class LogoutFunction extends AppCompatActivity {
+-
+-    private Button logoutButton;
+-
+-    @Override
+-    protected void onCreate(Bundle savedInstanceState) {
+-        super.onCreate(savedInstanceState);
+-        setContentView(R.layout.activity_setting);  // Load the layout containing logoutButton
+-
+-        logoutButton = findViewById(R.id.logoutButton);
+-
+-        logoutButton.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                performLogout();
+-            }
+-        });
+-    }
+-
+-    private void performLogout() {
+-        // Pass the current context (LogoutFunction) to the RetrofitClient
+-        LogoutService apiService = RetrofitClient.getRetrofitInstance(LogoutFunction.this).create(LogoutService.class);
+-        Call<Void> call = apiService.logout();
+-
+-        call.enqueue(new Callback<Void>() {
+-            @Override
+-            public void onResponse(Call<Void> call, Response<Void> response) {
+-                if (response.isSuccessful()) {
+-                    Toast.makeText(LogoutFunction.this, "Logout successful", Toast.LENGTH_SHORT).show();
+-                    // Redirect to the login layout
+-                    Intent intent = new Intent(LogoutFunction.this, Login.class);
+-                    startActivity(intent);
+-                    finish(); // Close LogoutFunction
+-                } else {
+-                    Toast.makeText(LogoutFunction.this, "Logout failed", Toast.LENGTH_SHORT).show();
+-                }
+-            }
+-
+-            @Override
+-            public void onFailure(Call<Void> call, Throwable t) {
+-                Toast.makeText(LogoutFunction.this, "An error occurred", Toast.LENGTH_SHORT).show();
+-            }
+-        });
+-    }
+-}
+Index: app/src/main/java/com/example/hydrativa/retrofit/LogoutService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.hydrativa.retrofit;\r\n\r\nimport retrofit2.Call;\r\nimport retrofit2.http.GET;\r\n\r\npublic interface LogoutService {\r\n    @GET(\"/logout\")\r\n    Call<Void> logout();\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hydrativa/retrofit/LogoutService.java b/app/src/main/java/com/example/hydrativa/retrofit/LogoutService.java
+--- a/app/src/main/java/com/example/hydrativa/retrofit/LogoutService.java	(revision 17951d83ba7b40f0c4b01f320ba3902cdce7183f)
++++ b/app/src/main/java/com/example/hydrativa/retrofit/LogoutService.java	(date 1731249336432)
+@@ -4,6 +4,6 @@
+ import retrofit2.http.GET;
+ 
+ public interface LogoutService {
+-    @GET("/logout")
++    @GET("logout")
+     Call<Void> logout();
+ }
+Index: app/src/main/java/com/example/hydrativa/ProfileActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hydrativa/ProfileActivity.java b/app/src/main/java/com/example/hydrativa/ProfileActivity.java
+new file mode 100644
+--- /dev/null	(date 1731288813767)
++++ b/app/src/main/java/com/example/hydrativa/ProfileActivity.java	(date 1731288813767)
+@@ -0,0 +1,80 @@
++package com.example.hydrativa;
++
++import android.os.Bundle;
++import android.view.View;
++import android.widget.Button;
++import android.widget.EditText;
++import android.widget.Toast;
++import androidx.appcompat.app.AppCompatActivity;
++
++import com.example.hydrativa.models.UserProfile;
++import com.example.hydrativa.retrofit.ProfileUpdateService;
++import com.example.hydrativa.retrofit.RetrofitClient;
++
++
++import retrofit2.Call;
++import retrofit2.Callback;
++import retrofit2.Response;
++
++public class ProfileActivity extends AppCompatActivity {
++
++    private EditText inputUsername, inputGender, inputName, inputPhone;
++    private Button updateButton;
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.activity_profile); // Ensure your layout name is correct
++
++        inputUsername = findViewById(R.id.input_username);
++        inputGender = findViewById(R.id.input_gender);
++        inputName = findViewById(R.id.input_name);
++        inputPhone = findViewById(R.id.input_phone);
++        updateButton = findViewById(R.id.loginButton);
++
++        // When the update button is clicked, perform the update
++        updateButton.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                updateProfile();
++            }
++        });
++    }
++
++    private void updateProfile() {
++        String username = inputUsername.getText().toString();
++        String gender = inputGender.getText().toString();
++        String name = inputName.getText().toString();
++        String phone = inputPhone.getText().toString();
++
++        // Validate fields
++        if (username.isEmpty() || gender.isEmpty() || name.isEmpty() || phone.isEmpty()) {
++            Toast.makeText(ProfileActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
++            return;
++        }
++
++        // Create the UserProfile object to send to the API
++        UserProfile userProfile = new UserProfile(username, gender, name, phone);
++
++        // Retrofit API call
++        ProfileUpdateService apiService = RetrofitClient.getRetrofitInstance(this).create(ProfileUpdateService.class);
++        Call<Void> call = apiService.updateProfile(userProfile);
++
++        call.enqueue(new Callback<Void>() {
++            @Override
++            public void onResponse(Call<Void> call, Response<Void> response) {
++                if (response.isSuccessful()) {
++                    Toast.makeText(ProfileActivity.this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
++                    // Optionally, navigate to another activity or back to the previous one
++                } else {
++                    Toast.makeText(ProfileActivity.this, "Failed to update profile", Toast.LENGTH_SHORT).show();
++                }
++            }
++
++            @Override
++            public void onFailure(Call<Void> call, Throwable t) {
++                Toast.makeText(ProfileActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
++            }
++        });
++    }
++}
+Index: app/src/main/java/com/example/hydrativa/models/UserProfile.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hydrativa/models/UserProfile.java b/app/src/main/java/com/example/hydrativa/models/UserProfile.java
+new file mode 100644
+--- /dev/null	(date 1731248886386)
++++ b/app/src/main/java/com/example/hydrativa/models/UserProfile.java	(date 1731248886386)
+@@ -0,0 +1,49 @@
++package com.example.hydrativa.models;
++
++public class UserProfile {
++    private String username;
++    private String jenis_kelamin;
++    private String name;
++    private String telp;
++
++    // Constructor
++    public UserProfile(String username, String jenis_kelamin, String name, String telp) {
++        this.username = username;
++        this.jenis_kelamin = jenis_kelamin;
++        this.name = name;
++        this.telp = telp;
++    }
++
++    // Getters and setters
++    public String getUsername() {
++        return username;
++    }
++
++    public void setUsername(String username) {
++        this.username = username;
++    }
++
++    public String getJenis_kelamin() {
++        return jenis_kelamin;
++    }
++
++    public void setJenis_kelamin(String jenis_kelamin) {
++        this.jenis_kelamin = jenis_kelamin;
++    }
++
++    public String getName() {
++        return name;
++    }
++
++    public void setName(String name) {
++        this.name = name;
++    }
++
++    public String getTelp() {
++        return telp;
++    }
++
++    public void setTelp(String telp) {
++        this.telp = telp;
++    }
++}
+Index: app/src/main/res/layout/activity_profile.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:id=\"@+id/main\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".Profile\">\r\n\r\n    <androidx.cardview.widget.CardView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"95dp\"\r\n        android:backgroundTint=\"@color/primary\"\r\n        android:id=\"@+id/header_profile\"\r\n        app:layout_constraintTop_toTopOf=\"parent\">\r\n\r\n        <TextView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Profile\"\r\n            android:textColor=\"@color/white\"\r\n            android:layout_gravity=\"center\"\r\n            android:layout_marginTop=\"5dp\"\r\n            android:textSize=\"20sp\"\r\n            android:fontFamily=\"@font/poppins\"\r\n            android:textStyle=\"bold\"/>\r\n\r\n        <ImageView\r\n            android:layout_width=\"40dp\"\r\n            android:layout_height=\"40dp\"\r\n            android:src=\"@drawable/arrow_left\"\r\n            android:layout_marginTop=\"25dp\"\r\n            android:layout_marginStart=\"18dp\"/>\r\n\r\n    </androidx.cardview.widget.CardView>\r\n\r\n    <androidx.cardview.widget.CardView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"30dp\"\r\n        android:layout_marginEnd=\"30dp\"\r\n        android:layout_marginTop=\"40dp\"\r\n        app:cardCornerRadius=\"16dp\"\r\n        android:elevation=\"4dp\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/header_profile\"\r\n        app:cardBackgroundColor=\"@android:color/white\">\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:orientation=\"vertical\"\r\n            android:gravity=\"center_horizontal\"\r\n            android:padding=\"16dp\">\r\n\r\n            <com.google.android.material.imageview.ShapeableImageView\r\n                android:id=\"@+id/profile_image\"\r\n                android:layout_width=\"100dp\"\r\n                android:layout_height=\"100dp\"\r\n                android:layout_marginBottom=\"16dp\"\r\n                android:scaleType=\"centerCrop\"\r\n                android:src=\"@drawable/stevia\"\r\n                app:shapeAppearanceOverlay=\"@style/CircleImage\"/>\r\n\r\n            <TextView\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Nama Lengkap\"\r\n                android:layout_marginTop=\"15dp\"\r\n                android:layout_marginEnd=\"94dp\"\r\n                android:fontFamily=\"@font/poppins\"/>\r\n            <com.google.android.material.textfield.TextInputLayout\r\n                android:id=\"@+id/layoutName\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginStart=\"11dp\"\r\n                android:layout_marginEnd=\"11dp\"\r\n                android:hint=\"Nama Lengkap\"\r\n                style=\"@style/CustomTextInputLayout\"\r\n                app:boxBackgroundMode=\"outline\"\r\n                app:boxStrokeWidth=\"2dp\"\r\n                app:boxStrokeWidthFocused=\"2dp\"\r\n                app:hintTextAppearance=\"@style/HintTextStyle\"\r\n                app:placeholderText=\"Masukkan nama lengkap Anda\">\r\n\r\n                <com.google.android.material.textfield.TextInputEditText\r\n                    android:id=\"@+id/input_name\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:textSize=\"16sp\"\r\n                    android:padding=\"13dp\"\r\n                    android:fontFamily=\"@font/poppins\" />\r\n            </com.google.android.material.textfield.TextInputLayout>\r\n\r\n            <TextView\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Jenis Kelamin\"\r\n                android:layout_marginTop=\"10dp\"\r\n                android:layout_marginEnd=\"99dp\"\r\n                android:fontFamily=\"@font/poppins\"/>\r\n            <com.google.android.material.textfield.TextInputLayout\r\n                android:id=\"@+id/layoutGender\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginStart=\"11dp\"\r\n                android:layout_marginEnd=\"11dp\"\r\n                android:hint=\"Jenis Kelamin\"\r\n                style=\"@style/CustomTextInputLayout\"\r\n                app:boxBackgroundMode=\"outline\"\r\n                app:boxStrokeWidth=\"2dp\"\r\n                app:boxStrokeWidthFocused=\"2dp\"\r\n                app:hintTextAppearance=\"@style/HintTextStyle\"\r\n                app:placeholderText=\"Pilih jenis kelamin\">\r\n\r\n                <com.google.android.material.textfield.TextInputEditText\r\n                    android:id=\"@+id/input_gender\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:textSize=\"16sp\"\r\n                    android:padding=\"13dp\"\r\n                    android:fontFamily=\"@font/poppins\" />\r\n            </com.google.android.material.textfield.TextInputLayout>\r\n\r\n            <TextView\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Alamat Email\"\r\n                android:layout_marginTop=\"10dp\"\r\n                android:layout_marginEnd=\"99dp\"\r\n                android:fontFamily=\"@font/poppins\"/>\r\n            <com.google.android.material.textfield.TextInputLayout\r\n                android:id=\"@+id/layoutEmail\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginStart=\"11dp\"\r\n                android:layout_marginEnd=\"11dp\"\r\n                android:hint=\"Email\"\r\n                style=\"@style/CustomTextInputLayout\"\r\n                app:boxBackgroundMode=\"outline\"\r\n                app:boxStrokeWidth=\"2dp\"\r\n                app:boxStrokeWidthFocused=\"2dp\"\r\n                app:hintTextAppearance=\"@style/HintTextStyle\"\r\n                app:placeholderText=\"Masukkan email Anda\">\r\n\r\n                <com.google.android.material.textfield.TextInputEditText\r\n                    android:id=\"@+id/input_email\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:inputType=\"textEmailAddress\"\r\n                    android:textSize=\"16sp\"\r\n                    android:padding=\"13dp\"\r\n                    android:fontFamily=\"@font/poppins\" />\r\n            </com.google.android.material.textfield.TextInputLayout>\r\n\r\n            <TextView\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Nomor Telepon\"\r\n                android:layout_marginTop=\"10dp\"\r\n                android:layout_marginEnd=\"93dp\"\r\n                android:fontFamily=\"@font/poppins\"/>\r\n            <com.google.android.material.textfield.TextInputLayout\r\n                android:id=\"@+id/layoutPhoneNumber\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginStart=\"11dp\"\r\n                android:layout_marginEnd=\"11dp\"\r\n                android:hint=\"No. Telepon\"\r\n                style=\"@style/CustomTextInputLayout\"\r\n                app:boxBackgroundMode=\"outline\"\r\n                app:boxStrokeWidth=\"2dp\"\r\n                app:boxStrokeWidthFocused=\"2dp\"\r\n                app:hintTextAppearance=\"@style/HintTextStyle\"\r\n                app:placeholderText=\"Masukkan nomor telepon Anda\">\r\n\r\n                <com.google.android.material.textfield.TextInputEditText\r\n                    android:id=\"@+id/input_phone\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:inputType=\"phone\"\r\n                    android:textSize=\"16sp\"\r\n                    android:padding=\"13dp\"\r\n                    android:fontFamily=\"@font/poppins\" />\r\n            </com.google.android.material.textfield.TextInputLayout>\r\n\r\n            <Button\r\n                android:id=\"@+id/loginButton\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginTop=\"15dp\"\r\n                android:backgroundTint=\"@color/primary\"\r\n                android:fontFamily=\"@font/poppins\"\r\n                android:textStyle=\"bold\"\r\n                android:text=\"Sunting\"\r\n                android:textColor=\"@android:color/white\"\r\n                app:cornerRadius=\"8dp\" />\r\n\r\n        </LinearLayout>\r\n\r\n    </androidx.cardview.widget.CardView>\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_profile.xml b/app/src/main/res/layout/activity_profile.xml
+--- a/app/src/main/res/layout/activity_profile.xml	(revision 17951d83ba7b40f0c4b01f320ba3902cdce7183f)
++++ b/app/src/main/res/layout/activity_profile.xml	(date 1731248698882)
+@@ -64,26 +64,27 @@
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+-                android:text="Nama Lengkap"
++                android:text="Username"
+                 android:layout_marginTop="15dp"
+                 android:layout_marginEnd="94dp"
+                 android:fontFamily="@font/poppins"/>
++
+             <com.google.android.material.textfield.TextInputLayout
+-                android:id="@+id/layoutName"
++                android:id="@+id/layoutUsername"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginStart="11dp"
+                 android:layout_marginEnd="11dp"
+-                android:hint="Nama Lengkap"
++                android:hint="Username"
+                 style="@style/CustomTextInputLayout"
+                 app:boxBackgroundMode="outline"
+                 app:boxStrokeWidth="2dp"
+                 app:boxStrokeWidthFocused="2dp"
+                 app:hintTextAppearance="@style/HintTextStyle"
+-                app:placeholderText="Masukkan nama lengkap Anda">
++                app:placeholderText="Masukkan Username">
+ 
+                 <com.google.android.material.textfield.TextInputEditText
+-                    android:id="@+id/input_name"
++                    android:id="@+id/input_username"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:textSize="16sp"
+@@ -124,29 +125,29 @@
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+-                android:text="Alamat Email"
+                 android:layout_marginTop="10dp"
+                 android:layout_marginEnd="99dp"
+-                android:fontFamily="@font/poppins"/>
++                android:fontFamily="@font/poppins"
++                android:text="Nama" />
++
+             <com.google.android.material.textfield.TextInputLayout
+-                android:id="@+id/layoutEmail"
++                android:id="@+id/layoutName"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginStart="11dp"
+                 android:layout_marginEnd="11dp"
+-                android:hint="Email"
++                android:hint="Name"
+                 style="@style/CustomTextInputLayout"
+                 app:boxBackgroundMode="outline"
+                 app:boxStrokeWidth="2dp"
+                 app:boxStrokeWidthFocused="2dp"
+                 app:hintTextAppearance="@style/HintTextStyle"
+-                app:placeholderText="Masukkan email Anda">
++                app:placeholderText="Masukkan nama Anda">
+ 
+                 <com.google.android.material.textfield.TextInputEditText
+-                    android:id="@+id/input_email"
++                    android:id="@+id/input_name"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+-                    android:inputType="textEmailAddress"
+                     android:textSize="16sp"
+                     android:padding="13dp"
+                     android:fontFamily="@font/poppins" />
+Index: app/src/main/java/com/example/hydrativa/retrofit/ProfileUpdateService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hydrativa/retrofit/ProfileUpdateService.java b/app/src/main/java/com/example/hydrativa/retrofit/ProfileUpdateService.java
+new file mode 100644
+--- /dev/null	(date 1731249042987)
++++ b/app/src/main/java/com/example/hydrativa/retrofit/ProfileUpdateService.java	(date 1731249042987)
+@@ -0,0 +1,12 @@
++package com.example.hydrativa.retrofit;
++
++import com.example.hydrativa.models.UserProfile;
++
++import retrofit2.Call;
++import retrofit2.http.Body;
++import retrofit2.http.POST;
++
++public interface ProfileUpdateService {
++    @POST("/me/update")
++    Call<Void> updateProfile(@Body UserProfile userProfile);
++}

@@ -64,26 +64,27 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nama Lengkap"
+                android:text="Username"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="94dp"
                 android:fontFamily="@font/poppins"/>
+
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutName"
+                android:id="@+id/layoutUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
                 android:layout_marginEnd="11dp"
-                android:hint="Nama Lengkap"
+                android:hint="Username"
                 style="@style/CustomTextInputLayout"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeWidth="2dp"
                 app:boxStrokeWidthFocused="2dp"
                 app:hintTextAppearance="@style/HintTextStyle"
-                app:placeholderText="Masukkan nama lengkap Anda">
+                app:placeholderText="Masukkan Username">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/input_name"
+                    android:id="@+id/input_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
@@ -124,29 +125,29 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Alamat Email"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="99dp"
-                android:fontFamily="@font/poppins"/>
+                android:fontFamily="@font/poppins"
+                android:text="Nama" />
+
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutEmail"
+                android:id="@+id/layoutName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
                 android:layout_marginEnd="11dp"
-                android:hint="Email"
+                android:hint="Name"
                 style="@style/CustomTextInputLayout"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeWidth="2dp"
                 app:boxStrokeWidthFocused="2dp"
                 app:hintTextAppearance="@style/HintTextStyle"
-                app:placeholderText="Masukkan email Anda">
+                app:placeholderText="Masukkan nama Anda">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/input_email"
+                    android:id="@+id/input_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
                     android:textSize="16sp"
                     android:padding="13dp"
                     android:fontFamily="@font/poppins" />
