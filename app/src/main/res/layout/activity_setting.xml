@@ -117,8 +117,7 @@
                     android:layout_weight="1"
                     android:text="Profil"
                     android:textColor="@android:color/black"
-                    android:fontFamily="@font/poppins"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/poppins_bold"
                     android:textSize="18sp" />
 
                 <ImageView
@@ -130,6 +129,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
                 android:text="Lengkapi data diri kamu sekarang!"
                 android:textColor="@android:color/darker_gray" />
 
@@ -151,7 +151,7 @@
                     android:layout_weight="1"
                     android:text="Ubah Password"
                     android:textColor="@android:color/black"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/poppins_bold"
                     android:textSize="18sp" />
 
                 <ImageView
@@ -197,9 +197,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Tentang Kami"
+                    android:fontFamily="@font/poppins_bold"
                     android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textSize="18sp"/>
 
                 <ImageView
                     android:layout_width="24dp"
@@ -211,6 +211,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tentang HydraTiva"
+                android:fontFamily="@font/poppins"
                 android:textColor="@android:color/darker_gray" />
 
             <View
@@ -232,7 +233,7 @@
                     android:text="Cara Pemakaian"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/poppins_bold"/>
 
                 <ImageView
                     android:layout_width="24dp"
@@ -243,6 +244,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
                 android:text="Cari tahu cara pemakaian HydraTiva disini!"
                 android:textColor="@android:color/darker_gray" />
 
@@ -263,9 +265,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Informasi"
+                    android:fontFamily="@font/poppins_bold"
                     android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textSize="18sp"/>
 
                 <ImageView
                     android:layout_width="24dp"
@@ -276,6 +278,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
                 android:text="Cari tahu cara pemakaian HydraTiva disini!"
                 android:textColor="@android:color/darker_gray" />
         </LinearLayout>
