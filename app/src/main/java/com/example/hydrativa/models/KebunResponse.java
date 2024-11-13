@@ -3,8 +3,9 @@ package com.example.hydrativa.models;
 import java.util.List;
 
 public class KebunResponse {
-    private String status; // Tambahkan status jika ada
-    private List<Kebun> data; // Gantilah sesuai dengan struktur JSON Anda
+    private String status;
+    private List<Kebun> data;
+    private String image_url;
 
     // Getter dan Setter
     public String getStatus() {
@@ -21,5 +22,13 @@ public class KebunResponse {
 
     public void setData(List<Kebun> data) {
         this.data = data;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 }

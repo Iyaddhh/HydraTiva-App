@@ -50,10 +50,7 @@ public class KebunAdapter extends RecyclerView.Adapter<KebunAdapter.KebunViewHol
         holder.title.setText(kebun.getNama_kebun());
         holder.location.setText(kebun.getLokasi_kebun());
 
-        String baseUrl = "http://10.0.2.2:8000/storage/images/kebun/";
-        String imageFileName = kebun.getGambar();
-
-        String imageUrl = imageFileName.contains("http") ? imageFileName : baseUrl + imageFileName;
+        String imageUrl = "http://192.168.1.5:8000/storage/" + kebun.getGambar();
 
         Glide.with(context)
                 .load(imageUrl)

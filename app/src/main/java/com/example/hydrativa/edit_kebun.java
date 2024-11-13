@@ -125,8 +125,6 @@ public class edit_kebun extends AppCompatActivity {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    String imageUrl = "images/kebun/" + "<generated_name>.jpg"; // Ini hanya contoh, sesuaikan dengan respons server
-
                     Log.d("edit_kebun", "Kebun berhasil diperbarui: " + response.message());
                     Toast.makeText(edit_kebun.this, "Kebun berhasil diperbarui", Toast.LENGTH_LONG).show();
                 } else {
@@ -134,12 +132,10 @@ public class edit_kebun extends AppCompatActivity {
                     Toast.makeText(edit_kebun.this, "Gagal memperbarui kebun: " + response.message(), Toast.LENGTH_LONG).show();
                 }
             }
-
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(edit_kebun.this, "Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-
     }
 }
