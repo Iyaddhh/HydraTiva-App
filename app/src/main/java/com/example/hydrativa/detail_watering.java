@@ -1,8 +1,10 @@
 package com.example.hydrativa;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +47,20 @@ public class detail_watering extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_watering);
 
+        ImageView arrowRight = findViewById(R.id.arrowRight3);
+
+        ImageView arrowRight3 = findViewById(R.id.arrowRight3);
+        arrowRight3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Pastikan Anda mengirimkan kebunId ke EditKebunActivity
+                Intent intent = new Intent(detail_watering.this, edit_kebun.class);
+                intent.putExtra("kebun_id", kebunId); // Kebun ID yang ingin Anda kirim
+                startActivity(intent);
+            }
+        });
+
+
         kebunService = RetrofitClient.getRetrofitInstance(getApplicationContext()).create(KebunService.class);
 
         gambarKebun = findViewById(R.id.kebunImage1);
@@ -55,12 +71,9 @@ public class detail_watering extends AppCompatActivity {
         tvStatus = findViewById(R.id.Status);
         tvTanggal = findViewById(R.id.TanggalKebun);
 
-
-
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("EEE, d MMM yyyy");
         String currentDate = formatter.format(date);
-
 
         kebunId = getIntent().getIntExtra("KEBUN_ID", -1);
         Call<Kebun> call = kebunService.getKebunDetail(kebunId);
@@ -80,8 +93,6 @@ public class detail_watering extends AppCompatActivity {
                             .load(imageUrl)
                             .error(R.drawable.tehdia)
                             .into(gambarKebun);
-
-
                 } else {
                     Toast.makeText(detail_watering.this, "Gagal memuat data kebun", Toast.LENGTH_SHORT).show();
                 }
@@ -93,5 +104,11 @@ public class detail_watering extends AppCompatActivity {
                 Log.d("Error", "Error occurred: " + throwable);
             }
         });
+
+        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String name = sharedPreferences.getString("name", "User");
+
+        TextView nameText = findViewById(R.id.usernameText);
+        nameText.setText(name);
     }
 }
