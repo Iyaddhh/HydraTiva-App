@@ -10,7 +10,7 @@ public class Kebun {
     private String status;
     private String gambar;
 
-    public Kebun(int kebun_id, String nama_kebun, int luas_lahan, String lokasi_kebun, int moisture, Float pH, String status, String kodeAlat) {
+    public Kebun(int kebun_id, String nama_kebun, int luas_lahan, String lokasi_kebun, int moisture, Float pH, String status, String gambar) {
         this.kebun_id = kebun_id;
         this.nama_kebun = nama_kebun;
         this.luas_lahan = luas_lahan;
@@ -83,5 +83,4 @@ public class Kebun {
 
     public void setGambar(String gambar) {
         this.gambar = gambar;
-    }
-}
+    }}

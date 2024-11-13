@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +16,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.hydrativa.models.ForgotRequest;
 import com.example.hydrativa.models.RegisterRequest;
 import com.example.hydrativa.models.RegisterResponse;
 import com.example.hydrativa.retrofit.RegisterService;
@@ -26,6 +29,8 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     EditText register_user, register_name, pass_user, register_email, NoTelepon;
+    RadioGroup radioGroup;
+    String jenis_kelamin;
     Button registerButton;
     TextView linkLogin;
     private RegisterService registerService;
@@ -41,7 +46,23 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        radioGroup = findViewById(R.id.radioGroup1);
         registerService = RetrofitClient.getRetrofitInstance(getApplicationContext()).create(RegisterService.class);
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // Find the selected RadioButton by ID
+                RadioButton selectedRadioButton = findViewById(checkedId);
+                if (selectedRadioButton != null) {
+                    // Get the text of the selected RadioButton and store it in jenis_kelamin
+                    jenis_kelamin = selectedRadioButton.getText().toString();
+
+                    // Show a toast (optional) to confirm the selected value
+                    Toast.makeText(MainActivity.this, "Selected Gender: " + jenis_kelamin, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         register_user = findViewById(R.id.userlayout);
         register_name = findViewById(R.id.nama);
@@ -59,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
                 String password = pass_user.getText().toString().trim();
                 String nama = register_name.getText().toString().trim();
                 String telp = NoTelepon.getText().toString().trim();
-                registerUser(username, email, password, nama, telp);
+                String kelamin = jenis_kelamin;
+                registerUser(username, email, password, nama, telp, kelamin);
             }
         });
 
@@ -73,8 +95,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void registerUser(String username, String email, String password, String nama, String telp) {
-        RegisterRequest registerRequest = new RegisterRequest(username, password, email, nama, telp);
+    private void registerUser(String username, String email, String password, String nama, String telp, String kelamin) {
+        RegisterRequest registerRequest = new RegisterRequest(username, password, email, nama, telp, kelamin);
 
         Call<RegisterResponse> call = registerService.registerUser(registerRequest);
         call.enqueue(new Callback<RegisterResponse>() {
@@ -99,3 +121,4 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 }
+

@@ -132,20 +132,24 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/Title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_bold"
                                 android:text="Kebun 1"
                                 android:textSize="20sp"
-                                android:textColor="@color/primary"/>
+                                android:textColor="@color/primary"
+                                />
 
                             <TextView
+                                android:id="@+id/Location"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
                                 android:text="Bogor, Soka 6"
                                 android:textSize="16sp"
-                                android:textColor="@color/primary" />
+                                android:textColor="@color/primary"
+                                />
                         </LinearLayout>
 
                         <ImageView
@@ -183,6 +187,7 @@
                                 android:textColor="@color/primary" />
 
                             <TextView
+                                android:id="@+id/TanggalKebun"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
@@ -205,6 +210,7 @@
                                 android:textColor="@color/primary" />
 
                             <TextView
+                                android:id="@+id/Status"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
@@ -229,11 +235,12 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_bold"
-                                android:text="Status Penyiraman"
+                                android:text="Moisture"
                                 android:textSize="14sp"
                                 android:textColor="@color/primary" />
 
                             <TextView
+                                android:id="@+id/Moisture"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
@@ -257,6 +264,7 @@
                                 android:textColor="@color/primary" />
 
                             <TextView
+                                android:id="@+id/PH"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
