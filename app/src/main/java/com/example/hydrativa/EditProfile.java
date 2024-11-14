@@ -48,7 +48,7 @@ public class EditProfile extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_profile);
+        setContentView(R.layout.activity_profile);
 
         radioGroup = findViewById(R.id.radioGroup1);
         profileService = RetrofitClient.getRetrofitInstance(getApplicationContext()).create(ProfileService.class);
