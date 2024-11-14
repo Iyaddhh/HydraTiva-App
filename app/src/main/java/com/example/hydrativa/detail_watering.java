@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,8 +21,6 @@ import com.example.hydrativa.models.Kebun;
 import com.example.hydrativa.retrofit.KebunService;
 import com.example.hydrativa.retrofit.RetrofitClient;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -37,7 +34,7 @@ public class detail_watering extends AppCompatActivity {
     private ImageView gambarKebun;
     private RecyclerView recyclerView;
     private HistoryPenyiramanAdapter historyAdapter;
-    private List<HistoryPenyiraman> historyList;  // Untuk menampung data sejarah penyiraman
+    private List<HistoryPenyiraman> historyList;
     private int kebunId;
     String imageUrl;
 
@@ -50,12 +47,12 @@ public class detail_watering extends AppCompatActivity {
         arrowRight3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Mengirimkan kebunId ke EditKebunActivity
                 Intent intent = new Intent(detail_watering.this, edit_kebun.class);
-                intent.putExtra("kebun_id", kebunId); // Kebun ID yang ingin Anda kirim
+                intent.putExtra("kebun_id", kebunId);
                 startActivity(intent);
             }
         });
+
         kebunService = RetrofitClient.getRetrofitInstance(getApplicationContext()).create(KebunService.class);
 
         gambarKebun = findViewById(R.id.kebunImage1);
@@ -66,13 +63,8 @@ public class detail_watering extends AppCompatActivity {
         tvKondisi = findViewById(R.id.Kondisi);
         tvStatus = findViewById(R.id.Status);
 
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("EEE, d MMM yyyy");
-        String currentDate = formatter.format(date);
-
         kebunId = getIntent().getIntExtra("KEBUN_ID", -1);
 
-        // Memanggil API untuk mendapatkan detail kebun
         Call<Kebun> call = kebunService.getKebunDetail(kebunId);
         call.enqueue(new Callback<Kebun>() {
             @Override
@@ -84,7 +76,7 @@ public class detail_watering extends AppCompatActivity {
                     tvMoisture.setText("Moisture: " + kebunDetail.getMoisture());
                     tvPH.setText(kebunDetail.getpH() + " pH");
                     tvKondisi.setText("Status: " + kebunDetail.getStatus());
-                    tvStatus.setText(currentDate);
+
                     imageUrl = "http://10.0.2.2:8000/storage/" + kebunDetail.getGambar();
                     Glide.with(detail_watering.this)
                             .load(imageUrl)
@@ -111,7 +103,7 @@ public class detail_watering extends AppCompatActivity {
         nameText.setText(name);
 
         recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this)); // Menggunakan LayoutManager Linear
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private void getHistoryPenyiraman(int kebunId) {
@@ -123,6 +115,21 @@ public class detail_watering extends AppCompatActivity {
                     historyList = response.body();
                     historyAdapter = new HistoryPenyiramanAdapter(historyList);
                     recyclerView.setAdapter(historyAdapter);
+
+                    // Get the latest status from the history list
+                    if (!historyList.isEmpty()) {
+                        HistoryPenyiraman latestHistory = historyList.get(historyList.size() - 1); // Assuming the latest entry is the first in the list
+                        String latestStatus = latestHistory.getSoilCondition();
+                        Log.d("StatusCheck", "Latest Soil Condition: " + latestStatus);
+                        // Set the status message based on the latest history status
+                        if ("kering".equalsIgnoreCase(latestStatus)) {
+                            tvStatus.setText("Sedang disiram");
+                        } else if ("normal".equalsIgnoreCase(latestStatus) || "basah".equalsIgnoreCase(latestStatus)) {
+                            tvStatus.setText("Sudah disiram");
+                        } else {
+                            tvStatus.setText("-");
+                        }
+                    }
                 } else {
                     Toast.makeText(detail_watering.this, "Gagal memuat data history penyiraman", Toast.LENGTH_SHORT).show();
                 }

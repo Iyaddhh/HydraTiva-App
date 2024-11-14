@@ -3,21 +3,32 @@ package com.example.hydrativa;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.hydrativa.retrofit.LoginService;
+import com.example.hydrativa.retrofit.RetrofitClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Setting extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_setting);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -50,5 +61,39 @@ public class Setting extends AppCompatActivity {
 
         TextView nameText = findViewById(R.id.usernameText);
         nameText.setText(name);
+
+        Button logoutButton = findViewById(R.id.logoutButton);
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                performLogout();
+            }
+        });
+    }
+
+    private void performLogout() {
+        // Pass the current context (LogoutFunction) to the RetrofitClient
+        LoginService apiService = RetrofitClient.getRetrofitInstance(Setting.this).create(LoginService.class);
+        Call<Void> call = apiService.logout();
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(Setting.this, "Logout successful", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Setting.this, Login.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(Setting.this, "Logout failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(Setting.this, "An error occurred", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
