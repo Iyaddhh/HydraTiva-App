@@ -5,15 +5,16 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 
 public interface ProfileService {
     @Multipart
-    @POST("me/update")
+    @POST("me/update/mobile")
     Call<Void> updateProfile(
             @Part("name") RequestBody name,
             @Part("username") RequestBody username,
-            @Part("email") RequestBody email,
+            @Part("jenis_kelamin") RequestBody jenis_kelamin,
             @Part("telp") RequestBody telp,
             @Part MultipartBody.Part image
     );

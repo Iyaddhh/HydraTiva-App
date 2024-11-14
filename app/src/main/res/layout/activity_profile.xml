@@ -99,52 +99,21 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="99dp"
                 android:fontFamily="@font/poppins"
-                android:text="Jenis Kelamin" />
+                android:text="Email" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutGender"
+                android:id="@+id/editEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
                 android:layout_marginEnd="11dp"
-                android:hint="Jenis Kelamin"
+                android:hint="Email"
                 style="@style/CustomTextInputLayout"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeWidth="2dp"
                 app:boxStrokeWidthFocused="2dp"
                 app:hintTextAppearance="@style/HintTextStyle"
-                app:placeholderText="Pilih jenis kelamin">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/input_gender"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:padding="13dp"
-                    android:fontFamily="@font/poppins" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="99dp"
-                android:fontFamily="@font/poppins"
-                android:text="Nama" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="11dp"
-                android:layout_marginEnd="11dp"
-                android:hint="Name"
-                style="@style/CustomTextInputLayout"
-                app:boxBackgroundMode="outline"
-                app:boxStrokeWidth="2dp"
-                app:boxStrokeWidthFocused="2dp"
-                app:hintTextAppearance="@style/HintTextStyle"
-                app:placeholderText="Masukkan nama Anda">
+                app:placeholderText="Masukkan Email Anda">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_name"
@@ -185,6 +154,28 @@
                     android:padding="13dp"
                     android:fontFamily="@font/poppins" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <RadioGroup
+                android:id="@+id/radioGroup1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                app:layout_constraintTop_toBottomOf="@+id/layoutpassword">
+                <RadioButton
+                    android:id="@+id/radio_laki"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Laki-laki"/>
+                <RadioButton
+                    android:id="@+id/radio_wanita"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Wanita"/>
+            </RadioGroup>
 
             <Button
                 android:id="@+id/loginButton"
