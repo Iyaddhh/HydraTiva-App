@@ -15,14 +15,16 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.hydrativa.models.ForgotRequest;
 import com.example.hydrativa.models.LoginRequest;
 import com.example.hydrativa.models.LoginResponse;
 import com.example.hydrativa.models.RegisterRequest;
+import com.example.hydrativa.retrofit.ForgotService;
 import com.example.hydrativa.retrofit.LoginService;
 import com.example.hydrativa.retrofit.RegisterService;
 import com.example.hydrativa.retrofit.RetrofitClient;
 
+import okhttp3.Request;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,6 +38,7 @@ public class Login extends AppCompatActivity {
     EditText login_user, pass_user;
     Button btn_login;
     TextView linkRegister;
+    TextView linkForgot;
 
 
     @Override
@@ -74,6 +77,15 @@ public class Login extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        linkForgot = findViewById(R.id.forgotLink);
+        linkForgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Login.this, Forgot.class);
+                startActivity(i);
+            }
+        });
     }
 
     private void loginUser(String username, String password) {
@@ -99,12 +111,10 @@ public class Login extends AppCompatActivity {
 
                     Toast.makeText(Login.this, "Login Successful!", Toast.LENGTH_SHORT).show();
 
-                    // Navigate to the Dashboard
                     Intent intent = new Intent(Login.this, Dashboard.class);
                     startActivity(intent);
                     finish();
                 } else {
-                    // Handle unsuccessful response
                     Toast.makeText(Login.this, "Login Failed", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -115,25 +125,7 @@ public class Login extends AppCompatActivity {
             }
         });
     }
-
-    public class ForgotActivity extends AppCompatActivity {
-        private ForgotRequest forgotPasswordManager;
-
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_login);
-
-            forgotPasswordManager = new ForgotRequest();
-            TextView lupaPasswordTextView = findViewById(R.id.lupapassword);
-
-            lupaPasswordTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String email = "pyrobackupacc@gmail.com"; // Update this to get user email dynamically
-                    forgotPasswordManager.sendResetPasswordLink(Login.this, email);
-                }
-            });
-        }
-    }
 }
+
+
+

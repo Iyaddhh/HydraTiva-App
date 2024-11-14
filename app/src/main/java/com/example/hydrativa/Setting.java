@@ -24,6 +24,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Setting extends AppCompatActivity {
+    TextView linkForgot;
+    TextView linkProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,25 @@ public class Setting extends AppCompatActivity {
                 performLogout();
             }
         });
+
+
+        linkForgot = findViewById(R.id.forgotLink);
+        linkForgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Setting.this, Forgot.class);
+                startActivity(i);
+            }
+        });
+
+        linkProfile = findViewById(R.id.profileupdateLink);
+        linkProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Setting.this, Profile.class);
+                startActivity(i);
+            }
+        });
     }
 
     private void performLogout() {
@@ -80,12 +101,12 @@ public class Setting extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(Setting.this, "Logout successful", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Setting.this, "Logout berhasil", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(Setting.this, Login.class);
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(Setting.this, "Logout failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Setting.this, "Logout gagal", Toast.LENGTH_SHORT).show();
                 }
             }
 

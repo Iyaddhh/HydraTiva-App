@@ -26,6 +26,7 @@
             android:textStyle="bold"/>
 
         <ImageView
+            android:id="@+id/balikkelogin"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/arrow_left"
@@ -57,94 +58,25 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="-18dp"
                 android:fontFamily="@font/poppins"
-                android:text="Masukkan Password" />
+                android:text="Masukkan Email" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutpasswordlama"
+                android:id="@+id/layoutresetpassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
                 android:layout_marginEnd="11dp"
                 android:layout_marginTop="16dp"
-                android:hint="Password lama"
-                app:endIconMode="password_toggle"
+                android:hint="Email"
                 style="@style/CustomTextInputLayout"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeWidth="2dp"
                 app:boxStrokeWidthFocused="2dp"
                 app:hintTextAppearance="@style/HintTextStyle"
-                app:placeholderText="Masukan Password Lama">
+                app:placeholderText="Masukan Email Kamu">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/passlama"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:textSize="16sp"
-                    android:padding="13dp"
-                    android:fontFamily="@font/poppins"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Password Baru"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="-2dp"
-                android:fontFamily="@font/poppins"/>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutpasswordbaru"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="11dp"
-                android:layout_marginEnd="11dp"
-                android:hint="Password baru"
-                app:endIconMode="password_toggle"
-                style="@style/CustomTextInputLayout"
-                app:boxBackgroundMode="outline"
-                app:boxStrokeWidth="2dp"
-                app:boxStrokeWidthFocused="2dp"
-                app:hintTextAppearance="@style/HintTextStyle"
-                app:placeholderText="Masukan Password Baru">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/passbaru"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:textSize="16sp"
-                    android:padding="13dp"
-                    android:fontFamily="@font/poppins"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Konfirmasi Password Baru"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="-2dp"
-                android:fontFamily="@font/poppins"/>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutpasswordkonfirmasi"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="11dp"
-                android:layout_marginEnd="11dp"
-                android:hint="Konfirmasi Password"
-                app:endIconMode="password_toggle"
-                style="@style/CustomTextInputLayout"
-                app:boxBackgroundMode="outline"
-                app:boxStrokeWidth="2dp"
-                app:boxStrokeWidthFocused="2dp"
-                app:hintTextAppearance="@style/HintTextStyle"
-                app:placeholderText="Konfirmasi Password Baru">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/passkonfirmasi"
+                    android:id="@+id/emailresetpassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
@@ -154,7 +86,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/loginButton"
+                android:id="@+id/resetpasswordbutton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
@@ -162,7 +94,7 @@
                 android:layout_marginEnd="11dp"
                 android:backgroundTint="@color/primary"
                 android:fontFamily="@font/poppins"
-                android:text="Simpan"
+                android:text="Kirim"
                 android:textColor="@android:color/white"
                 app:cornerRadius="8dp" />
         </LinearLayout>

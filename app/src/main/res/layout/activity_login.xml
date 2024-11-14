@@ -134,13 +134,11 @@
         android:layout_marginStart="4dp"/>
 
     <TextView
-        android:id="@+id/lupapassword"
+        android:id="@+id/forgotLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Forgot Password?"
         android:textColor="@color/primary"
-        android:clickable="true"
-        android:focusable="true"
         android:layout_marginStart="12dp"
         android:layout_marginTop="54dp"
         android:fontFamily="@font/poppins"
