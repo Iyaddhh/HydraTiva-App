@@ -32,12 +32,13 @@ public class Profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        backtoSetting = findViewById(R.id.settingLink);
-        backtoSetting.setOnClickListener(new View.OnClickListener() {
+        Button loginButton = findViewById(R.id.loginButton);
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Profile.this, Setting.class);
-                startActivity(i);
+            public void onClick(View v) {
+                // Intent untuk membuka halaman activity_edit_profile.xml
+                Intent intent = new Intent(Profile.this, EditProfile.class);
+                startActivity(intent);
             }
         });
     }

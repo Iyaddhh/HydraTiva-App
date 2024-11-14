@@ -59,6 +59,7 @@
                 android:layout_marginBottom="16dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/stevia"
+                android:onClick="openImagePicker"
                 app:shapeAppearanceOverlay="@style/CircleImage"/>
 
             <TextView
@@ -104,13 +105,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
                 android:layout_marginEnd="11dp"
-                android:hint="Jenis Kelamin"
+                android:hint="Username"
                 style="@style/CustomTextInputLayout"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeWidth="2dp"
                 app:boxStrokeWidthFocused="2dp"
                 app:hintTextAppearance="@style/HintTextStyle"
-                app:placeholderText="Pilih jenis kelamin">
+                app:placeholderText="Username">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_username"
