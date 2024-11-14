@@ -60,15 +60,16 @@
                 android:layout_marginBottom="16dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/stevia"
-                app:shapeAppearanceOverlay="@style/CircleImage"/>
+                app:shapeAppearanceOverlay="@style/CircleImage"
+                android:onClick="openImagePicker"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Username"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="94dp"
-                android:fontFamily="@font/poppins"/>
+                android:fontFamily="@font/poppins"
+                android:text="Username" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/layoutUsername"
@@ -99,21 +100,21 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="99dp"
                 android:fontFamily="@font/poppins"
-                android:text="Email" />
+                android:text="Nama" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/editEmail"
+                android:id="@+id/editName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
                 android:layout_marginEnd="11dp"
-                android:hint="Email"
+                android:hint="Nama"
                 style="@style/CustomTextInputLayout"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeWidth="2dp"
                 app:boxStrokeWidthFocused="2dp"
                 app:hintTextAppearance="@style/HintTextStyle"
-                app:placeholderText="Masukkan Email Anda">
+                app:placeholderText="Masukkan Nama Anda">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_name"
@@ -178,7 +179,7 @@
             </RadioGroup>
 
             <Button
-                android:id="@+id/loginButton"
+                android:id="@+id/suntingButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"

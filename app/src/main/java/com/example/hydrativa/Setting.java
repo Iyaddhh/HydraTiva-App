@@ -86,7 +86,7 @@ public class Setting extends AppCompatActivity {
         linkProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(Setting.this, Profile.class);
+                Intent i = new Intent(Setting.this, EditProfile.class);
                 startActivity(i);
             }
         });
