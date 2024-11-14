@@ -7,140 +7,131 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         app:cardCornerRadius="16dp"
-        app:cardElevation="4dp">
+        app:cardElevation="2dp"
+        android:backgroundTint="@color/white">
 
-        <com.zerobranch.layout.SwipeLayout
-            android:id="@+id/swipe_layout"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:draggedItem="@+id/drag_item"
-            app:rightItem="@+id/right_view"
-            app:swipeDirection="left">
+            android:padding="12dp">
 
-            <!-- Right View for Delete Action -->
-            <ImageView
-                android:id="@+id/right_view"
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="end"
-                android:background="@color/red"
-                android:gravity="center"
-                android:padding="10dp"
-                android:src="@drawable/baseline_delete_24" />
-
-            <!-- Content of CardView -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/drag_item"
-                android:layout_width="match_parent"
+            <!-- Tanggal -->
+            <TextView
+                android:id="@+id/dateText"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:padding="16dp">
+                android:text="Kamis, 23 Mei 2024"
+                android:textSize="16sp"
+                android:textColor="@color/primary"
+                android:fontFamily="@font/poppins_bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/timeText" />
 
-                <!-- Date and Time -->
-                <TextView
-                    android:id="@+id/dateText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Kamis, 23 Mei 2024"
-                    android:textSize="16sp"
-                    android:textColor="@color/primary"
-                    android:fontFamily="@font/poppins_bold"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    />
+            <!-- Waktu -->
+            <TextView
+                android:id="@+id/timeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="07.30"
+                android:textSize="12sp"
+                android:textColor="@color/grey"
+                android:fontFamily="@font/poppins"
+                app:layout_constraintTop_toTopOf="@id/dateText"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-                <!-- Moisture Status -->
-                <TextView
-                    android:id="@+id/moistureLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Moisture"
-                    android:textSize="14sp"
-                    android:textColor="@color/primary"
-                    android:fontFamily="@font/poppins_bold"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintTop_toBottomOf="@id/dateText"
-                    app:layout_constraintStart_toStartOf="parent" />
+            <!-- Informasi Moisture -->
+            <TextView
+                android:id="@+id/moistureLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Moisture"
+                android:textSize="14sp"
+                android:textColor="@color/primary"
+                android:fontFamily="@font/poppins_bold"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/dateText"
+                app:layout_constraintStart_toStartOf="parent" />
 
-                <TextView
-                    android:id="@+id/moistureStatus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Normal"
-                    android:fontFamily="@font/poppins"
-                    android:textSize="12sp"
-                    android:textColor="@color/grey"
-                    android:background="@drawable/round_notifikasi"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="2dp"
-                    app:layout_constraintTop_toBottomOf="@id/moistureLabel"
-                    app:layout_constraintStart_toStartOf="parent" />
+            <TextView
+                android:id="@+id/moistureStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_notifikasi"
+                android:fontFamily="@font/poppins"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp"
+                android:text="Normal"
+                android:textColor="@color/grey"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@+id/moistureLabel"
+                app:layout_constraintStart_toStartOf="@+id/moistureLabel"
+                app:layout_constraintTop_toBottomOf="@id/moistureLabel" />
 
-                <!-- Status -->
-                <TextView
-                    android:id="@+id/statusLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_bold"
-                    android:text="Status"
-                    android:layout_marginStart="45dp"
-                    android:layout_marginTop="8dp"
-                    android:textColor="@color/primary"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toEndOf="@id/moistureLabel"
-                    app:layout_constraintTop_toBottomOf="@id/dateText" />
+            <!-- Informasi Status -->
+            <TextView
+                android:id="@+id/statusLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Status"
+                android:layout_marginStart="45dp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/primary"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@+id/moistureLabel"
+                app:layout_constraintTop_toBottomOf="@+id/dateText" />
 
-                <TextView
-                    android:id="@+id/statusValue"
-                    android:fontFamily="@font/poppins"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/round_notifikasi"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="2dp"
-                    android:text="Sudah disiram"
-                    android:textColor="@color/grey"
-                    android:textSize="12sp"
-                    android:layout_marginStart="20dp"
-                    app:layout_constraintStart_toEndOf="@id/moistureStatus"
-                    app:layout_constraintTop_toBottomOf="@id/statusLabel" />
+            <TextView
+                android:id="@+id/statusValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_notifikasi"
+                android:fontFamily="@font/poppins"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp"
+                android:text="Sudah disiram"
+                android:textColor="@color/grey"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@+id/statusLabel"
+                app:layout_constraintStart_toStartOf="@+id/statusLabel"
+                app:layout_constraintTop_toBottomOf="@+id/statusLabel" />
 
-                <!-- Soil PH -->
-                <TextView
-                    android:id="@+id/soilPhLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_bold"
-                    android:text="Kadar Tanah"
-                    android:layout_marginStart="45dp"
-                    android:layout_marginTop="8dp"
-                    android:textColor="@color/primary"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toEndOf="@id/statusLabel"
-                    app:layout_constraintTop_toBottomOf="@id/dateText" />
+            <!-- Informasi Kadar Tanah -->
+            <TextView
+                android:id="@+id/soilPhLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Kadar Tanah"
+                android:layout_marginStart="45dp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/primary"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@+id/statusLabel"
+                app:layout_constraintTop_toBottomOf="@+id/dateText" />
 
-                <TextView
-                    android:id="@+id/soilPhValue"
-                    android:layout_width="wrap_content"
-                    android:fontFamily="@font/poppins"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/round_notifikasi"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="2dp"
-                    android:layout_marginStart="40dp"
-                    android:text="7pH"
-                    android:textColor="@color/grey"
-                    android:textSize="12sp"
-                    app:layout_constraintStart_toEndOf="@id/statusValue"
-                    app:layout_constraintTop_toBottomOf="@id/soilPhLabel" />
+            <TextView
+                android:id="@+id/soilPhValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_notifikasi"
+                android:fontFamily="@font/poppins"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp"
+                android:text="7pH"
+                android:textColor="@color/grey"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@+id/soilPhLabel"
+                app:layout_constraintStart_toStartOf="@+id/soilPhLabel"
+                app:layout_constraintTop_toBottomOf="@+id/soilPhLabel" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </com.zerobranch.layout.SwipeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
 </RelativeLayout>
