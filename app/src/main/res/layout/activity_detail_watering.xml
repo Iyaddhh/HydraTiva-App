@@ -182,12 +182,12 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_bold"
-                                android:text="Tanggal"
+                                android:text="Status"
                                 android:textSize="14sp"
                                 android:textColor="@color/primary" />
 
                             <TextView
-                                android:id="@+id/TanggalKebun"
+                                android:id="@+id/Status"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
@@ -205,12 +205,12 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_bold"
-                                android:text="Keadaan Tanah"
+                                android:text="Kondisi"
                                 android:textSize="14sp"
                                 android:textColor="@color/primary" />
 
                             <TextView
-                                android:id="@+id/Status"
+                                android:id="@+id/Kondisi"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
@@ -318,203 +318,10 @@
                     android:layout_marginEnd="20dp" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="4dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="12dp">
-
-                    <ImageView
-                        android:id="@+id/kebunImage3"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/stevia"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginStart="12dp"
-                        android:gravity="center_vertical"
-                        app:layout_constraintStart_toEndOf="@id/kebunImage3"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/arrowRight3">
-
-                        <TextView
-                            android:id="@+id/kebunTitle3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_bold"
-                            android:text="Kebun 3"
-                            android:textSize="16sp"
-                            android:textColor="@color/primary"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/kebunLocation3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Bogor, Soka 6"
-                            android:textSize="18sp"
-                            android:textColor="@color/primary" />
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/arrowRight3"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/arrow_right"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="4dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="12dp">
-
-                    <ImageView
-                        android:id="@+id/kebunImage4"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/stevia"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginStart="12dp"
-                        android:gravity="center_vertical"
-                        app:layout_constraintStart_toEndOf="@id/kebunImage4"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/arrowRight4">
-
-                        <TextView
-                            android:id="@+id/kebunTitle4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_bold"
-                            android:text="Kebun 1"
-                            android:textSize="16sp"
-                            android:textColor="@color/primary"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/kebunLocation4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Bogor, Soka 6"
-                            android:textSize="18sp"
-                            android:textColor="@color/primary" />
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/arrowRight4"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/arrow_right"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="4dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="12dp">
-
-                    <ImageView
-                        android:id="@+id/kebunImage5"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/stevia"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginStart="12dp"
-                        android:gravity="center_vertical"
-                        app:layout_constraintStart_toEndOf="@id/kebunImage5"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/arrowRight5">
-
-                        <TextView
-                            android:id="@+id/kebunTitle5"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_bold"
-                            android:text="Kebun 5"
-                            android:textSize="16sp"
-                            android:textColor="@color/primary"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/kebunLocation5"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Bogor, Soka 6"
-                            android:textSize="18sp"
-                            android:textColor="@color/primary" />
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/arrowRight5"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/arrow_right"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
+                    android:layout_height="wrap_content" />
 
         </LinearLayout>
     </ScrollView>

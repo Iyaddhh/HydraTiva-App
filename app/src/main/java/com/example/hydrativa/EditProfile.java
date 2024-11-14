@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.hydrativa.retrofit.KebunService;
+import com.example.hydrativa.retrofit.ProfileService;
 import com.example.hydrativa.retrofit.RetrofitClient;
 
 import java.io.File;
@@ -25,38 +25,36 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class edit_kebun extends AppCompatActivity {
+public class EditProfile extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
-    private int kebunId;
     private ImageView uploadedImage;
-    private EditText namaKebun, lokasiKebun, luasLahan, idAlat;
+    private EditText name, username, email, telp;
     private Uri imageUri;
     private Button updateButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_kebun);
+        setContentView(R.layout.activity_edit_profile);
 
-        kebunId = getIntent().getIntExtra("kebun_id", -1);
-        uploadedImage = findViewById(R.id.uploadedImage);
-        namaKebun = findViewById(R.id.namaKebun);
-        lokasiKebun = findViewById(R.id.lokasiKebun);
-        luasLahan = findViewById(R.id.luasKebun);
-        idAlat = findViewById(R.id.hydrativa_id);
-        updateButton = findViewById(R.id.suntingButton);
+        uploadedImage = findViewById(R.id.profile_image);
+        name = findViewById(R.id.input_name);
+        username = findViewById(R.id.input_username);
+        email = findViewById(R.id.input_email);
+        telp = findViewById(R.id.input_phone);
+        updateButton = findViewById(R.id.update_button);
 
-        namaKebun.setText("");
-        lokasiKebun.setText("");
-        luasLahan.setText("");
-        idAlat.setText("");
+        name.setText("");
+        username.setText("");
+        email.setText("");
+        telp.setText("");
         uploadedImage.setImageDrawable(null);
 
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateData();
+                updateProfileData();
             }
         });
     }
@@ -85,28 +83,29 @@ public class edit_kebun extends AppCompatActivity {
                 return cursor.getString(columnIndex);
             }
         } catch (Exception e) {
-            Log.e("EditKebun", "Error retrieving real path from URI", e);
+            Log.e("EditProfile", "Error retrieving real path from URI", e);
         }
         return null;
     }
 
-    private void updateData() {
-        String nama = namaKebun.getText().toString().trim();
-        String lokasi = lokasiKebun.getText().toString().trim();
-        String luas = luasLahan.getText().toString().trim();
-        String id = idAlat.getText().toString().trim();
+    private void updateProfileData() {
+        String inputName = name.getText().toString().trim();
+        String inputUsername = username.getText().toString().trim();
+        String inputEmail = email.getText().toString().trim();
+        String inputTelp = telp.getText().toString().trim();
 
-        if (nama.isEmpty() || lokasi.isEmpty() || luas.isEmpty() || id.isEmpty()) {
+        if (inputName.isEmpty() || inputUsername.isEmpty() || inputEmail.isEmpty() || inputTelp.isEmpty()) {
             Toast.makeText(this, "Harap lengkapi semua informasi", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        RequestBody namaKebunRequest = RequestBody.create(MediaType.parse("text/plain"), nama);
-        RequestBody lokasiKebunRequest = RequestBody.create(MediaType.parse("text/plain"), lokasi);
-        RequestBody luasLahanRequest = RequestBody.create(MediaType.parse("text/plain"), luas);
-        RequestBody idAlatRequest = RequestBody.create(MediaType.parse("text/plain"), id);
+        // Creating RequestBody for each input field
+        RequestBody requestName = RequestBody.create(MediaType.parse("text/plain"), inputName);
+        RequestBody requestUsername = RequestBody.create(MediaType.parse("text/plain"), inputUsername);
+        RequestBody requestEmail = RequestBody.create(MediaType.parse("text/plain"), inputEmail);
+        RequestBody requestTelp = RequestBody.create(MediaType.parse("text/plain"), inputTelp);
 
-        // Mengatur imagePart hanya jika gambar dipilih
+        // Set imagePart only if an image is selected
         MultipartBody.Part imagePart = null;
         if (imageUri != null) {
             File file = new File(getRealPathFromURI(imageUri));
@@ -118,23 +117,26 @@ public class edit_kebun extends AppCompatActivity {
             imagePart = MultipartBody.Part.createFormData("gambar", file.getName(), requestFile);
         }
 
-        KebunService apiService = RetrofitClient.getRetrofitInstance(this).create(KebunService.class);
-        Call<Void> call = apiService.updateKebun(kebunId, namaKebunRequest, luasLahanRequest, lokasiKebunRequest, idAlatRequest, imagePart);
+        // Make the API call to update profile
+        ProfileService apiService = RetrofitClient.getRetrofitInstance(this).create(ProfileService.class);
+        Call<Void> call = apiService.updateProfile(requestName, requestUsername, requestEmail, requestTelp, imagePart);
 
+        // Handling API response
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    Log.d("edit_kebun", "Kebun berhasil diperbarui: " + response.message());
-                    Toast.makeText(edit_kebun.this, "Kebun berhasil diperbarui", Toast.LENGTH_LONG).show();
+                    Log.d("EditProfile", "Profil berhasil diperbarui: " + response.message());
+                    Toast.makeText(EditProfile.this, "Profil berhasil diperbarui", Toast.LENGTH_LONG).show();
                 } else {
-                    Log.e("edit_kebun", "Gagal memperbarui: " + response.code() + " - " + response.message());
-                    Toast.makeText(edit_kebun.this, "Gagal memperbarui kebun: " + response.message(), Toast.LENGTH_LONG).show();
+                    Log.e("EditProfile", "Gagal memperbarui: " + response.code() + " - " + response.message());
+                    Toast.makeText(EditProfile.this, "Gagal memperbarui profil: " + response.message(), Toast.LENGTH_LONG).show();
                 }
             }
+
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(edit_kebun.this, "Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(EditProfile.this, "Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
