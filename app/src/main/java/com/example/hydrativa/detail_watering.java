@@ -77,7 +77,7 @@ public class detail_watering extends AppCompatActivity {
                     tvPH.setText(kebunDetail.getpH() + " pH");
                     tvKondisi.setText("Status: " + kebunDetail.getStatus());
 
-                    imageUrl = "http://10.0.2.2:8000/storage/" + kebunDetail.getGambar();
+                    imageUrl = "http://192.168.1.11:8000/storage/" + kebunDetail.getGambar();
                     Glide.with(detail_watering.this)
                             .load(imageUrl)
                             .error(R.drawable.tehdia)

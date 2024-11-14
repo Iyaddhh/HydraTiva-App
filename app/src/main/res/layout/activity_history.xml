@@ -108,26 +108,89 @@
                     android:layout_marginStart="30dp" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/main"
+            <androidx.cardview.widget.CardView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                card_view:cardElevation="8dp"
+                card_view:cardCornerRadius="14dp"
+                android:layout_marginStart="20dp"
+                card_view:cardBackgroundColor="@android:color/white">
+
+                <Spinner
+                    android:id="@+id/spinnerMonth"
+                    android:layout_width="180dp"
+                    android:padding="10dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner"
+                    android:spinnerMode="dropdown"
+                    app:layout_constraintTop_toBottomOf="@+id/market"/>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context=".MainActivity">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                android:backgroundTint="@color/white">
 
-                <!-- Spinner for month selection -->
-
-                <!-- RecyclerView to display the history list -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewHistory"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintBottom_toTopOf="@id/bottomView"
-                    tools:listitem="@layout/item_history_card" />
+                    android:layout_height="wrap_content"
+                    android:padding="12dp">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <!-- Judul Notifikasi -->
+                    <TextView
+                        android:id="@+id/titleText1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_bold"
+                        android:text="Kamis,23 Mei 2024"
+                        android:textColor="@color/primary"
+                        android:textSize="14sp"
+                        android:layout_marginStart="10dp"
+                        app:layout_constraintEnd_toStartOf="@+id/timeText1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <!-- Teks Deskripsi -->
+                    <TextView
+                        android:id="@+id/descriptionText1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/poppins"
+                        android:layout_marginStart="10dp"
+                        android:maxLines="3"
+                        android:text="Cek kebunmu pada tanggal ini, sekarang"
+                        android:textColor="@color/grey"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="@+id/titleText1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/titleText1" />
+
+                    <!-- Waktu -->
+                    <TextView
+                        android:id="@+id/timeText1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="07.55"
+                        android:textSize="12sp"
+                        android:textColor="@color/grey"
+                        android:fontFamily="@font/poppins"
+                        app:layout_constraintTop_toTopOf="@id/titleText1"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
     </ScrollView>
