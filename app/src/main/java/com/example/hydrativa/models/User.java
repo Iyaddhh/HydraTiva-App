@@ -13,6 +13,6 @@ public class User {
         this.name = name;
     }
 
-    // Getters and setters...
+
 }
 

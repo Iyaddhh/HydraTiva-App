@@ -82,9 +82,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintVertical_bias="0.728" />
-
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -446,12 +444,7 @@
                             android:fontFamily="@font/poppins_bold" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
-
             </GridLayout>
-
-
-
-
         </LinearLayout>
     </ScrollView>
 
