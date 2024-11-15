@@ -60,8 +60,7 @@
                 android:layout_marginBottom="16dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/stevia"
-                app:shapeAppearanceOverlay="@style/CircleImage"
-                android:onClick="openImagePicker"/>
+                app:shapeAppearanceOverlay="@style/CircleImage"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -77,16 +76,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
                 android:layout_marginEnd="11dp"
-                android:hint="Username"
                 style="@style/CustomTextInputLayout"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeWidth="2dp"
                 app:boxStrokeWidthFocused="2dp"
-                app:hintTextAppearance="@style/HintTextStyle"
-                app:placeholderText="Masukkan Username">
+                app:hintTextAppearance="@style/HintTextStyle">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/input_username"
+                    android:id="@+id/usernamedata"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
@@ -103,21 +100,18 @@
                 android:text="Nama" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/editName"
+                android:id="@+id/layoutName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
                 android:layout_marginEnd="11dp"
-                android:hint="Nama"
                 style="@style/CustomTextInputLayout"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeWidth="2dp"
-                app:boxStrokeWidthFocused="2dp"
-                app:hintTextAppearance="@style/HintTextStyle"
-                app:placeholderText="Masukkan Nama Anda">
+                app:boxStrokeWidthFocused="2dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/input_name"
+                    android:id="@+id/namedata"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
@@ -138,16 +132,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
                 android:layout_marginEnd="11dp"
-                android:hint="No. Telepon"
                 style="@style/CustomTextInputLayout"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeWidth="2dp"
                 app:boxStrokeWidthFocused="2dp"
-                app:hintTextAppearance="@style/HintTextStyle"
-                app:placeholderText="Masukkan nomor telepon Anda">
+                app:hintTextAppearance="@style/HintTextStyle">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/input_phone"
+                    android:id="@+id/phonedata"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="phone"
@@ -164,8 +156,7 @@
                 android:gravity="center_horizontal"
                 android:layout_marginTop="15dp"
                 android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
-                app:layout_constraintTop_toBottomOf="@+id/layoutpassword">
+                android:layout_marginEnd="30dp">
                 <RadioButton
                     android:id="@+id/radio_laki"
                     android:layout_width="wrap_content"

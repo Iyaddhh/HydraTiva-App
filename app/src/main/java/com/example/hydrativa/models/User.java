@@ -1,6 +1,6 @@
 package com.example.hydrativa.models;
 
-public class    User {
+public class User {
     private String username;
     private String jenis_kelamin;
     private String name;

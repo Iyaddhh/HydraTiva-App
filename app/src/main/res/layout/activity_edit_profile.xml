@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Profile">
+    tools:context=".EditProfile">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -100,7 +100,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="99dp"
                 android:fontFamily="@font/poppins"
-                android:text="Email" />
+                android:text="Nama" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editName"
@@ -117,7 +117,7 @@
                 app:placeholderText="Masukkan Nama Anda">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/input_name"
+                    android:id="@+id/input_nama"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"

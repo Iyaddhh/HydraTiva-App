@@ -65,7 +65,7 @@ public class EditProfile extends AppCompatActivity {
         });
 
         uploadedImage = findViewById(R.id.profile_image);
-        name = findViewById(R.id.input_name);
+        name = findViewById(R.id.input_nama);
         username = findViewById(R.id.input_username);
         telp = findViewById(R.id.input_phone);
         suntingButton = findViewById(R.id.suntingButton);
