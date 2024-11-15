@@ -101,6 +101,9 @@ public class EditProfile extends AppCompatActivity {
             imageUri = data.getData();
             uploadedImage.setImageURI(imageUri);
         }
+        else{
+            uploadedImage.setImageResource(R.drawable.default_profile);
+        }
     }
 
     private String getRealPathFromURI(Uri contentUri) {
