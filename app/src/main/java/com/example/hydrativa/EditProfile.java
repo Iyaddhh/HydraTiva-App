@@ -48,7 +48,7 @@ public class EditProfile extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_edit_profile);
 
         radioGroup = findViewById(R.id.radioGroup1);
         profileService = RetrofitClient.getRetrofitInstance(getApplicationContext()).create(ProfileService.class);
@@ -142,7 +142,7 @@ public class EditProfile extends AppCompatActivity {
             imagePart = MultipartBody.Part.createFormData("gambar", file.getName(), requestFile);
         }
 
-        Call<Void> call = profileService.updateProfile(requestName, requestUsername, requestJenis_Kelamin, requestTelp, imagePart);
+        Call<Void> call = profileService.updateProfile(requestUsername, requestJenis_Kelamin, requestName, requestTelp, imagePart);
 
         call.enqueue(new Callback<Void>() {
             @Override

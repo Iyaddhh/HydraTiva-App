@@ -37,6 +37,7 @@ public class detail_watering extends AppCompatActivity {
     private List<HistoryPenyiraman> historyList;
     private int kebunId;
     String imageUrl;
+    TextView linkHistory;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,7 +78,7 @@ public class detail_watering extends AppCompatActivity {
                     tvPH.setText(kebunDetail.getpH() + " pH");
                     tvKondisi.setText("Status: " + kebunDetail.getStatus());
 
-                    imageUrl = "http://192.168.1.11:8000/storage/" + kebunDetail.getGambar();
+                    imageUrl = "http://10.0.2.2:8000/storage/" + kebunDetail.getGambar();
                     Glide.with(detail_watering.this)
                             .load(imageUrl)
                             .error(R.drawable.tehdia)
@@ -139,6 +140,15 @@ public class detail_watering extends AppCompatActivity {
             public void onFailure(Call<List<HistoryPenyiraman>> call, Throwable throwable) {
                 Toast.makeText(detail_watering.this, "Error: " + throwable.toString(), Toast.LENGTH_SHORT).show();
                 Log.d("Error", "Error occurred: " + throwable);
+            }
+        });
+
+        linkHistory = findViewById(R.id.selengkapnya);
+        linkHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(detail_watering.this, History.class);
+                startActivity(i);
             }
         });
     }

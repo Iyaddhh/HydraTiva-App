@@ -1,70 +1,70 @@
-package com.example.hydrativa.retrofit;
+    package com.example.hydrativa.retrofit;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+    import android.content.Context;
+    import android.content.SharedPreferences;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+    import com.google.gson.Gson;
+    import com.google.gson.GsonBuilder;
 
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+    import okhttp3.Interceptor;
+    import okhttp3.OkHttpClient;
+    import okhttp3.Request;
+    import okhttp3.Response;
+    import retrofit2.Retrofit;
+    import retrofit2.converter.gson.GsonConverterFactory;
 
-import com.example.hydrativa.models.LoginResponse;
+    import com.example.hydrativa.models.LoginResponse;
 
-import java.io.IOException;
+    import java.io.IOException;
 
-public class RetrofitClient {
-    private static Retrofit retrofit;
-    private static final String BASE_URL = "http://192.168.1.11:8000/api/";
+    public class RetrofitClient {
+        private static Retrofit retrofit;
+        private static final String BASE_URL = "http://10.0.2.2:8000/api/";
 
-    public static Retrofit getRetrofitInstance(Context context) {
-        if (retrofit == null) {
-            synchronized (RetrofitClient.class) {
-                if (retrofit == null) {
-                    // Create a simple Gson instance
-                    Gson gson = new GsonBuilder()
-                            .setLenient()
-                            .create();
+        public static Retrofit getRetrofitInstance(Context context) {
+            if (retrofit == null) {
+                synchronized (RetrofitClient.class) {
+                    if (retrofit == null) {
+                        // Create a simple Gson instance
+                        Gson gson = new GsonBuilder()
+                                .setLenient()
+                                .create();
 
-                    OkHttpClient client = new OkHttpClient.Builder()
-                            .addInterceptor(new AuthInterceptor(context))
-                            .build();
+                        OkHttpClient client = new OkHttpClient.Builder()
+                                .addInterceptor(new AuthInterceptor(context))
+                                .build();
 
-                    retrofit = new Retrofit.Builder()
-                            .baseUrl(BASE_URL)
-                            .client(client)
-                            .addConverterFactory(GsonConverterFactory.create(gson))
-                            .build();
+                        retrofit = new Retrofit.Builder()
+                                .baseUrl(BASE_URL)
+                                .client(client)
+                                .addConverterFactory(GsonConverterFactory.create(gson))
+                                .build();
+                    }
                 }
             }
-        }
-        return retrofit;
-    }
-
-    private static class AuthInterceptor implements Interceptor {
-        private final SharedPreferences sharedPreferences;
-
-        public AuthInterceptor(Context context) {
-            this.sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+            return retrofit;
         }
 
-        @Override
-        public Response intercept(Chain chain) throws IOException {
-            String token = sharedPreferences.getString("auth_token", null);
+        private static class AuthInterceptor implements Interceptor {
+            private final SharedPreferences sharedPreferences;
 
-            Request originalRequest = chain.request();
-            Request.Builder requestBuilder = originalRequest.newBuilder();
-
-            if (token != null) {
-                requestBuilder.header("Authorization", "Bearer " + token);
+            public AuthInterceptor(Context context) {
+                this.sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
             }
 
-            Request newRequest = requestBuilder.build();
-            return chain.proceed(newRequest);
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                String token = sharedPreferences.getString("auth_token", null);
+
+                Request originalRequest = chain.request();
+                Request.Builder requestBuilder = originalRequest.newBuilder();
+
+                if (token != null) {
+                    requestBuilder.header("Authorization", "Bearer " + token);
+                }
+
+                Request newRequest = requestBuilder.build();
+                return chain.proceed(newRequest);
+            }
         }
     }
-}

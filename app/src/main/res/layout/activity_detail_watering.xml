@@ -301,7 +301,7 @@
 
                 <!-- TextView for Selengkapnya -->
                 <TextView
-                    android:id="@+id/selengkap"
+                    android:id="@+id/selengkapnya"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Selengkapnya"

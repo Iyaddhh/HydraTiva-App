@@ -45,7 +45,7 @@ public class edit_kebun extends AppCompatActivity {
         lokasiKebun = findViewById(R.id.lokasiKebun);
         luasLahan = findViewById(R.id.luasKebun);
         idAlat = findViewById(R.id.hydrativa_id);
-        updateButton = findViewById(R.id.suntingButton);
+        updateButton = findViewById(R.id.updateButton);
 
         namaKebun.setText("");
         lokasiKebun.setText("");

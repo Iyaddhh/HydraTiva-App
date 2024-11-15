@@ -60,18 +60,14 @@ public class HistoryPenyiramanAdapter extends RecyclerView.Adapter<HistoryPenyir
 
         Log.d("HistoryPenyiraman", "Date from server: " + history.getDate());
 
-        // Cek apakah tanggal sudah ditampilkan
         if (!displayedDates.contains(formattedDate)) {
-            // Jika tanggal belum ada, tampilkan item dan tambahkan tanggal ke dalam set
             holder.dateText.setText(formattedDate != null ? formattedDate : "No Date");
             holder.moistureStatus.setText(history.getMoisture() != null ? history.getMoisture() : "No Moisture Status");
             holder.statusValue.setText(history.getSoilCondition() != null ? history.getSoilCondition() : "No Soil Condition");
             holder.soilPhValue.setText(history.getPhLevel() != null ? history.getPhLevel() : "No pH Level");
 
-            // Tambahkan tanggal ke set untuk memastikan tidak ada duplikasi
             displayedDates.add(formattedDate);
         } else {
-            // Jika tanggal sudah ditampilkan, sembunyikan CardView
             holder.itemView.setVisibility(View.GONE);
         }
     }
