@@ -7,6 +7,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface ShowProfileService {
-    @GET("me/{id}")
+    @GET("me")
     Call<ShowProfileResponse> getUser(@Path("id") int id);
 }
