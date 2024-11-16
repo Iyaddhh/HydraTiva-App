@@ -5,35 +5,27 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
+
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 import com.example.hydrativa.adapters.ImageAdapter;
 import com.example.hydrativa.models.ImageItem;
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 public class Dashboard extends AppCompatActivity {
@@ -110,9 +102,24 @@ public class Dashboard extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
         String name = sharedPreferences.getString("name", "User");
+        String gambar = sharedPreferences.getString("gambar", null);
+        Log.d("SharedPreferences", "Isi gambar: " + gambar);
 
         TextView nameText = findViewById(R.id.nameText);
         nameText.setText(name);
+
+        ImageView gambarView = findViewById(R.id.circleImage);
+        if (gambar != null && !gambar.equals("User")) { // Periksa apakah gambar valid
+            // Jika gambar adalah path lokal atau URL
+            Glide.with(this)
+                    .load(Uri.parse(gambar)) // Menggunakan Uri jika path gambar lokal atau URL
+                    .into(gambarView);
+        } else {
+            // Jika gambar tidak valid, tampilkan gambar default
+            Glide.with(this)
+                    .load(R.drawable.default_profile) // Gambar default
+                    .into(gambarView);
+        }
 
         viewPage = findViewById(R.id.viewpager);
         LinearLayout slideDot = findViewById(R.id.slider);

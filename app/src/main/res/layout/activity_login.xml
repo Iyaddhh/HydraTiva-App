@@ -41,7 +41,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginTop="32dp"
-        android:hint="Username"
+        android:hint="Nama"
         app:endIconMode="clear_text"
         style="@style/CustomTextInputLayout"
         app:layout_constraintTop_toBottomOf="@id/subtitleLogin"
@@ -51,7 +51,7 @@
         app:boxStrokeWidth="2dp"
         app:boxStrokeWidthFocused="2dp"
         app:hintTextAppearance="@style/HintTextStyle"
-        app:placeholderText="Masukan Username">
+        app:placeholderText="Masukan Nama">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/userlogin"
@@ -70,7 +70,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginTop="16dp"
-        android:hint="Password"
+        android:hint="Kata Sandi"
         app:endIconMode="password_toggle"
         style="@style/CustomTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -80,7 +80,7 @@
         app:boxStrokeWidth="2dp"
         app:boxStrokeWidthFocused="2dp"
         app:hintTextAppearance="@style/HintTextStyle"
-        app:placeholderText="Masukan Password">
+        app:placeholderText="Masukan Kata Sandi">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passlogin"
@@ -137,7 +137,7 @@
         android:id="@+id/forgotLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Forgot Password?"
+        android:text="Lupa Kata Sandi?"
         android:textColor="@color/primary"
         android:layout_marginStart="12dp"
         android:layout_marginTop="54dp"

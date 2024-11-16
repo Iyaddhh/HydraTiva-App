@@ -1,10 +1,12 @@
 package com.example.hydrativa.retrofit;
 
 import com.example.hydrativa.models.EditProfileRequest;
+import com.example.hydrativa.models.User;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -19,4 +21,8 @@ public interface ProfileService {
             @Part("telp") RequestBody telp,
             @Part MultipartBody.Part image
     );
+
+    @GET("me/")
+    Call<User> getProfile();
+
 }

@@ -1,9 +1,11 @@
 package com.example.hydrativa;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView;
 
@@ -65,6 +67,12 @@ public class History extends AppCompatActivity {
                 // Tidak melakukan apa-apa jika tidak ada yang dipilih
             }
         });
+
+        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String name = sharedPreferences.getString("name", "User");
+
+        TextView nameText = findViewById(R.id.usernameText);
+        nameText.setText(name);
 
         // Inisialisasi RecyclerView
         recyclerView = findViewById(R.id.recyclerView);

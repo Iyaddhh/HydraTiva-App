@@ -21,6 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
+import com.example.hydrativa.models.User;
 import com.example.hydrativa.retrofit.ProfileService;
 import com.example.hydrativa.retrofit.RetrofitClient;
 
@@ -51,38 +53,64 @@ public class EditProfile extends AppCompatActivity {
         setContentView(R.layout.activity_edit_profile);
 
         radioGroup = findViewById(R.id.radioGroup1);
-        profileService = RetrofitClient.getRetrofitInstance(getApplicationContext()).create(ProfileService.class);
-
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                RadioButton selectedRadioButton = findViewById(checkedId);
-                if (selectedRadioButton != null) {
-                    jenis_kelamin = selectedRadioButton.getText().toString();
-                    Toast.makeText(EditProfile.this, "Jenis Kelamin: " + jenis_kelamin, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
         uploadedImage = findViewById(R.id.profile_image);
         name = findViewById(R.id.input_name);
         username = findViewById(R.id.input_username);
         telp = findViewById(R.id.input_phone);
         suntingButton = findViewById(R.id.suntingButton);
 
-        name.setText("");
-        username.setText("");
-        telp.setText("");
-        uploadedImage.setImageDrawable(null);
+        profileService = RetrofitClient.getRetrofitInstance(getApplicationContext()).create(ProfileService.class);
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
-        }
+        // Memuat data pengguna
+        loadUserProfile();
 
         suntingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateProfileData();
+            }
+        });
+    }
+
+    private void loadUserProfile() {
+        // Mengambil data profil pengguna dari API
+        Call<User> call = profileService.getProfile();
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    User user = response.body();
+
+                    // Menampilkan data pengguna ke dalam EditText dan RadioGroup
+                    name.setText(user.getName());
+                    username.setText(user.getUsername());
+                    telp.setText(user.getTelp());
+
+                    // Set jenis kelamin berdasarkan data yang diterima
+                    if (user.getJenis_kelamin() != null) {
+                        if (user.getJenis_kelamin().equalsIgnoreCase("Laki-laki")) {
+                            radioGroup.check(R.id.radio_laki);
+                        } else if (user.getJenis_kelamin().equalsIgnoreCase("Perempuan")) {
+                            radioGroup.check(R.id.radio_wanita);
+                        }
+                    }
+
+                    // Menampilkan gambar profil jika ada
+                    if (user.getGambar() != null && !user.getGambar().isEmpty()) {
+                        String gambarUrl = "http://10.0.2.2:8000/storage/" + user.getGambar();
+                        Glide.with(EditProfile.this)
+                                .load(gambarUrl)
+                                .into(uploadedImage);
+                    }
+                } else {
+                    Toast.makeText(EditProfile.this, "Failed to load profile", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(EditProfile.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -100,8 +128,7 @@ public class EditProfile extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
             uploadedImage.setImageURI(imageUri);
-        }
-        else{
+        } else {
             uploadedImage.setImageResource(R.drawable.default_profile);
         }
     }
@@ -123,6 +150,14 @@ public class EditProfile extends AppCompatActivity {
         String inputName = name.getText().toString().trim();
         String inputUsername = username.getText().toString().trim();
         String inputTelp = telp.getText().toString().trim();
+        int selectedId = radioGroup.getCheckedRadioButtonId();
+        if (selectedId == R.id.radio_laki) {
+            jenis_kelamin = "Laki-laki";
+        } else if (selectedId == R.id.radio_wanita) {
+            jenis_kelamin = "Perempuan";
+        } else {
+            jenis_kelamin = null;  // jika tidak ada pilihan yang dipilih
+        }
 
         if (inputName.isEmpty() || inputUsername.isEmpty() || jenis_kelamin == null || inputTelp.isEmpty()) {
             Toast.makeText(this, "Harap lengkapi semua informasi", Toast.LENGTH_SHORT).show();

@@ -13,6 +13,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.bumptech.glide.Glide;
+import com.example.hydrativa.models.Kebun;
 import com.example.hydrativa.retrofit.KebunService;
 import com.example.hydrativa.retrofit.RetrofitClient;
 
@@ -47,16 +50,44 @@ public class edit_kebun extends AppCompatActivity {
         idAlat = findViewById(R.id.hydrativa_id);
         updateButton = findViewById(R.id.updateButton);
 
-        namaKebun.setText("");
-        lokasiKebun.setText("");
-        luasLahan.setText("");
-        idAlat.setText("");
-        uploadedImage.setImageDrawable(null);
+        getKebunData(kebunId);
 
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateData();
+            }
+        });
+    }
+
+    private void getKebunData(int kebunId) {
+        KebunService apiService = RetrofitClient.getRetrofitInstance(this).create(KebunService.class);
+        Call<Kebun> call = apiService.getKebunDetail(kebunId);
+
+        call.enqueue(new Callback<Kebun>() {
+            @Override
+            public void onResponse(Call<Kebun> call, Response<Kebun> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Kebun kebun = response.body();
+                    namaKebun.setText(kebun.getNama_kebun());
+                    lokasiKebun.setText(kebun.getLokasi_kebun());
+                    luasLahan.setText(String.valueOf(kebun.getLuas_lahan()));
+                    idAlat.setText(String.valueOf(kebun.getKebun_id()));
+
+                    if (kebun.getGambar() != null && !kebun.getGambar().isEmpty()) {
+                        String gambarUrl = "http://10.0.2.2:8000/storage/" + kebun.getGambar();
+                        Glide.with(edit_kebun.this)
+                                .load(gambarUrl)
+                                .into(uploadedImage);
+                    }
+                } else {
+                    Toast.makeText(edit_kebun.this, "Gagal mengambil data kebun", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Kebun> call, Throwable t) {
+                Toast.makeText(edit_kebun.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -106,7 +137,6 @@ public class edit_kebun extends AppCompatActivity {
         RequestBody luasLahanRequest = RequestBody.create(MediaType.parse("text/plain"), luas);
         RequestBody idAlatRequest = RequestBody.create(MediaType.parse("text/plain"), id);
 
-        // Mengatur imagePart hanya jika gambar dipilih
         MultipartBody.Part imagePart = null;
         if (imageUri != null) {
             File file = new File(getRealPathFromURI(imageUri));
