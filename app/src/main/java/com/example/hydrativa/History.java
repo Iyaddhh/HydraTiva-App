@@ -2,7 +2,10 @@ package com.example.hydrativa;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.AdapterView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,66 +14,156 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.hydrativa.adapters.HistoryPenyiramanAdapter;
 import com.example.hydrativa.models.HistoryPenyiraman;
 import com.example.hydrativa.retrofit.KebunService;
+import com.example.hydrativa.retrofit.RetrofitClient;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class History extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private HistoryPenyiramanAdapter adapter;
     private List<HistoryPenyiraman> historyList;
-
-    private static final String BASE_URL = "http://10.0.2.2:8000/api/";  // URL API
+    private List<HistoryPenyiraman> filteredHistoryList;
+    private Spinner spinnerMonth;
+    private List<String> monthsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
+        // Inisialisasi data bulan
+        monthsList = new ArrayList<>();
+
+        // Mengatur Spinner dengan bulan
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, monthsList);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinnerMonth = findViewById(R.id.spinnerMonth);
+        spinnerMonth.setAdapter(spinnerAdapter);
+
+        // Menambahkan listener untuk spinner
+        spinnerMonth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, android.view.View selectedItemView, int position, long id) {
+                // Mendapatkan bulan yang dipilih
+                String selectedMonthYear = (String) parentView.getItemAtPosition(position);
+                filterDataByMonth(selectedMonthYear);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // Tidak melakukan apa-apa jika tidak ada yang dipilih
+            }
+        });
+
+        // Inisialisasi RecyclerView
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        historyList = new ArrayList<>();
+        // Mendapatkan data history dari API
+        int kebunId = 2; // Ganti dengan ID kebun yang sesuai
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        // Membuat instance dari KebunService
-        KebunService apiService = retrofit.create(KebunService.class);
-
-        // Mendapatkan kebun_id dari sharedPreferences atau aktivitas lain
-        int kebunId = getIntent().getIntExtra("kebun_id", 1); // Misalnya, kita mendapatkan kebunId dari intent
-
-        // Memanggil API untuk mengambil histori penyiraman berdasarkan kebunId
+        KebunService apiService = RetrofitClient.getRetrofitInstance(History.this).create(KebunService.class);
         Call<List<HistoryPenyiraman>> call = apiService.getHistori(kebunId);
-
         call.enqueue(new Callback<List<HistoryPenyiraman>>() {
             @Override
             public void onResponse(Call<List<HistoryPenyiraman>> call, Response<List<HistoryPenyiraman>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    // Menambahkan data ke list dan mengupdate RecyclerView
-                    historyList.addAll(response.body());
-                    adapter = new HistoryPenyiramanAdapter(historyList);
+                    historyList = response.body();
+                    filteredHistoryList = new ArrayList<>(historyList);
+                    adapter = new HistoryPenyiramanAdapter(filteredHistoryList);
                     recyclerView.setAdapter(adapter);
+
+                    // Dapatkan bulan dan tahun dari data history
+                    addMonthsToSpinner(historyList);
                 } else {
-                    Log.d("History", "ini" + response.message());
-                    Toast.makeText(History.this, "Gagal mengambil data", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(History.this, "Tidak ada data histori", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<HistoryPenyiraman>> call, Throwable t) {
-                Toast.makeText(History.this, "Terjadi kesalahan: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(History.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+    // Fungsi untuk menambah bulan dan tahun yang ditemukan dalam data history ke dalam spinner
+    private void addMonthsToSpinner(List<HistoryPenyiraman> historyList) {
+        // Format tanggal untuk mendapatkan bulan dan tahun
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); // Format sesuai data Anda
+        for (HistoryPenyiraman history : historyList) {
+            try {
+                String dateStr = history.getDate();
+                Log.d("History", "Date from history: " + dateStr);
+                // Parsing waktu menjadi objek Date
+                Date date = sdf.parse(history.getDate());
+                // Mengubah string waktu menjadi Date
+                SimpleDateFormat monthYearFormat = new SimpleDateFormat("MMMM yyyy"); // Format bulan dan tahun
+                String monthYear = monthYearFormat.format(date); // Mendapatkan bulan dan tahun dalam format "Maret 2023"
+
+                // Pastikan bulan dan tahun unik sebelum ditambahkan ke list
+                if (!monthsList.contains(monthYear)) {
+                    monthsList.add(monthYear);
+                }
+            } catch (Exception e) {
+                e.printStackTrace(); // Jika parsing gagal, lewati item ini
+            }
+        }
+
+        Log.d("History", "Months list: " + monthsList);
+
+        // Update spinner setelah bulan dan tahun ditambahkan
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, monthsList);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerMonth.setAdapter(spinnerAdapter);
+    }
+
+    // Fungsi untuk memfilter data berdasarkan bulan yang dipilih
+    private void filterDataByMonth(String selectedMonthYear) {
+        if (selectedMonthYear != null && !selectedMonthYear.isEmpty()) {
+            // Format tanggal untuk memisahkan bulan dan tahun
+            SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy");
+            Map<String, HistoryPenyiraman> dateHistoryMap = new HashMap<>();
+
+            // Mengelompokkan data berdasarkan tanggal dan menyimpan data terbaru
+            for (HistoryPenyiraman history : historyList) {
+                try {
+                    Date date = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(history.getDate());
+                    SimpleDateFormat monthYearFormat = new SimpleDateFormat("MMMM yyyy");
+                    String monthYear = monthYearFormat.format(date);
+
+                    // Memastikan bulan yang dipilih cocok
+                    if (monthYear.equals(selectedMonthYear)) {
+                        // Mendapatkan tanggal dari history (format hanya tanggal)
+                        SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy/MM/dd");
+                        String day = dayFormat.format(date);
+
+                        // Jika tanggal belum ada, atau jika data ini lebih terbaru, ganti data
+                        if (!dateHistoryMap.containsKey(day) || dateHistoryMap.get(day).getDate().compareTo(history.getDate()) < 0) {
+                            dateHistoryMap.put(day, history);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace(); // Jika parsing gagal, lewati item ini
+                }
+            }
+
+            // Dapatkan data terbaru yang ditemukan untuk bulan yang dipilih
+            filteredHistoryList.clear();
+            filteredHistoryList.addAll(dateHistoryMap.values());
+            adapter.notifyDataSetChanged();
+        }
+    }
+
 }
