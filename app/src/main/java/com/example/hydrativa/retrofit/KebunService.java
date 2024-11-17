@@ -1,5 +1,6 @@
 package com.example.hydrativa.retrofit;
 
+import com.example.hydrativa.models.HistoryPenyiraman;
 import com.example.hydrativa.models.Kebun;
 
 import okhttp3.MultipartBody;
@@ -22,7 +23,7 @@ public interface KebunService {
             @Part("nama_kebun") RequestBody namaKebun,
             @Part("luas_lahan") RequestBody luasLahan,
             @Part("lokasi_kebun") RequestBody lokasiKebun,
-            @Part("alat_id") RequestBody idAlat,
+            @Part("kode_alat") RequestBody idAlat,
             @Part MultipartBody.Part image
     );
 
@@ -45,4 +46,7 @@ public interface KebunService {
 
     @DELETE("kebun/{id}")
     Call<Void> deleteKebun(@Path("id") int kebun_id);
+
+    @GET("kebun/histori/{id}")
+    Call<List<HistoryPenyiraman>> getHistori(@Path("id") int kebunId);
 }

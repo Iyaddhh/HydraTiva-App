@@ -1,48 +1,63 @@
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginStart="20dp"
-    android:layout_marginEnd="20dp"
-    android:layout_marginTop="5dp"
-    android:layout_marginBottom="5dp"
-    app:cardCornerRadius="18dp">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp">
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="2dp"
+        android:backgroundTint="@color/white">
 
-        <!-- Date (Day, Date, Month, Year) -->
-        <TextView
-            android:id="@+id/tvDate"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Kamis, 23 Mei 2024"
-            android:textColor="@color/primary"
-            android:textSize="16sp"
-            android:fontFamily="@font/poppins_bold" />
+            android:padding="12dp">
 
-        <!-- Description -->
-        <TextView
-            android:id="@+id/tvDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cek Kebun mu pada tanggal ini, Sekarang!"
-            android:textSize="14sp"
-            android:layout_marginTop="4dp"
-            android:fontFamily="@font/poppins" />
+            <!-- Tanggal -->
+            <TextView
+                android:id="@+id/dateText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Kamis, 23 Mei 2024"
+                android:textSize="16sp"
+                android:textColor="@color/primary"
+                android:fontFamily="@font/poppins_bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/timeText" />
 
-        <!-- Time -->
-        <TextView
-            android:id="@+id/tvTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="07.30"
-            android:textSize="14sp"
-            android:layout_gravity="end"
-            android:fontFamily="@font/poppins" />
+            <!-- Waktu -->
+            <TextView
+                android:id="@+id/timeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="07.30"
+                android:textSize="12sp"
+                android:textColor="@color/grey"
+                android:fontFamily="@font/poppins"
+                app:layout_constraintTop_toTopOf="@id/dateText"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+            <!-- Informasi Moisture -->
+            <TextView
+                android:id="@+id/moistureLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cek Kebunmu Sekarang!"
+                android:textSize="14sp"
+                android:textColor="@color/grey"
+                android:fontFamily="@font/poppins"
+                app:layout_constraintTop_toBottomOf="@id/dateText"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

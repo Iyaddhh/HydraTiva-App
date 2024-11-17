@@ -40,21 +40,22 @@
         app:layout_constraintTop_toBottomOf="@+id/header_kebun">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="175dp"
-            android:layout_marginHorizontal="30dp"
+            android:layout_width="350dp"
+            android:layout_height="200dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="15dp"
-            app:cardCornerRadius="28dp">
+            app:cardCornerRadius="18dp">
 
             <ImageView
                 android:id="@+id/uploadedImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
                 android:src="@drawable/tambah_gambar"
                 android:contentDescription="Tambah Gambar"
-                android:background="#E0E0E0"
                 android:onClick="openImagePicker"/>
         </androidx.cardview.widget.CardView>
 
