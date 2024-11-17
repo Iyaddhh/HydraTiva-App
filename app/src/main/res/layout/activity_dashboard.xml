@@ -62,7 +62,7 @@
                             android:layout_marginTop="60dp" />
 
                         <TextView
-                            android:id="@+id/nameText"
+                            android:id="@+id/usernameText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Tegar Santoso"
@@ -83,7 +83,9 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintVertical_bias="0.728" />
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -445,6 +447,7 @@
                             android:fontFamily="@font/poppins_bold" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
+
             </GridLayout>
         </LinearLayout>
     </ScrollView>
