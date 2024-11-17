@@ -79,6 +79,7 @@
                             android:layout_height="75dp"
                             android:layout_marginEnd="40dp"
                             android:src="@drawable/circle_bg"
+                            android:scaleType="centerCrop"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
@@ -196,7 +197,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
-                                android:text="Kamis, 23 Mei 2024"
+                                android:text="-"
                                 android:textSize="14sp"
                                 android:textColor="@color/primary" />
                         </LinearLayout>
@@ -219,7 +220,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
-                                android:text="Normal"
+                                android:text="-"
                                 android:textSize="14sp"
                                 android:textColor="@color/primary" />
                         </LinearLayout>
@@ -249,7 +250,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
-                                android:text="Sudah di siram"
+                                android:text="-"
                                 android:textSize="14sp"
                                 android:textColor="@color/primary" />
                         </LinearLayout>
@@ -273,7 +274,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
-                                android:text="7pH"
+                                android:text="-"
                                 android:textSize="14sp"
                                 android:textColor="@color/primary" />
                         </LinearLayout>

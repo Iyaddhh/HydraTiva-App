@@ -75,7 +75,7 @@ public class edit_kebun extends AppCompatActivity {
                     idAlat.setText(String.valueOf(kebun.getKebun_id()));
 
                     if (kebun.getGambar() != null && !kebun.getGambar().isEmpty()) {
-                        String gambarUrl = "http://10.0.2.2:8000/storage/" + kebun.getGambar();
+                        String gambarUrl = "https://hydrativa-hufme6esdvd6acfp.eastasia-01.azurewebsites.net/storage/" + kebun.getGambar();
                         Glide.with(edit_kebun.this)
                                 .load(gambarUrl)
                                 .into(uploadedImage);

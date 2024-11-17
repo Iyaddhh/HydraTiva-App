@@ -82,9 +82,15 @@ public class Profile extends AppCompatActivity {
                     jenis_kelamin.setText(user.getJenis_kelamin());
 
                     if (user.getGambar() != null && !user.getGambar().isEmpty()) {
-                        String gambarUrl = "http://10.0.2.2:8000/storage/" + user.getGambar();
+                        User userProfile = response.body();
+                        String imageUrl = userProfile.getGambar();
+
+                        if (imageUrl != null && imageUrl.startsWith("http://")) {
+                            imageUrl = "https://" + imageUrl.substring(7); // Mengganti http:// menjadi https://
+                        }
+
                         Glide.with(Profile.this)
-                                .load(gambarUrl)
+                                .load(imageUrl)
                                 .into(profile_image);
                     }
                 } else {

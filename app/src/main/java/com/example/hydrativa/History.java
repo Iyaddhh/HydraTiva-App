@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,9 +14,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.hydrativa.adapters.HistoryPenyiramanAdapter;
 import com.example.hydrativa.models.HistoryPenyiraman;
+import com.example.hydrativa.models.User;
 import com.example.hydrativa.retrofit.KebunService;
+import com.example.hydrativa.retrofit.ProfileService;
 import com.example.hydrativa.retrofit.RetrofitClient;
 
 import java.text.SimpleDateFormat;
@@ -42,6 +46,14 @@ public class History extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+
+        int kebunId = getIntent().getIntExtra("kebun_id", 1); // -1 sebagai default jika tidak ada kebun_id
+
+        if (kebunId == -1) {
+            Toast.makeText(this, "Kebun ID tidak ditemukan", Toast.LENGTH_SHORT).show();
+            finish(); // Keluar dari aktivitas jika kebunId tidak valid
+            return;
+        }
 
         // Inisialisasi data bulan
         monthsList = new ArrayList<>();
@@ -78,8 +90,40 @@ public class History extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Mendapatkan data history dari API
-        int kebunId = 2; // Ganti dengan ID kebun yang sesuai
+        // Mengambil profil pengguna dari API
+        ProfileService profileService = RetrofitClient.getRetrofitInstance(History.this).create(ProfileService.class);
+        Call<User> profileCall = profileService.getProfile();
+        profileCall.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    User userProfile = response.body();
+                    String imageUrl = userProfile.getGambar();
+
+                    if (imageUrl != null && imageUrl.startsWith("http://")) {
+                        imageUrl = "https://" + imageUrl.substring(7); // Mengganti http:// menjadi https://
+                    }
+
+                    ImageView profileImageView = findViewById(R.id.circleImage);
+
+                    // Menggunakan Glide untuk memuat gambar profil
+                    Glide.with(History.this)
+                            .load(imageUrl)
+                            .circleCrop()
+                            .error(R.drawable.tehdia)
+                            .into(profileImageView);
+
+                } else {
+                    Toast.makeText(History.this, "Gagal memuat profil pengguna", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable throwable) {
+                Toast.makeText(History.this, "Error: " + throwable.toString(), Toast.LENGTH_SHORT).show();
+                Log.d("Error", "Error occurred: " + throwable);
+            }
+        });
 
         KebunService apiService = RetrofitClient.getRetrofitInstance(History.this).create(KebunService.class);
         Call<List<HistoryPenyiraman>> call = apiService.getHistori(kebunId);

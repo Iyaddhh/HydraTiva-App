@@ -18,7 +18,9 @@ import com.bumptech.glide.Glide;
 import com.example.hydrativa.adapters.HistoryPenyiramanAdapter;
 import com.example.hydrativa.models.HistoryPenyiraman;
 import com.example.hydrativa.models.Kebun;
+import com.example.hydrativa.models.User;
 import com.example.hydrativa.retrofit.KebunService;
+import com.example.hydrativa.retrofit.ProfileService;
 import com.example.hydrativa.retrofit.RetrofitClient;
 
 import java.util.List;
@@ -66,6 +68,45 @@ public class detail_watering extends AppCompatActivity {
 
         kebunId = getIntent().getIntExtra("KEBUN_ID", -1);
 
+        // Mengambil profil pengguna dari API
+        ProfileService profileService = RetrofitClient.getRetrofitInstance(detail_watering.this).create(ProfileService.class);
+        Call<User> profileCall = profileService.getProfile();
+        profileCall.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    User userProfile = response.body();
+                    String imageUrl = userProfile.getGambar();
+
+                    if (imageUrl != null && imageUrl.startsWith("http://")) {
+                        imageUrl = "https://" + imageUrl.substring(7); // Mengganti http:// menjadi https://
+                    }
+
+                    ImageView profileImageView = findViewById(R.id.circleImage);
+
+                    if (imageUrl != null && imageUrl.startsWith("http://")) {
+                        imageUrl = "https://" + imageUrl.substring(7); // Mengganti http:// menjadi https://
+                    }
+
+                    // Menggunakan Glide untuk memuat gambar profil
+                    Glide.with(detail_watering.this)
+                            .load(imageUrl)
+                            .circleCrop()
+                            .error(R.drawable.tehdia)
+                            .into(profileImageView);
+
+                } else {
+                    Toast.makeText(detail_watering.this, "Gagal memuat profil pengguna", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable throwable) {
+                Toast.makeText(detail_watering.this, "Error: " + throwable.toString(), Toast.LENGTH_SHORT).show();
+                Log.d("Error", "Error occurred: " + throwable);
+            }
+        });
+
         Call<Kebun> call = kebunService.getKebunDetail(kebunId);
         call.enqueue(new Callback<Kebun>() {
             @Override
@@ -78,7 +119,7 @@ public class detail_watering extends AppCompatActivity {
                     tvPH.setText(kebunDetail.getpH() + " pH");
                     tvKondisi.setText("Status: " + kebunDetail.getStatus());
 
-                    imageUrl = "http://10.0.2.2:8000/storage/" + kebunDetail.getGambar();
+                    imageUrl = "https://hydrativa-hufme6esdvd6acfp.eastasia-01.azurewebsites.net/storage/" + kebunDetail.getGambar();
                     Glide.with(detail_watering.this)
                             .load(imageUrl)
                             .error(R.drawable.tehdia)
@@ -148,6 +189,7 @@ public class detail_watering extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(detail_watering.this, History.class);
+                i.putExtra("kebun_id", kebunId);
                 startActivity(i);
             }
         });

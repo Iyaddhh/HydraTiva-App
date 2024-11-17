@@ -9,9 +9,8 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -19,19 +18,24 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-
 import com.example.hydrativa.adapters.ImageAdapter;
 import com.example.hydrativa.models.ImageItem;
+import com.example.hydrativa.retrofit.RetrofitClient;
+import com.example.hydrativa.models.User;
+import com.example.hydrativa.retrofit.ProfileService;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class Dashboard extends AppCompatActivity {
 
-    ViewPager2 viewPage;
-    private ViewPager2.OnPageChangeCallback pageChangeListener;
+    private ViewPager2 viewPage;
     private ImageView[] dotsImage;
     private Handler handler;
     private int currentPage = 0;
@@ -39,50 +43,24 @@ public class Dashboard extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_dashboard);
+
+        // Menangani padding sistem untuk edge-to-edge view
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        androidx.cardview.widget.CardView gridKebun1 = findViewById(R.id.grid1);
-        androidx.cardview.widget.CardView gridKebun2 = findViewById(R.id.grid2);
-        androidx.cardview.widget.CardView gridKebun3 = findViewById(R.id.grid3);
-        androidx.cardview.widget.CardView gridKebun4 = findViewById(R.id.grid4);
+        // Menambahkan onClickListener untuk grid kebun
+        findViewById(R.id.grid1).setOnClickListener(view -> openUrl("https://www.youtube.com/"));
+        findViewById(R.id.grid2).setOnClickListener(view -> openUrl("https://www.youtube.com/"));
+        findViewById(R.id.grid3).setOnClickListener(view -> openUrl("https://www.youtube.com/"));
+        findViewById(R.id.grid4).setOnClickListener(view -> openUrl("https://www.youtube.com/"));
 
-        gridKebun1.setOnClickListener(view -> {
-            String url = "https://www.youtube.com/";
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(url));
-            startActivity(intent);
-        });
-
-        gridKebun2.setOnClickListener(view -> {
-            String url = "https://www.youtube.com/";
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(url));
-            startActivity(intent);
-        });
-
-        gridKebun3.setOnClickListener(view -> {
-            String url = "https://www.youtube.com/";
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(url));
-            startActivity(intent);
-        });
-
-        gridKebun4.setOnClickListener(view -> {
-            String url = "https://www.youtube.com/";
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(url));
-            startActivity(intent);
-        });
-
+        // Menangani BottomNavigationView
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomView);
-        bottomNavigationView.setSelectedItemId(R.id.nav_home); // Optional, to set a default selection
-
+        bottomNavigationView.setSelectedItemId(R.id.nav_home);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_home) {
                 return true;
@@ -100,27 +78,48 @@ public class Dashboard extends AppCompatActivity {
             return false;
         });
 
+        // Mengambil nama pengguna dari SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
         String name = sharedPreferences.getString("name", "User");
-        String gambar = sharedPreferences.getString("gambar", null);
-        Log.d("SharedPreferences", "Isi gambar: " + gambar);
 
+        // Menampilkan nama pengguna
         TextView nameText = findViewById(R.id.nameText);
         nameText.setText(name);
 
-        ImageView gambarView = findViewById(R.id.circleImage);
-        if (gambar != null && !gambar.equals("User")) { // Periksa apakah gambar valid
-            // Jika gambar adalah path lokal atau URL
-            Glide.with(this)
-                    .load(Uri.parse(gambar)) // Menggunakan Uri jika path gambar lokal atau URL
-                    .into(gambarView);
-        } else {
-            // Jika gambar tidak valid, tampilkan gambar default
-            Glide.with(this)
-                    .load(R.drawable.default_profile) // Gambar default
-                    .into(gambarView);
-        }
+        // Mengambil profil pengguna dari API
+        ProfileService profileService = RetrofitClient.getRetrofitInstance(Dashboard.this).create(ProfileService.class);
+        Call<User> call = profileService.getProfile();
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    User userProfile = response.body();
+                    String imageUrl = userProfile.getGambar(); // Pastikan Anda memiliki path yang benar
+                    ImageView profileImageView = findViewById(R.id.circleImage);
 
+                    if (imageUrl != null && imageUrl.startsWith("http://")) {
+                        imageUrl = "https://" + imageUrl.substring(7); // Mengganti http:// menjadi https://
+                    }
+                    // Menggunakan Glide untuk memuat gambar profil
+                    Glide.with(Dashboard.this)
+                            .load(imageUrl)
+                            .circleCrop()
+                            .error(R.drawable.tehdia)
+                            .into(profileImageView);
+
+                } else {
+                    Toast.makeText(Dashboard.this, "Gagal memuat profil pengguna", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable throwable) {
+                Toast.makeText(Dashboard.this, "Error: " + throwable.toString(), Toast.LENGTH_SHORT).show();
+                Log.d("Error", "Error occurred: " + throwable);
+            }
+        });
+
+        // Setup ViewPager untuk gambar slider
         viewPage = findViewById(R.id.viewpager);
         LinearLayout slideDot = findViewById(R.id.slider);
 
@@ -134,14 +133,12 @@ public class Dashboard extends AppCompatActivity {
         imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.stevia));
         imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.tehdia));
         imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.daun_bg));
-        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.stevia));
-        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.tehdia));
-        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.daun_bg));
 
         ImageAdapter imageAdapter = new ImageAdapter();
         viewPage.setAdapter(imageAdapter);
         imageAdapter.submitList(imageList);
 
+        // Setup dot indicators
         dotsImage = new ImageView[imageList.size()];
         for (int i = 0; i < imageList.size(); i++) {
             dotsImage[i] = new ImageView(this);
@@ -150,7 +147,7 @@ public class Dashboard extends AppCompatActivity {
         }
         dotsImage[0].setImageResource(R.drawable.active_dot);
 
-        pageChangeListener = new ViewPager2.OnPageChangeCallback() {
+        viewPage.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
@@ -162,9 +159,7 @@ public class Dashboard extends AppCompatActivity {
                     }
                 }
             }
-        };
-
-        viewPage.registerOnPageChangeCallback(pageChangeListener);
+        });
 
         handler = new Handler();
         Runnable runnable = new Runnable() {
@@ -181,11 +176,17 @@ public class Dashboard extends AppCompatActivity {
         handler.postDelayed(runnable, 3000);
     }
 
+    private void openUrl(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (viewPage != null) {
-            viewPage.unregisterOnPageChangeCallback(pageChangeListener);
+            viewPage.unregisterOnPageChangeCallback(null);
         }
     }
 }

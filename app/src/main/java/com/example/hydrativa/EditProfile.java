@@ -1,8 +1,6 @@
 package com.example.hydrativa;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,14 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.hydrativa.models.User;
@@ -98,9 +92,15 @@ public class EditProfile extends AppCompatActivity {
 
                     // Menampilkan gambar profil jika ada
                     if (user.getGambar() != null && !user.getGambar().isEmpty()) {
-                        String gambarUrl = "http://10.0.2.2:8000/storage/" + user.getGambar();
+                        User userProfile = response.body();
+                        String imageUrl = userProfile.getGambar();
+
+                        if (imageUrl != null && imageUrl.startsWith("http://")) {
+                            imageUrl = "https://" + imageUrl.substring(7); // Mengganti http:// menjadi https://
+                        }
+
                         Glide.with(EditProfile.this)
-                                .load(gambarUrl)
+                                .load(imageUrl)
                                 .into(uploadedImage);
                     }
                 } else {
@@ -159,20 +159,23 @@ public class EditProfile extends AppCompatActivity {
             jenis_kelamin = null;  // jika tidak ada pilihan yang dipilih
         }
 
+        // Validasi input
         if (inputName.isEmpty() || inputUsername.isEmpty() || jenis_kelamin == null || inputTelp.isEmpty()) {
             Toast.makeText(this, "Harap lengkapi semua informasi", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Persiapkan data untuk dikirim
         RequestBody requestName = RequestBody.create(MediaType.parse("text/plain"), inputName);
         RequestBody requestUsername = RequestBody.create(MediaType.parse("text/plain"), inputUsername);
         RequestBody requestJenis_Kelamin = RequestBody.create(MediaType.parse("text/plain"), jenis_kelamin);
         RequestBody requestTelp = RequestBody.create(MediaType.parse("text/plain"), inputTelp);
 
+        // Menyiapkan image jika ada
         MultipartBody.Part imagePart = null;
         if (imageUri != null) {
             File file = new File(getRealPathFromURI(imageUri));
-            if (file.length() > 2048 * 1024) {
+            if (file.length() > 2048 * 1024) {  // 2MB max size
                 Toast.makeText(this, "File gambar terlalu besar", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -180,6 +183,7 @@ public class EditProfile extends AppCompatActivity {
             imagePart = MultipartBody.Part.createFormData("gambar", file.getName(), requestFile);
         }
 
+        // Kirim data ke server menggunakan Retrofit
         Call<Void> call = profileService.updateProfile(requestUsername, requestJenis_Kelamin, requestName, requestTelp, imagePart);
 
         call.enqueue(new Callback<Void>() {

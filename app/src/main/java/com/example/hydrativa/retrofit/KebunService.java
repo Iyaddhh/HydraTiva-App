@@ -2,10 +2,13 @@ package com.example.hydrativa.retrofit;
 
 import com.example.hydrativa.models.HistoryPenyiraman;
 import com.example.hydrativa.models.Kebun;
+import com.example.hydrativa.models.LoginRequest;
+import com.example.hydrativa.models.LoginResponse;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -49,4 +52,11 @@ public interface KebunService {
 
     @GET("kebun/histori/{id}")
     Call<List<HistoryPenyiraman>> getHistori(@Path("id") int kebunId);
+
+
+    @POST("login")
+    Call<LoginResponse> loginUser(@Body LoginRequest request);
+
+    @GET("logout")
+    Call<Void> logout();
 }

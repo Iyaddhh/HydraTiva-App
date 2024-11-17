@@ -3,6 +3,7 @@ package com.example.hydrativa;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,20 +18,13 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.hydrativa.models.LoginRequest;
 import com.example.hydrativa.models.LoginResponse;
-import com.example.hydrativa.models.RegisterRequest;
-import com.example.hydrativa.retrofit.ForgotService;
 import com.example.hydrativa.retrofit.LoginService;
-import com.example.hydrativa.retrofit.RegisterService;
 import com.example.hydrativa.retrofit.RetrofitClient;
 
 import okhttp3.Request;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class Login extends AppCompatActivity {
 
@@ -40,6 +34,7 @@ public class Login extends AppCompatActivity {
     TextView linkRegister;
     TextView linkForgot;
 
+    private static final String TAG = "LoginActivity"; // Tag untuk Log
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +60,7 @@ public class Login extends AppCompatActivity {
             public void onClick(View view) {
                 String username = login_user.getText().toString().trim();
                 String password = pass_user.getText().toString().trim();
+                Log.d(TAG, "Attempting login with username: " + username); // Log username
                 loginUser(username, password);
             }
         });
@@ -92,10 +88,14 @@ public class Login extends AppCompatActivity {
         LoginRequest loginRequest = new LoginRequest(username, password);
         Call<LoginResponse> call = loginService.loginUser(loginRequest);
 
+        Log.d(TAG, "Sending login request: " + loginRequest); // Log request payload
+
         call.enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                Log.d(TAG, "Login response received: " + response); // Log response
                 if (response.isSuccessful() && response.body() != null) {
+                    Log.d(TAG, "Login successful: " + response.body()); // Log response body jika sukses
                     // Login succeeded, retrieve the token from LoginResponse
                     LoginResponse loginResponse = response.body();
                     String token = loginResponse.getToken();
@@ -115,17 +115,21 @@ public class Login extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
+                    try {
+                        String errorBody = response.errorBody().string(); // Log error body
+                        Log.e(TAG, "Login failed. Error: " + errorBody);
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error reading errorBody", e);
+                    }
                     Toast.makeText(Login.this, "Login Failed", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Log.e(TAG, "Login request failed", t); // Log error saat gagal
                 Toast.makeText(Login.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 }
-
-
-

@@ -6,20 +6,26 @@
     import com.google.gson.Gson;
     import com.google.gson.GsonBuilder;
 
+    import okhttp3.Dns;
     import okhttp3.Interceptor;
     import okhttp3.OkHttpClient;
     import okhttp3.Request;
     import okhttp3.Response;
     import retrofit2.Retrofit;
     import retrofit2.converter.gson.GsonConverterFactory;
+    import okhttp3.logging.HttpLoggingInterceptor;
 
-    import com.example.hydrativa.models.LoginResponse;
 
     import java.io.IOException;
+    import java.net.InetAddress;
+    import java.net.UnknownHostException;
+    import java.util.Arrays;
+    import java.util.List;
+    import java.util.concurrent.TimeUnit;
 
     public class RetrofitClient {
         private static Retrofit retrofit;
-        private static final String BASE_URL = "http://10.0.2.2:8000/api/";
+        private static final String BASE_URL = "https://hydrativa-hufme6esdvd6acfp.eastasia-01.azurewebsites.net/api/";
 
         public static Retrofit getRetrofitInstance(Context context) {
             if (retrofit == null) {
@@ -31,8 +37,15 @@
                                 .create();
 
                         OkHttpClient client = new OkHttpClient.Builder()
+                                .hostnameVerifier((hostname, session) -> true)
+                                .connectTimeout(30, TimeUnit.SECONDS)  // Waktu timeout saat mencoba koneksi ke server
+                                .readTimeout(30, TimeUnit.SECONDS)     // Waktu timeout saat menunggu respons dari server
+                                .writeTimeout(30, TimeUnit.SECONDS)
                                 .addInterceptor(new AuthInterceptor(context))
+                                .addInterceptor(new HttpLoggingInterceptor()
+                                        .setLevel(HttpLoggingInterceptor.Level.BODY)) // Log seluruh request dan response
                                 .build();
+
 
                         retrofit = new Retrofit.Builder()
                                 .baseUrl(BASE_URL)

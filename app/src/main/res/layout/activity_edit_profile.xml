@@ -58,10 +58,10 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginBottom="16dp"
+                android:onClick="openImagePicker"
                 android:scaleType="centerCrop"
                 android:src="@drawable/stevia"
-                app:shapeAppearanceOverlay="@style/CircleImage"
-                android:onClick="openImagePicker"/>
+                app:shapeAppearanceOverlay="@style/CircleImage" />
 
             <TextView
                 android:layout_width="wrap_content"

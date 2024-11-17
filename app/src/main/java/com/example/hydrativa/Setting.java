@@ -3,8 +3,10 @@ package com.example.hydrativa;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,7 +17,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
+import com.example.hydrativa.models.User;
 import com.example.hydrativa.retrofit.LogoutService;
+import com.example.hydrativa.retrofit.ProfileService;
 import com.example.hydrativa.retrofit.RetrofitClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -88,6 +93,40 @@ public class Setting extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(Setting.this, Profile.class);
                 startActivity(i);
+            }
+        });
+
+        // Mengambil profil pengguna dari API
+        ProfileService profileService = RetrofitClient.getRetrofitInstance(Setting.this).create(ProfileService.class);
+        Call<User> profileCall = profileService.getProfile();
+        profileCall.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    User userProfile = response.body();
+                    String imageUrl = userProfile.getGambar();
+
+                    if (imageUrl != null && imageUrl.startsWith("http://")) {
+                        imageUrl = "https://" + imageUrl.substring(7); // Mengganti http:// menjadi https://
+                    }
+                    ImageView profileImageView = findViewById(R.id.circleImage);
+
+                    // Menggunakan Glide untuk memuat gambar profil
+                    Glide.with(Setting.this)
+                            .load(imageUrl)
+                            .circleCrop()
+                            .error(R.drawable.tehdia)
+                            .into(profileImageView);
+
+                } else {
+                    Toast.makeText(Setting.this, "Gagal memuat profil pengguna", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable throwable) {
+                Toast.makeText(Setting.this, "Error: " + throwable.toString(), Toast.LENGTH_SHORT).show();
+                Log.d("Error", "Error occurred: " + throwable);
             }
         });
     }
