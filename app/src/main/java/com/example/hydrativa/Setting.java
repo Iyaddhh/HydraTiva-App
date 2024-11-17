@@ -56,13 +56,13 @@ public class Setting extends AppCompatActivity {
             }
             return false;
         });
-        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
-        String name = sharedPreferences.getString("name", "User");
-
         fab.setOnClickListener(view -> {
             startActivity(new Intent(Setting.this, Watering.class));
             overridePendingTransition(0, 0);
         });
+
+        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String name = sharedPreferences.getString("name", "User");
 
         TextView nameText = findViewById(R.id.usernameText);
         nameText.setText(name);

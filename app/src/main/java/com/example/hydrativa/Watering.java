@@ -110,11 +110,5 @@ public class Watering extends AppCompatActivity {
             startActivity(intent);
             overridePendingTransition(0, 0);
         });
-
-        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
-        String name = sharedPreferences.getString("name", "User");
-
-        TextView nameText = findViewById(R.id.usernameText);
-        nameText.setText(name);
     }
 }

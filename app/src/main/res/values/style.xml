@@ -16,6 +16,7 @@
         <item name="android:textColor">@color/grey</item>
         <item name="android:fontFamily">@font/poppins</item> 
         <item name="android:textSize">14sp</item>
+        <item name="android:alpha">0.8</item>
     </style>
 
     <style name="PlaceholderTextStyle" parent="TextAppearance.MaterialComponents.Body1">

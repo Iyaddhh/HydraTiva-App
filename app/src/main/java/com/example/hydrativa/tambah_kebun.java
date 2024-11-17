@@ -51,6 +51,16 @@ public class tambah_kebun extends AppCompatActivity {
                 saveData();
             }
         });
+
+        ImageView backButton = findViewById(R.id.backButton);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
     }
 
     public void openImagePicker(View view) {

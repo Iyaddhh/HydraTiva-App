@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".about">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="95dp"
+        android:backgroundTint="@color/primary"
+        android:id="@+id/header_profile"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tentang HydraTiva"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:textSize="20sp"
+            android:fontFamily="@font/poppins"
+            android:textStyle="bold"/>
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/arrow_left"
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="18dp"/>
+    </androidx.cardview.widget.CardView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/logo_aplikasi"
+            android:id="@+id/logo"
+            android:layout_marginStart="180dp"
+            android:layout_marginTop="120dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HydraTiva"
+            android:fontFamily="@font/poppins"
+            android:layout_marginStart="165dp"
+            android:layout_marginTop="180dp"
+            android:textSize="15sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lorem Ipsum"
+            android:fontFamily="@font/poppins"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:layout_marginTop="220dp"
+            android:layout_marginStart="20dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lorem Ipsum Dolor Sit Amet"
+            android:fontFamily="@font/poppins"
+            android:textSize="13sp"
+            android:layout_marginTop="240dp"
+            android:layout_marginStart="20dp"/>
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

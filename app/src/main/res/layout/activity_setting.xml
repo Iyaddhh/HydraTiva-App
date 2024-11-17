@@ -344,6 +344,7 @@
             android:layout_height="wrap_content"
             app:menu="@menu/bottom_nav_menu"
             app:itemIconSize="35dp"
+            app:itemIconTint="@color/bottom_nav_bar_color"
             android:background="@android:color/transparent"
             android:elevation="8dp"
             android:layout_gravity="bottom"

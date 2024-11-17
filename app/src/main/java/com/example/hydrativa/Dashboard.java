@@ -24,6 +24,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -108,17 +109,16 @@ public class Dashboard extends AppCompatActivity {
             }
             return false;
         });
+        fab.setOnClickListener(view -> {
+            startActivity(new Intent(Dashboard.this, Watering.class));
+            overridePendingTransition(0, 0);
+        });
 
         SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
         String name = sharedPreferences.getString("name", "User");
 
         TextView nameText = findViewById(R.id.nameText);
         nameText.setText(name);
-
-        fab.setOnClickListener(view -> {
-            startActivity(new Intent(Dashboard.this, Watering.class));
-            overridePendingTransition(0, 0);
-        });
 
         viewPage = findViewById(R.id.viewpager);
         LinearLayout slideDot = findViewById(R.id.slider);
