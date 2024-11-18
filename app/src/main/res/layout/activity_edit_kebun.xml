@@ -80,8 +80,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nama Kebun"
-                    android:layout_marginEnd="90dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="11dp"
+                    android:layout_gravity="start"
                     android:fontFamily="@font/poppins"/>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -90,7 +91,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="11dp"
                     android:layout_marginEnd="11dp"
-                    android:hint="Masukan nama kebun"
                     style="@style/CustomTextInputLayout"
                     app:boxBackgroundMode="outline"
                     app:boxStrokeWidth="2dp"
@@ -111,8 +111,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Luas Kebun"
-                    android:layout_marginEnd="90dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="11dp"
+                    android:layout_gravity="start"
                     android:fontFamily="@font/poppins"/>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -121,7 +122,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="11dp"
                     android:layout_marginEnd="11dp"
-                    android:hint="Masukan luas kebun"
                     style="@style/CustomTextInputLayout"
                     app:boxBackgroundMode="outline"
                     app:boxStrokeWidth="2dp"
@@ -143,8 +143,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Lokasi Kebun"
-                    android:layout_marginEnd="90dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="11dp"
+                    android:layout_gravity="start"
                     android:fontFamily="@font/poppins"/>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -153,7 +154,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="11dp"
                     android:layout_marginEnd="11dp"
-                    android:hint="Masukan lokasi kebun"
                     style="@style/CustomTextInputLayout"
                     app:boxBackgroundMode="outline"
                     app:boxStrokeWidth="2dp"
