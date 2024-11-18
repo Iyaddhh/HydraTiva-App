@@ -46,6 +46,16 @@ public class EditProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
+        ImageView settingLink = findViewById(R.id.settingLink);
+
+        settingLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EditProfile.this, Profile.class);
+                startActivity(intent);
+            }
+        });
+
         radioGroup = findViewById(R.id.radioGroup1);
         uploadedImage = findViewById(R.id.profile_image);
         name = findViewById(R.id.input_name);

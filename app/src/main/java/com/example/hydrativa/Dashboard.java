@@ -6,12 +6,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -52,11 +54,42 @@ public class Dashboard extends AppCompatActivity {
             return insets;
         });
 
-        // Menambahkan onClickListener untuk grid kebun
-        findViewById(R.id.grid1).setOnClickListener(view -> openUrl("https://www.youtube.com/"));
-        findViewById(R.id.grid2).setOnClickListener(view -> openUrl("https://www.youtube.com/"));
-        findViewById(R.id.grid3).setOnClickListener(view -> openUrl("https://www.youtube.com/"));
-        findViewById(R.id.grid4).setOnClickListener(view -> openUrl("https://www.youtube.com/"));
+        CardView cV1 = findViewById(R.id.grid1);
+        CardView cV2 = findViewById(R.id.grid2);
+        CardView cV3 = findViewById(R.id.grid3);
+        CardView cV4 = findViewById(R.id.grid4);
+
+        cV1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Dashboard.this, Materi1.class);
+                startActivity(intent);
+            }
+        });
+
+        cV2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Dashboard.this, materi2.class);
+                startActivity(intent);
+            }
+        });
+
+        cV3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Dashboard.this, materi3.class);
+                startActivity(intent);
+            }
+        });
+
+        cV4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Dashboard.this, materi4.class);
+                startActivity(intent);
+            }
+        });
 
         // Menangani BottomNavigationView
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomView);
@@ -83,7 +116,7 @@ public class Dashboard extends AppCompatActivity {
         String name = sharedPreferences.getString("name", "User");
 
         // Menampilkan nama pengguna
-        TextView nameText = findViewById(R.id.nameText);
+        TextView nameText = findViewById(R.id.usernameText);
         nameText.setText(name);
 
         // Mengambil profil pengguna dari API

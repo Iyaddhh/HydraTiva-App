@@ -34,6 +34,16 @@ public class Profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        ImageView settingLink = findViewById(R.id.settingLink);
+
+        settingLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Profile.this, Setting.class);
+                startActivity(intent);
+            }
+        });
+
         profile_image = findViewById(R.id.profile_image);
         username = findViewById(R.id.input_username);
         name = findViewById(R.id.input_name);

@@ -37,7 +37,6 @@ public interface KebunService {
             @Part("nama_kebun") RequestBody namaKebun,
             @Part("luas_lahan") RequestBody luasLahan,
             @Part("lokasi_kebun") RequestBody lokasiKebun,
-            @Part("alat_id") RequestBody idAlat,
             @Part MultipartBody.Part image
     );
 

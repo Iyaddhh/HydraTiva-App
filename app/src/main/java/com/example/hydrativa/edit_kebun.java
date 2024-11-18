@@ -33,7 +33,7 @@ public class edit_kebun extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private int kebunId;
     private ImageView uploadedImage;
-    private EditText namaKebun, lokasiKebun, luasLahan, idAlat;
+    private EditText namaKebun, lokasiKebun, luasLahan;
     private Uri imageUri;
     private Button updateButton;
 
@@ -42,12 +42,11 @@ public class edit_kebun extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_kebun);
 
-        kebunId = getIntent().getIntExtra("kebun_id", -1);
+        kebunId = getIntent().getIntExtra("kebun_id", kebunId);
         uploadedImage = findViewById(R.id.uploadedImage);
         namaKebun = findViewById(R.id.namaKebun);
         lokasiKebun = findViewById(R.id.lokasiKebun);
         luasLahan = findViewById(R.id.luasKebun);
-        idAlat = findViewById(R.id.hydrativa_id);
         updateButton = findViewById(R.id.updateButton);
 
         getKebunData(kebunId);
@@ -72,7 +71,6 @@ public class edit_kebun extends AppCompatActivity {
                     namaKebun.setText(kebun.getNama_kebun());
                     lokasiKebun.setText(kebun.getLokasi_kebun());
                     luasLahan.setText(String.valueOf(kebun.getLuas_lahan()));
-                    idAlat.setText(String.valueOf(kebun.getKebun_id()));
 
                     if (kebun.getGambar() != null && !kebun.getGambar().isEmpty()) {
                         String gambarUrl = "https://hydrativa-hufme6esdvd6acfp.eastasia-01.azurewebsites.net/storage/" + kebun.getGambar();
@@ -125,9 +123,8 @@ public class edit_kebun extends AppCompatActivity {
         String nama = namaKebun.getText().toString().trim();
         String lokasi = lokasiKebun.getText().toString().trim();
         String luas = luasLahan.getText().toString().trim();
-        String id = idAlat.getText().toString().trim();
 
-        if (nama.isEmpty() || lokasi.isEmpty() || luas.isEmpty() || id.isEmpty()) {
+        if (nama.isEmpty() || lokasi.isEmpty() || luas.isEmpty()) {
             Toast.makeText(this, "Harap lengkapi semua informasi", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -135,7 +132,6 @@ public class edit_kebun extends AppCompatActivity {
         RequestBody namaKebunRequest = RequestBody.create(MediaType.parse("text/plain"), nama);
         RequestBody lokasiKebunRequest = RequestBody.create(MediaType.parse("text/plain"), lokasi);
         RequestBody luasLahanRequest = RequestBody.create(MediaType.parse("text/plain"), luas);
-        RequestBody idAlatRequest = RequestBody.create(MediaType.parse("text/plain"), id);
 
         MultipartBody.Part imagePart = null;
         if (imageUri != null) {
@@ -149,7 +145,7 @@ public class edit_kebun extends AppCompatActivity {
         }
 
         KebunService apiService = RetrofitClient.getRetrofitInstance(this).create(KebunService.class);
-        Call<Void> call = apiService.updateKebun(kebunId, namaKebunRequest, luasLahanRequest, lokasiKebunRequest, idAlatRequest, imagePart);
+        Call<Void> call = apiService.updateKebun(kebunId, namaKebunRequest, luasLahanRequest, lokasiKebunRequest, imagePart);
 
         call.enqueue(new Callback<Void>() {
             @Override
@@ -165,6 +161,16 @@ public class edit_kebun extends AppCompatActivity {
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(edit_kebun.this, "Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        ImageView settingLink = findViewById(R.id.kebunLink);
+
+        settingLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(edit_kebun.this, detail_watering.class);
+                startActivity(intent);
             }
         });
     }
