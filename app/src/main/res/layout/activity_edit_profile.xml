@@ -68,7 +68,8 @@
                 android:layout_height="wrap_content"
                 android:text="Username"
                 android:layout_marginTop="15dp"
-                android:layout_marginEnd="94dp"
+                android:layout_marginStart="11dp"
+                android:layout_gravity="start"
                 android:fontFamily="@font/poppins"/>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -77,7 +78,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
                 android:layout_marginEnd="11dp"
-                android:hint="Username"
                 style="@style/CustomTextInputLayout"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeWidth="2dp"
@@ -97,10 +97,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="99dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="11dp"
+                android:layout_gravity="start"
                 android:fontFamily="@font/poppins"
-                android:text="Email" />
+                android:text="Nama Lengkap" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editName"
@@ -108,7 +109,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
                 android:layout_marginEnd="11dp"
-                android:hint="Name"
                 style="@style/CustomTextInputLayout"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeWidth="2dp"
@@ -129,8 +129,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nomor Telepon"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="93dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="11dp"
+                android:layout_gravity="start"
                 android:fontFamily="@font/poppins"/>
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/layoutPhoneNumber"
@@ -138,7 +139,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
                 android:layout_marginEnd="11dp"
-                android:hint="No. Telepon"
                 style="@style/CustomTextInputLayout"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeWidth="2dp"
@@ -161,10 +161,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_horizontal"
                 android:layout_marginTop="15dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
+                android:layout_marginStart="11dp"
+                android:layout_gravity="start"
                 app:layout_constraintTop_toBottomOf="@+id/layoutpassword">
                 <RadioButton
                     android:id="@+id/radio_laki"

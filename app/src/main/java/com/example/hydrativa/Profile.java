@@ -41,6 +41,7 @@ public class Profile extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(Profile.this, Setting.class);
                 startActivity(intent);
+                overridePendingTransition(0,0);
             }
         });
 
