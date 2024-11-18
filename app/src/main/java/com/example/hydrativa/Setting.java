@@ -22,7 +22,9 @@ import com.example.hydrativa.models.User;
 import com.example.hydrativa.retrofit.LogoutService;
 import com.example.hydrativa.retrofit.ProfileService;
 import com.example.hydrativa.retrofit.RetrofitClient;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,8 +45,11 @@ public class Setting extends AppCompatActivity {
             return insets;
         });
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomView);
-        bottomNavigationView.setSelectedItemId(R.id.nav_settings); // Set the default selected item
+        BottomAppBar bottomAppBar = findViewById(R.id.bottomView);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
+
+        bottomNavigationView.setSelectedItemId(R.id.nav_settings);
+        FloatingActionButton fab = findViewById(R.id.fab);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_home) {
@@ -52,15 +57,14 @@ public class Setting extends AppCompatActivity {
                 finish();
                 overridePendingTransition(0, 0);
                 return true;
-            } else if (item.getItemId() == R.id.nav_watering) {
-                startActivity(new Intent(getApplicationContext(), Watering.class));
-                finish();
-                overridePendingTransition(0, 0);
-                return true;
             } else if (item.getItemId() == R.id.nav_settings) {
                 return true;
             }
             return false;
+        });
+        fab.setOnClickListener(view -> {
+            startActivity(new Intent(Setting.this, Watering.class));
+            overridePendingTransition(0, 0);
         });
         SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
         String name = sharedPreferences.getString("name", "User");

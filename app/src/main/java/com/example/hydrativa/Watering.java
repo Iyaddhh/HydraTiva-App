@@ -24,7 +24,9 @@ import com.example.hydrativa.models.User;
 import com.example.hydrativa.retrofit.KebunService;
 import com.example.hydrativa.retrofit.ProfileService;
 import com.example.hydrativa.retrofit.RetrofitClient;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -117,24 +119,32 @@ public class Watering extends AppCompatActivity {
             }
         });
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomView);
-        bottomNavigationView.setSelectedItemId(R.id.nav_watering);
+        BottomAppBar bottomAppBar = findViewById(R.id.bottomView);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
+
+        bottomNavigationView.setSelectedItemId(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_home) {
                 startActivity(new Intent(getApplicationContext(), Dashboard.class));
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
-                return true;
-            } else if (item.getItemId() == R.id.nav_watering) {
+                overridePendingTransition(0, 0);
                 return true;
             } else if (item.getItemId() == R.id.nav_settings) {
                 startActivity(new Intent(getApplicationContext(), Setting.class));
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
+                overridePendingTransition(0, 0);
                 return true;
             }
             return false;
+        });
+
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent(Watering.this, Watering.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
         });
 
         SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);

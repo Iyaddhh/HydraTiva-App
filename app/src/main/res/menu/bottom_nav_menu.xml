@@ -4,9 +4,7 @@
         android:icon="@drawable/home"
         android:title="Home" />
     <item
-        android:id="@+id/nav_watering"
-        android:icon="@drawable/watering"
-        android:title="Watering" />
+        android:title="" />
     <item
         android:id="@+id/nav_settings"
         android:icon="@drawable/setting"
