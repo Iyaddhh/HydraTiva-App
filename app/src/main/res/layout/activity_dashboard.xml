@@ -214,7 +214,7 @@
                             android:layout_gravity="center"
                             android:adjustViewBounds="true"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/tehdia" />
+                            android:src="@drawable/covermateri1" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -336,7 +336,7 @@
                             android:layout_gravity="center"
                             android:adjustViewBounds="true"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/tehdia" />
+                            android:src="@drawable/covermateri3" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -396,7 +396,7 @@
                             android:layout_gravity="center"
                             android:adjustViewBounds="true"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/tehdia" />
+                            android:src="@drawable/covermateri4" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -437,7 +437,6 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- Bottom Navigation View -->
     <!-- Bottom Navigation View -->
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"

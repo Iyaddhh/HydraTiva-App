@@ -1,5 +1,7 @@
 package com.example.hydrativa.adapters;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +45,11 @@ public class ImageAdapter extends ListAdapter<ImageItem, ImageAdapter.ViewHolder
             Glide.with(itemView)
                     .load(item.getImageId())
                     .into(imageView);
+
+            imageView.setOnClickListener(v -> {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getUrl()));
+                v.getContext().startActivity(browserIntent);
+            });
         }
     }
 
