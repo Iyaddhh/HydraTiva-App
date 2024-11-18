@@ -14,10 +14,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import com.bumptech.glide.Glide;
 import com.example.hydrativa.adapters.ImageAdapter;
@@ -27,6 +31,9 @@ import com.example.hydrativa.models.User;
 import com.example.hydrativa.retrofit.ProfileService;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -91,16 +98,16 @@ public class Dashboard extends AppCompatActivity {
             }
         });
 
+        BottomAppBar bottomAppBar = findViewById(R.id.bottomView);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
+
+        bottomNavigationView.setSelectedItemId(R.id.nav_home);
+        FloatingActionButton fab = findViewById(R.id.fab);
+
         // Menangani BottomNavigationView
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomView);
         bottomNavigationView.setSelectedItemId(R.id.nav_home);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_home) {
-                return true;
-            } else if (item.getItemId() == R.id.nav_watering) {
-                startActivity(new Intent(Dashboard.this, Watering.class));
-                finish();
-                overridePendingTransition(0, 0);
                 return true;
             } else if (item.getItemId() == R.id.nav_settings) {
                 startActivity(new Intent(Dashboard.this, Setting.class));
@@ -109,6 +116,10 @@ public class Dashboard extends AppCompatActivity {
                 return true;
             }
             return false;
+        });
+        fab.setOnClickListener(view -> {
+            startActivity(new Intent(Dashboard.this, Watering.class));
+            overridePendingTransition(0, 0);
         });
 
         // Mengambil nama pengguna dari SharedPreferences
