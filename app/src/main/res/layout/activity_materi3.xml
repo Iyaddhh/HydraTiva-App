@@ -6,7 +6,7 @@
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".materi2">
+    tools:context=".materi3">
 
     <!-- CardView Header -->
     <androidx.cardview.widget.CardView
@@ -59,7 +59,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Manfaat Stevia"
+                android:text="Cara Menanam Stevia"
                 android:textSize="20sp"
                 android:textColor="@android:color/black"
                 android:fontFamily="@font/poppins_bold" />
@@ -110,7 +110,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ners.unair.ac.id"
+                    android:text="dinpertanpangan"
                     android:fontFamily="@font/poppins"
                     android:textColor="@color/grey"
                     android:layout_marginStart="5dp"
@@ -162,17 +162,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins"
-                android:text="Penderita diabetes diharuskan untuk mengontrol kadar gulanya agar tetap stabil. Stevia tergolong aman dikonsumsi penderita diabetes karena tidak termasuk ke dalam gula dan mengandung nol kalori."
-                android:textSize="14dp"
-                android:justificationMode="inter_word"
-                android:textColor="@android:color/black"
-                android:layout_marginTop="8dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_bold"
-                android:text="3. Dapat menurunkan tekanan darah tinggi"
+                android:text="Sebelum melakukan penanaman, lahan tanam yang akan digunakan untuk budidaya stevia digemburkan dengan cara dicangkul atau di bajak sebanyak 2 kali."
                 android:textSize="14dp"
                 android:justificationMode="inter_word"
                 android:textColor="@android:color/black"
@@ -182,17 +172,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins"
-                android:text="Kandungan glikosida pada stevia dapat melebarkan pembuluh darah. Selain itu, glikosida juga dapat meningkatkan pengeluaran natrium dalam tubuh. Hal tersebut dapat membantu menjaga tekanan darah agar tetap sehat."
-                android:textSize="14dp"
-                android:justificationMode="inter_word"
-                android:textColor="@android:color/black"
-                android:layout_marginTop="8dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_bold"
-                android:text="4. Memiliki potensi sebagai antikanker"
+                android:text="Selanjutnya buatlah bedengan dengan ukuran lebar sekitar 100-125 cm, tinggi sekitar 20 cm dan untuk panjangnya dapat disesuaikan dengan lahan tanam. Apabila lahan tanam yang digunakan berkontur miring maka sebaiknya dibuat teras terebih dahulu."
                 android:textSize="14dp"
                 android:justificationMode="inter_word"
                 android:textColor="@android:color/black"
@@ -202,17 +182,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins"
-                android:text="Penelitian menunjukan bahwa Stevia yang digabungkan dengan daun blackberry memiliki potensi untuk pengobatan alami pada kanker usus."
-                android:textSize="14dp"
-                android:justificationMode="inter_word"
-                android:textColor="@android:color/black"
-                android:layout_marginTop="8dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_bold"
-                android:text="5. Tidak menyebabkan karies gigi"
+                android:text="Setelah semua siap, selanjutnya lakukan penanaman. Bibit ditanam dengan jarak tanam sekitar 25 cm x 25 cm atau 30 cm x 30 cm dengan dalam setiap bedengan 4-5 baris bibit."
                 android:textSize="14dp"
                 android:justificationMode="inter_word"
                 android:textColor="@android:color/black"
@@ -222,17 +192,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins"
-                android:justificationMode="inter_word"
-                android:text="Konsumsi gula tambahan dapat menyebabkan karies atau kerusakan pada gigi. Stevia dapat menjadi alternatif pemanis yang ramah untuk kesehatan gigi agar tiddak mengalami risiko karies gigi."
+                android:text="Sebelum ditanam dalam lubang tanam yang dibuat diberi pupuk organik baik itu pupuk kandang atau pupuk kompos dengan dosis sekitar 250 gram/lubang tanam. Waktu yang baik untuk melakukan penanaman stevia yaitu pada musim hujan."
                 android:textSize="14dp"
+                android:justificationMode="inter_word"
                 android:textColor="@android:color/black"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_bold"
-                android:text="Efek Samping"
+                android:text="c.    Pemeliharaan Stevia"
+                android:textSize="14dp"
+                android:justificationMode="inter_word"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Pemupukan"
                 android:textSize="14dp"
                 android:justificationMode="inter_word"
                 android:textColor="@android:color/black"
@@ -242,9 +222,79 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins"
-                android:text="Stevia diketahui memiliki berbagai manfaat. Akan tetapi, konsumsi Stevia harus secukupnya dan hindari konsumsi yang berlebihan. Reaksi setiap orang akan berbeda-beda ketika mengonsumsi Stevia. Pada beberapa orang dengan saluran pencernaan sensitif akan merasakan efek samping. Kandungan sorbitol stevia akan menimbulkan efek samping, seperti kembung, mual, dan diare."
+                android:text="Setelah satu minggu tanam, lakukan pemupukan dengan menggunakan pupuk urea, TSP dan KCl dengan dosis masing-masing 1 gram, 1 gram dan 1 gram/tanaman. Pemupukan ini kembali dilakukan setiap setelah panen."
                 android:textSize="14dp"
-                android:layout_marginBottom="20dp"
+                android:justificationMode="inter_word"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Pemangkasan"
+                android:textSize="14dp"
+                android:justificationMode="inter_word"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:text="Saat tanaman berumur sekitar 2 minggu, lakukan pemangkasan pada setiap ujung tanaman agat percabangan terbentuk dan produksi daunnya semakin banyak."
+                android:textSize="14dp"
+                android:justificationMode="inter_word"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Pengendalian hama dan penyakit"
+                android:textSize="14dp"
+                android:justificationMode="inter_word"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:text="Hama dan penyakit yang sering menyerang tanaman stevia antara lain kutu daun aphis sp yang merusak bagian pucuk daun, ulat grayak Heliothis sp., Cendawan Poria hypolateria yang menyebabkan batang berwarna merah bata dan akhirnya layu, dan juga penyakit Sclerotium rolfsii serta Fusarium sp."
+                android:textSize="14dp"
+                android:justificationMode="inter_word"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:text="Untuk mengendalikan hama dan penyakit ini jangan gunakan insektisida ataupun fungisida, lakukan pengendalian secara manual saja seperti mengambil hama atau mengambil bagian tanaman yang terserang kemudian dimusnahkan agar tidak menyebar."
+                android:textSize="14dp"
+                android:justificationMode="inter_word"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_bold"
+                android:text="d.    Pemanenan Daun Stevia Dan Pasca Panen"
+                android:textSize="14dp"
+                android:justificationMode="inter_word"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:text="Daun stevia mulai dapat dipanen setelah berumur 40-60 hari setelah penanaman dan pemanenan berikutnya dapat dilakukan setiap 30-60 hari sekali. Pemanenan ini jangan lambat karena dapat menurunkan kadar gula yang ada pada daun."
+                android:textSize="14dp"
+                android:layout_marginBottom="40dp"
                 android:justificationMode="inter_word"
                 android:textColor="@android:color/black"
                 android:layout_marginTop="8dp" />
