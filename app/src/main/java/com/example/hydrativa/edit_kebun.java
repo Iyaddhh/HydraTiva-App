@@ -1,5 +1,7 @@
 package com.example.hydrativa;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -47,9 +49,9 @@ public class edit_kebun extends AppCompatActivity {
         settingLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(edit_kebun.this, detail_watering.class);
+                Intent intent = new Intent(edit_kebun.this, Dashboard.class);
                 intent.putExtra("kebun_id", kebunId);
-
+                Log.d(TAG, "onClick: " + kebunId);
                 startActivity(intent);
             }
         });

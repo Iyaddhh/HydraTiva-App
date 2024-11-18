@@ -1,5 +1,7 @@
 package com.example.hydrativa;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -57,7 +59,7 @@ public class detail_watering extends AppCompatActivity {
                 intent.putExtra("kebun_id", kebunId);
                 startActivity(intent);
 
-                kebunId = getIntent().getIntExtra("kebun_id", -1);
+                kebunId = getIntent().getIntExtra("kebun_id", kebunId);
             }
         });
 
@@ -92,7 +94,8 @@ public class detail_watering extends AppCompatActivity {
         tvKondisi = findViewById(R.id.Kondisi);
         tvStatus = findViewById(R.id.Status);
 
-        kebunId = getIntent().getIntExtra("KEBUN_ID", -1);
+        kebunId = getIntent().getIntExtra("KEBUN_ID", kebunId);
+        Log.d(TAG, "ID NYAAAAAA: "+kebunId);
 
         // Mengambil profil pengguna dari API
         ProfileService profileService = RetrofitClient.getRetrofitInstance(detail_watering.this).create(ProfileService.class);
@@ -152,6 +155,8 @@ public class detail_watering extends AppCompatActivity {
                             .into(gambarKebun);
 
                     getHistoryPenyiraman(kebunId);
+
+
                 } else {
                     Toast.makeText(detail_watering.this, "Gagal memuat data kebun", Toast.LENGTH_SHORT).show();
                 }

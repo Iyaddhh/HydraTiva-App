@@ -150,7 +150,7 @@ public class Watering extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
         String name = sharedPreferences.getString("name", "User");
 
-        TextView nameText = findViewById(R.id.nameText);
+        TextView nameText = findViewById(R.id.usernameText);
         nameText.setText(name);
     }
 }
