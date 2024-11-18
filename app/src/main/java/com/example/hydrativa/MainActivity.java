@@ -16,7 +16,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.hydrativa.models.ForgotRequest;
 import com.example.hydrativa.models.RegisterRequest;
 import com.example.hydrativa.models.RegisterResponse;
 import com.example.hydrativa.retrofit.RegisterService;
@@ -52,13 +51,10 @@ public class MainActivity extends AppCompatActivity {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                // Find the selected RadioButton by ID
                 RadioButton selectedRadioButton = findViewById(checkedId);
                 if (selectedRadioButton != null) {
-                    // Get the text of the selected RadioButton and store it in jenis_kelamin
                     jenis_kelamin = selectedRadioButton.getText().toString();
 
-                    // Show a toast (optional) to confirm the selected value
                     Toast.makeText(MainActivity.this, "Selected Gender: " + jenis_kelamin, Toast.LENGTH_SHORT).show();
                 }
             }

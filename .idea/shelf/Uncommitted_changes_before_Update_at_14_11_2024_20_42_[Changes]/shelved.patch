@@ -1,0 +1,594 @@
+Index: app/src/main/java/com/example/hydrativa/EditProfile.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.hydrativa;\r\n\r\nimport android.content.Intent;\r\nimport android.database.Cursor;\r\nimport android.net.Uri;\r\nimport android.os.Bundle;\r\nimport android.provider.MediaStore;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.ImageView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport com.example.hydrativa.retrofit.ProfileService;\r\nimport com.example.hydrativa.retrofit.RetrofitClient;\r\n\r\nimport java.io.File;\r\n\r\nimport okhttp3.MediaType;\r\nimport okhttp3.MultipartBody;\r\nimport okhttp3.RequestBody;\r\nimport retrofit2.Call;\r\nimport retrofit2.Callback;\r\nimport retrofit2.Response;\r\n\r\npublic class EditProfile extends AppCompatActivity {\r\n\r\n    private static final int PICK_IMAGE_REQUEST = 1;\r\n    private ImageView uploadedImage;\r\n    private EditText name, username, email, telp;\r\n    private Uri imageUri;\r\n    private Button updateButton;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_edit_profile);\r\n\r\n        uploadedImage = findViewById(R.id.profile_image);\r\n        name = findViewById(R.id.input_name);\r\n        username = findViewById(R.id.input_username);\r\n        email = findViewById(R.id.input_email);\r\n        telp = findViewById(R.id.input_phone);\r\n        updateButton = findViewById(R.id.update_button);\r\n\r\n        name.setText(\"\");\r\n        username.setText(\"\");\r\n        email.setText(\"\");\r\n        telp.setText(\"\");\r\n        uploadedImage.setImageDrawable(null);\r\n\r\n        updateButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                updateProfileData();\r\n            }\r\n        });\r\n    }\r\n\r\n    public void openImagePicker(View view) {\r\n        Intent intent = new Intent();\r\n        intent.setType(\"image/*\");\r\n        intent.setAction(Intent.ACTION_GET_CONTENT);\r\n        startActivityForResult(Intent.createChooser(intent, \"Pilih Gambar\"), PICK_IMAGE_REQUEST);\r\n    }\r\n\r\n    @Override\r\n    protected void onActivityResult(int requestCode, int resultCode, Intent data) {\r\n        super.onActivityResult(requestCode, resultCode, data);\r\n        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {\r\n            imageUri = data.getData();\r\n            uploadedImage.setImageURI(imageUri);\r\n        }\r\n    }\r\n\r\n    private String getRealPathFromURI(Uri contentUri) {\r\n        String[] proj = {MediaStore.Images.Media.DATA};\r\n        try (Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null)) {\r\n            if (cursor != null && cursor.moveToFirst()) {\r\n                int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);\r\n                return cursor.getString(columnIndex);\r\n            }\r\n        } catch (Exception e) {\r\n            Log.e(\"EditProfile\", \"Error retrieving real path from URI\", e);\r\n        }\r\n        return null;\r\n    }\r\n\r\n    private void updateProfileData() {\r\n        String inputName = name.getText().toString().trim();\r\n        String inputUsername = username.getText().toString().trim();\r\n        String inputEmail = email.getText().toString().trim();\r\n        String inputTelp = telp.getText().toString().trim();\r\n\r\n        if (inputName.isEmpty() || inputUsername.isEmpty() || inputEmail.isEmpty() || inputTelp.isEmpty()) {\r\n            Toast.makeText(this, \"Harap lengkapi semua informasi\", Toast.LENGTH_SHORT).show();\r\n            return;\r\n        }\r\n\r\n        // Creating RequestBody for each input field\r\n        RequestBody requestName = RequestBody.create(MediaType.parse(\"text/plain\"), inputName);\r\n        RequestBody requestUsername = RequestBody.create(MediaType.parse(\"text/plain\"), inputUsername);\r\n        RequestBody requestEmail = RequestBody.create(MediaType.parse(\"text/plain\"), inputEmail);\r\n        RequestBody requestTelp = RequestBody.create(MediaType.parse(\"text/plain\"), inputTelp);\r\n\r\n        // Set imagePart only if an image is selected\r\n        MultipartBody.Part imagePart = null;\r\n        if (imageUri != null) {\r\n            File file = new File(getRealPathFromURI(imageUri));\r\n            if (file.length() > 2048 * 1024) {\r\n                Toast.makeText(this, \"File gambar terlalu besar\", Toast.LENGTH_SHORT).show();\r\n                return;\r\n            }\r\n            RequestBody requestFile = RequestBody.create(MediaType.parse(\"image/*\"), file);\r\n            imagePart = MultipartBody.Part.createFormData(\"gambar\", file.getName(), requestFile);\r\n        }\r\n\r\n        // Make the API call to update profile\r\n        ProfileService apiService = RetrofitClient.getRetrofitInstance(this).create(ProfileService.class);\r\n        Call<Void> call = apiService.updateProfile(requestName, requestUsername, requestEmail, requestTelp, imagePart);\r\n\r\n        // Handling API response\r\n        call.enqueue(new Callback<Void>() {\r\n            @Override\r\n            public void onResponse(Call<Void> call, Response<Void> response) {\r\n                if (response.isSuccessful()) {\r\n                    Log.d(\"EditProfile\", \"Profil berhasil diperbarui: \" + response.message());\r\n                    Toast.makeText(EditProfile.this, \"Profil berhasil diperbarui\", Toast.LENGTH_LONG).show();\r\n                } else {\r\n                    Log.e(\"EditProfile\", \"Gagal memperbarui: \" + response.code() + \" - \" + response.message());\r\n                    Toast.makeText(EditProfile.this, \"Gagal memperbarui profil: \" + response.message(), Toast.LENGTH_LONG).show();\r\n                }\r\n            }\r\n\r\n            @Override\r\n            public void onFailure(Call<Void> call, Throwable t) {\r\n                Toast.makeText(EditProfile.this, \"Error: \" + t.getMessage(), Toast.LENGTH_LONG).show();\r\n            }\r\n        });\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hydrativa/EditProfile.java b/app/src/main/java/com/example/hydrativa/EditProfile.java
+--- a/app/src/main/java/com/example/hydrativa/EditProfile.java	(revision 685df11ba7c2a3462a44fb89e1c53ebada91e6ae)
++++ b/app/src/main/java/com/example/hydrativa/EditProfile.java	(date 1731591063701)
+@@ -1,20 +1,21 @@
+ package com.example.hydrativa;
+ 
+ import android.content.Intent;
+-import android.database.Cursor;
+-import android.net.Uri;
+ import android.os.Bundle;
+-import android.provider.MediaStore;
+-import android.util.Log;
+ import android.view.View;
+ import android.widget.Button;
+-import android.widget.EditText;
+ import android.widget.ImageView;
++import android.widget.RadioButton;
++import android.widget.RadioGroup;
+ import android.widget.Toast;
+ 
++import androidx.annotation.Nullable;
+ import androidx.appcompat.app.AppCompatActivity;
+-import com.example.hydrativa.retrofit.ProfileService;
+-import com.example.hydrativa.retrofit.RetrofitClient;
++
++import com.example.hydrativa.models.EditProfileRequest;
++import com.example.hydrativa.retrofit.UpdateService;
++import com.google.android.material.imageview.ShapeableImageView;
++import com.google.android.material.textfield.TextInputEditText;
+ 
+ import java.io.File;
+ 
+@@ -27,117 +28,52 @@
+ 
+ public class EditProfile extends AppCompatActivity {
+ 
+-    private static final int PICK_IMAGE_REQUEST = 1;
+-    private ImageView uploadedImage;
+-    private EditText name, username, email, telp;
+-    private Uri imageUri;
+-    private Button updateButton;
++    private TextInputEditText inputUsername, inputName, inputPhone;
++    private RadioGroup radioGroupGender;
++    private ShapeableImageView profileImage;
++    private RadioButton selectedGender;
++    private Button suntingButton;
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+-        setContentView(R.layout.activity_edit_profile);
++        setContentView(R.layout.activity_profile);
+ 
+-        uploadedImage = findViewById(R.id.profile_image);
+-        name = findViewById(R.id.input_name);
+-        username = findViewById(R.id.input_username);
+-        email = findViewById(R.id.input_email);
+-        telp = findViewById(R.id.input_phone);
+-        updateButton = findViewById(R.id.update_button);
++        inputUsername = findViewById(R.id.input_username);
++        inputName = findViewById(R.id.input_name);
++        inputPhone = findViewById(R.id.input_phone);
++        radioGroupGender = findViewById(R.id.radioGroup1);
++        profileImage = findViewById(R.id.profile_image);
++        suntingButton = findViewById(R.id.suntingButton);
+ 
+-        name.setText("");
+-        username.setText("");
+-        email.setText("");
+-        telp.setText("");
+-        uploadedImage.setImageDrawable(null);
++        suntingButton.setOnClickListener(view -> updateProfile());
+ 
+-        updateButton.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                updateProfileData();
+-            }
+-        });
++        profileImage.setOnClickListener(v -> openImagePicker());
+     }
+ 
+-    public void openImagePicker(View view) {
+-        Intent intent = new Intent();
+-        intent.setType("image/*");
+-        intent.setAction(Intent.ACTION_GET_CONTENT);
+-        startActivityForResult(Intent.createChooser(intent, "Pilih Gambar"), PICK_IMAGE_REQUEST);
++    private void openImagePicker() {
++        // Code to open the image picker and set selected image to profileImage
+     }
+ 
+-    @Override
+-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+-        super.onActivityResult(requestCode, resultCode, data);
+-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+-            imageUri = data.getData();
+-            uploadedImage.setImageURI(imageUri);
+-        }
+-    }
++    private void updateProfile() {
++        String username = inputUsername.getText().toString();
++        String name = inputName.getText().toString();
++        String phone = inputPhone.getText().toString();
++        int selectedGenderId = radioGroupGender.getCheckedRadioButtonId();
++        selectedGender = findViewById(selectedGenderId);
++        String gender = selectedGender.getText().toString();
+ 
+-    private String getRealPathFromURI(Uri contentUri) {
+-        String[] proj = {MediaStore.Images.Media.DATA};
+-        try (Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null)) {
+-            if (cursor != null && cursor.moveToFirst()) {
+-                int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+-                return cursor.getString(columnIndex);
+-            }
+-        } catch (Exception e) {
+-            Log.e("EditProfile", "Error retrieving real path from URI", e);
+-        }
+-        return null;
+-    }
+-
+-    private void updateProfileData() {
+-        String inputName = name.getText().toString().trim();
+-        String inputUsername = username.getText().toString().trim();
+-        String inputEmail = email.getText().toString().trim();
+-        String inputTelp = telp.getText().toString().trim();
+-
+-        if (inputName.isEmpty() || inputUsername.isEmpty() || inputEmail.isEmpty() || inputTelp.isEmpty()) {
+-            Toast.makeText(this, "Harap lengkapi semua informasi", Toast.LENGTH_SHORT).show();
+-            return;
+-        }
++        File imageFile = new File(/* path of the selected image from openImagePicker */);
+ 
+-        // Creating RequestBody for each input field
+-        RequestBody requestName = RequestBody.create(MediaType.parse("text/plain"), inputName);
+-        RequestBody requestUsername = RequestBody.create(MediaType.parse("text/plain"), inputUsername);
+-        RequestBody requestEmail = RequestBody.create(MediaType.parse("text/plain"), inputEmail);
+-        RequestBody requestTelp = RequestBody.create(MediaType.parse("text/plain"), inputTelp);
++        RequestBody usernamePart = RequestBody.create(MediaType.parse("text/plain"), username);
++        RequestBody namePart = RequestBody.create(MediaType.parse("text/plain"), name);
++        RequestBody phonePart = RequestBody.create(MediaType.parse("text/plain"), phone);
++        RequestBody genderPart = RequestBody.create(MediaType.parse("text/plain"), gender);
+ 
+-        // Set imagePart only if an image is selected
+         MultipartBody.Part imagePart = null;
+-        if (imageUri != null) {
+-            File file = new File(getRealPathFromURI(imageUri));
+-            if (file.length() > 2048 * 1024) {
+-                Toast.makeText(this, "File gambar terlalu besar", Toast.LENGTH_SHORT).show();
+-                return;
+-            }
+-            RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+-            imagePart = MultipartBody.Part.createFormData("gambar", file.getName(), requestFile);
++        if (imageFile.exists()) {
++            RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), imageFile);
++            imagePart = MultipartBody.Part.createFormData("gambar", imageFile.getName(), requestFile);
+         }
+-
+-        // Make the API call to update profile
+-        ProfileService apiService = RetrofitClient.getRetrofitInstance(this).create(ProfileService.class);
+-        Call<Void> call = apiService.updateProfile(requestName, requestUsername, requestEmail, requestTelp, imagePart);
+-
+-        // Handling API response
+-        call.enqueue(new Callback<Void>() {
+-            @Override
+-            public void onResponse(Call<Void> call, Response<Void> response) {
+-                if (response.isSuccessful()) {
+-                    Log.d("EditProfile", "Profil berhasil diperbarui: " + response.message());
+-                    Toast.makeText(EditProfile.this, "Profil berhasil diperbarui", Toast.LENGTH_LONG).show();
+-                } else {
+-                    Log.e("EditProfile", "Gagal memperbarui: " + response.code() + " - " + response.message());
+-                    Toast.makeText(EditProfile.this, "Gagal memperbarui profil: " + response.message(), Toast.LENGTH_LONG).show();
+-                }
+-            }
+-
+-            @Override
+-            public void onFailure(Call<Void> call, Throwable t) {
+-                Toast.makeText(EditProfile.this, "Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+-            }
+-        });
+     }
+ }
+Index: app/src/main/res/layout/activity_profile.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:id=\"@+id/main\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".Profile\">\r\n\r\n    <androidx.cardview.widget.CardView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"95dp\"\r\n        android:backgroundTint=\"@color/primary\"\r\n        android:id=\"@+id/header_profile\"\r\n        app:layout_constraintTop_toTopOf=\"parent\">\r\n\r\n        <TextView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Profile\"\r\n            android:textColor=\"@color/white\"\r\n            android:layout_gravity=\"center\"\r\n            android:layout_marginTop=\"5dp\"\r\n            android:textSize=\"20sp\"\r\n            android:fontFamily=\"@font/poppins\"\r\n            android:textStyle=\"bold\"/>\r\n\r\n        <ImageView\r\n            android:id=\"@+id/settingLink\"\r\n            android:layout_width=\"40dp\"\r\n            android:layout_height=\"40dp\"\r\n            android:src=\"@drawable/arrow_left\"\r\n            android:layout_marginTop=\"25dp\"\r\n            android:layout_marginStart=\"18dp\"/>\r\n\r\n    </androidx.cardview.widget.CardView>\r\n\r\n    <androidx.cardview.widget.CardView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"30dp\"\r\n        android:layout_marginEnd=\"30dp\"\r\n        android:layout_marginTop=\"40dp\"\r\n        app:cardCornerRadius=\"16dp\"\r\n        android:elevation=\"4dp\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/header_profile\"\r\n        app:cardBackgroundColor=\"@android:color/white\">\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:orientation=\"vertical\"\r\n            android:gravity=\"center_horizontal\"\r\n            android:padding=\"16dp\">\r\n\r\n            <com.google.android.material.imageview.ShapeableImageView\r\n                android:id=\"@+id/profile_image\"\r\n                android:layout_width=\"100dp\"\r\n                android:layout_height=\"100dp\"\r\n                android:layout_marginBottom=\"16dp\"\r\n                android:scaleType=\"centerCrop\"\r\n                android:src=\"@drawable/stevia\"\r\n                app:shapeAppearanceOverlay=\"@style/CircleImage\"/>\r\n\r\n            <TextView\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Username\"\r\n                android:layout_marginTop=\"15dp\"\r\n                android:layout_marginEnd=\"94dp\"\r\n                android:fontFamily=\"@font/poppins\"/>\r\n\r\n            <com.google.android.material.textfield.TextInputLayout\r\n                android:id=\"@+id/layoutUsername\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginStart=\"11dp\"\r\n                android:layout_marginEnd=\"11dp\"\r\n                android:hint=\"Username\"\r\n                style=\"@style/CustomTextInputLayout\"\r\n                app:boxBackgroundMode=\"outline\"\r\n                app:boxStrokeWidth=\"2dp\"\r\n                app:boxStrokeWidthFocused=\"2dp\"\r\n                app:hintTextAppearance=\"@style/HintTextStyle\"\r\n                app:placeholderText=\"Masukkan Username\">\r\n\r\n                <com.google.android.material.textfield.TextInputEditText\r\n                    android:id=\"@+id/input_username\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:textSize=\"16sp\"\r\n                    android:padding=\"13dp\"\r\n                    android:fontFamily=\"@font/poppins\" />\r\n            </com.google.android.material.textfield.TextInputLayout>\r\n\r\n            <TextView\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginTop=\"10dp\"\r\n                android:layout_marginEnd=\"99dp\"\r\n                android:fontFamily=\"@font/poppins\"\r\n                android:text=\"Jenis Kelamin\" />\r\n\r\n            <com.google.android.material.textfield.TextInputLayout\r\n                android:id=\"@+id/layoutGender\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginStart=\"11dp\"\r\n                android:layout_marginEnd=\"11dp\"\r\n                android:hint=\"Jenis Kelamin\"\r\n                style=\"@style/CustomTextInputLayout\"\r\n                app:boxBackgroundMode=\"outline\"\r\n                app:boxStrokeWidth=\"2dp\"\r\n                app:boxStrokeWidthFocused=\"2dp\"\r\n                app:hintTextAppearance=\"@style/HintTextStyle\"\r\n                app:placeholderText=\"Pilih jenis kelamin\">\r\n\r\n                <com.google.android.material.textfield.TextInputEditText\r\n                    android:id=\"@+id/input_gender\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:textSize=\"16sp\"\r\n                    android:padding=\"13dp\"\r\n                    android:fontFamily=\"@font/poppins\" />\r\n            </com.google.android.material.textfield.TextInputLayout>\r\n\r\n            <TextView\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginTop=\"10dp\"\r\n                android:layout_marginEnd=\"99dp\"\r\n                android:fontFamily=\"@font/poppins\"\r\n                android:text=\"Nama\" />\r\n\r\n            <com.google.android.material.textfield.TextInputLayout\r\n                android:id=\"@+id/layoutName\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginStart=\"11dp\"\r\n                android:layout_marginEnd=\"11dp\"\r\n                android:hint=\"Name\"\r\n                style=\"@style/CustomTextInputLayout\"\r\n                app:boxBackgroundMode=\"outline\"\r\n                app:boxStrokeWidth=\"2dp\"\r\n                app:boxStrokeWidthFocused=\"2dp\"\r\n                app:hintTextAppearance=\"@style/HintTextStyle\"\r\n                app:placeholderText=\"Masukkan nama Anda\">\r\n\r\n                <com.google.android.material.textfield.TextInputEditText\r\n                    android:id=\"@+id/input_name\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:textSize=\"16sp\"\r\n                    android:padding=\"13dp\"\r\n                    android:fontFamily=\"@font/poppins\" />\r\n            </com.google.android.material.textfield.TextInputLayout>\r\n\r\n            <TextView\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Nomor Telepon\"\r\n                android:layout_marginTop=\"10dp\"\r\n                android:layout_marginEnd=\"93dp\"\r\n                android:fontFamily=\"@font/poppins\"/>\r\n            <com.google.android.material.textfield.TextInputLayout\r\n                android:id=\"@+id/layoutPhoneNumber\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginStart=\"11dp\"\r\n                android:layout_marginEnd=\"11dp\"\r\n                android:hint=\"No. Telepon\"\r\n                style=\"@style/CustomTextInputLayout\"\r\n                app:boxBackgroundMode=\"outline\"\r\n                app:boxStrokeWidth=\"2dp\"\r\n                app:boxStrokeWidthFocused=\"2dp\"\r\n                app:hintTextAppearance=\"@style/HintTextStyle\"\r\n                app:placeholderText=\"Masukkan nomor telepon Anda\">\r\n\r\n                <com.google.android.material.textfield.TextInputEditText\r\n                    android:id=\"@+id/input_phone\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:inputType=\"phone\"\r\n                    android:textSize=\"16sp\"\r\n                    android:padding=\"13dp\"\r\n                    android:fontFamily=\"@font/poppins\" />\r\n            </com.google.android.material.textfield.TextInputLayout>\r\n\r\n            <Button\r\n                android:id=\"@+id/loginButton\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginTop=\"15dp\"\r\n                android:backgroundTint=\"@color/primary\"\r\n                android:fontFamily=\"@font/poppins\"\r\n                android:textStyle=\"bold\"\r\n                android:text=\"Sunting\"\r\n                android:textColor=\"@android:color/white\"\r\n                app:cornerRadius=\"8dp\" />\r\n\r\n        </LinearLayout>\r\n\r\n    </androidx.cardview.widget.CardView>\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_profile.xml b/app/src/main/res/layout/activity_profile.xml
+--- a/app/src/main/res/layout/activity_profile.xml	(revision 685df11ba7c2a3462a44fb89e1c53ebada91e6ae)
++++ b/app/src/main/res/layout/activity_profile.xml	(date 1731590344655)
+@@ -60,15 +60,16 @@
+                 android:layout_marginBottom="16dp"
+                 android:scaleType="centerCrop"
+                 android:src="@drawable/stevia"
+-                app:shapeAppearanceOverlay="@style/CircleImage"/>
++                app:shapeAppearanceOverlay="@style/CircleImage"
++                android:onClick="openImagePicker"/>
+ 
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+-                android:text="Username"
+                 android:layout_marginTop="15dp"
+                 android:layout_marginEnd="94dp"
+-                android:fontFamily="@font/poppins"/>
++                android:fontFamily="@font/poppins"
++                android:text="Username" />
+ 
+             <com.google.android.material.textfield.TextInputLayout
+                 android:id="@+id/layoutUsername"
+@@ -92,37 +93,6 @@
+                     android:padding="13dp"
+                     android:fontFamily="@font/poppins" />
+             </com.google.android.material.textfield.TextInputLayout>
+-
+-            <TextView
+-                android:layout_width="wrap_content"
+-                android:layout_height="wrap_content"
+-                android:layout_marginTop="10dp"
+-                android:layout_marginEnd="99dp"
+-                android:fontFamily="@font/poppins"
+-                android:text="Jenis Kelamin" />
+-
+-            <com.google.android.material.textfield.TextInputLayout
+-                android:id="@+id/layoutGender"
+-                android:layout_width="match_parent"
+-                android:layout_height="wrap_content"
+-                android:layout_marginStart="11dp"
+-                android:layout_marginEnd="11dp"
+-                android:hint="Jenis Kelamin"
+-                style="@style/CustomTextInputLayout"
+-                app:boxBackgroundMode="outline"
+-                app:boxStrokeWidth="2dp"
+-                app:boxStrokeWidthFocused="2dp"
+-                app:hintTextAppearance="@style/HintTextStyle"
+-                app:placeholderText="Pilih jenis kelamin">
+-
+-                <com.google.android.material.textfield.TextInputEditText
+-                    android:id="@+id/input_gender"
+-                    android:layout_width="match_parent"
+-                    android:layout_height="wrap_content"
+-                    android:textSize="16sp"
+-                    android:padding="13dp"
+-                    android:fontFamily="@font/poppins" />
+-            </com.google.android.material.textfield.TextInputLayout>
+ 
+             <TextView
+                 android:layout_width="wrap_content"
+@@ -133,18 +103,18 @@
+                 android:text="Nama" />
+ 
+             <com.google.android.material.textfield.TextInputLayout
+-                android:id="@+id/layoutName"
++                android:id="@+id/editName"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginStart="11dp"
+                 android:layout_marginEnd="11dp"
+-                android:hint="Name"
++                android:hint="Nama"
+                 style="@style/CustomTextInputLayout"
+                 app:boxBackgroundMode="outline"
+                 app:boxStrokeWidth="2dp"
+                 app:boxStrokeWidthFocused="2dp"
+                 app:hintTextAppearance="@style/HintTextStyle"
+-                app:placeholderText="Masukkan nama Anda">
++                app:placeholderText="Masukkan Nama Anda">
+ 
+                 <com.google.android.material.textfield.TextInputEditText
+                     android:id="@+id/input_name"
+@@ -186,8 +156,30 @@
+                     android:fontFamily="@font/poppins" />
+             </com.google.android.material.textfield.TextInputLayout>
+ 
++            <RadioGroup
++                android:id="@+id/radioGroup1"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:orientation="horizontal"
++                android:gravity="center_horizontal"
++                android:layout_marginTop="15dp"
++                android:layout_marginStart="30dp"
++                android:layout_marginEnd="30dp"
++                app:layout_constraintTop_toBottomOf="@+id/layoutpassword">
++                <RadioButton
++                    android:id="@+id/radio_laki"
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:text="Laki-laki"/>
++                <RadioButton
++                    android:id="@+id/radio_wanita"
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:text="Wanita"/>
++            </RadioGroup>
++
+             <Button
+-                android:id="@+id/loginButton"
++                android:id="@+id/suntingButton"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="15dp"
+Index: app/src/main/java/com/example/hydrativa/retrofit/ProfileService.java
+===================================================================
+diff --git a/app/src/main/java/com/example/hydrativa/retrofit/ProfileService.java b/app/src/main/java/com/example/hydrativa/retrofit/ProfileService.java
+deleted file mode 100644
+--- a/app/src/main/java/com/example/hydrativa/retrofit/ProfileService.java	(revision 685df11ba7c2a3462a44fb89e1c53ebada91e6ae)
++++ /dev/null	(revision 685df11ba7c2a3462a44fb89e1c53ebada91e6ae)
+@@ -1,20 +0,0 @@
+-package com.example.hydrativa.retrofit;
+-
+-import okhttp3.MultipartBody;
+-import okhttp3.RequestBody;
+-import retrofit2.Call;
+-import retrofit2.http.Multipart;
+-import retrofit2.http.POST;
+-import retrofit2.http.Part;
+-
+-public interface ProfileService {
+-    @Multipart
+-    @POST("me/update")
+-    Call<Void> updateProfile(
+-            @Part("name") RequestBody name,
+-            @Part("username") RequestBody username,
+-            @Part("email") RequestBody email,
+-            @Part("telp") RequestBody telp,
+-            @Part MultipartBody.Part image
+-    );
+-}
+Index: app/src/main/java/com/example/hydrativa/Profile.java
+===================================================================
+diff --git a/app/src/main/java/com/example/hydrativa/Profile.java b/app/src/main/java/com/example/hydrativa/Profile.java
+deleted file mode 100644
+--- a/app/src/main/java/com/example/hydrativa/Profile.java	(revision 685df11ba7c2a3462a44fb89e1c53ebada91e6ae)
++++ /dev/null	(revision 685df11ba7c2a3462a44fb89e1c53ebada91e6ae)
+@@ -1,45 +0,0 @@
+-package com.example.hydrativa;
+-
+-import android.content.Intent;
+-import android.os.Bundle;
+-import android.view.View;
+-import android.widget.Button;
+-import android.widget.EditText;
+-import android.widget.ImageView;
+-import android.widget.Toast;
+-
+-import androidx.appcompat.app.AppCompatActivity;
+-
+-import com.example.hydrativa.models.EditProfileRequest;
+-import com.example.hydrativa.retrofit.ProfileUpdateService;
+-
+-import okhttp3.ResponseBody;
+-import retrofit2.Call;
+-import retrofit2.Callback;
+-import retrofit2.Response;
+-import retrofit2.Retrofit;
+-import retrofit2.converter.gson.GsonConverterFactory;
+-
+-public class Profile extends AppCompatActivity {
+-
+-    private EditText inputUsername, inputGender, inputName, inputPhone;
+-    private Button loginButton;
+-    private ProfileUpdateService apiService;
+-    private ImageView backtoSetting;
+-
+-    @Override
+-    protected void onCreate(Bundle savedInstanceState) {
+-        super.onCreate(savedInstanceState);
+-        setContentView(R.layout.activity_profile);
+-
+-        backtoSetting = findViewById(R.id.settingLink);
+-        backtoSetting.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View view) {
+-                Intent i = new Intent(Profile.this, Setting.class);
+-                startActivity(i);
+-            }
+-        });
+-    }
+-
+-}
+Index: app/src/main/java/com/example/hydrativa/retrofit/ProfileUpdateService.java
+===================================================================
+diff --git a/app/src/main/java/com/example/hydrativa/retrofit/ProfileUpdateService.java b/app/src/main/java/com/example/hydrativa/retrofit/ProfileUpdateService.java
+deleted file mode 100644
+--- a/app/src/main/java/com/example/hydrativa/retrofit/ProfileUpdateService.java	(revision 685df11ba7c2a3462a44fb89e1c53ebada91e6ae)
++++ /dev/null	(revision 685df11ba7c2a3462a44fb89e1c53ebada91e6ae)
+@@ -1,13 +0,0 @@
+-package com.example.hydrativa.retrofit;
+-
+-import com.example.hydrativa.models.EditProfileRequest;
+-
+-import okhttp3.ResponseBody;
+-import retrofit2.Call;
+-import retrofit2.http.Body;
+-import retrofit2.http.POST;
+-
+-public interface ProfileUpdateService {
+-    @POST("/me/update")
+-    Call<ResponseBody> updateProfile(@Body EditProfileRequest request);
+-}
+Index: app/src/main/java/com/example/hydrativa/models/User.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hydrativa/models/User.java b/app/src/main/java/com/example/hydrativa/models/User.java
+new file mode 100644
+--- /dev/null	(date 1731589716744)
++++ b/app/src/main/java/com/example/hydrativa/models/User.java	(date 1731589716744)
+@@ -0,0 +1,16 @@
++package com.example.hydrativa.models;
++
++public class    User {
++    private String username;
++    private String jenis_kelamin;
++    private String name;
++    private String telp;
++
++    public User(String username, String jenis_kelamin, String name, String telp) {
++        this.username = username;
++        this.jenis_kelamin = jenis_kelamin;
++        this.name = name;
++        this.telp = telp;
++    }
++
++}
+Index: app/src/main/java/com/example/hydrativa/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.hydrativa;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.RadioButton;\r\nimport android.widget.RadioGroup;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.activity.EdgeToEdge;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.core.graphics.Insets;\r\nimport androidx.core.view.ViewCompat;\r\nimport androidx.core.view.WindowInsetsCompat;\r\n\r\nimport com.example.hydrativa.models.RegisterRequest;\r\nimport com.example.hydrativa.models.RegisterResponse;\r\nimport com.example.hydrativa.retrofit.RegisterService;\r\nimport com.example.hydrativa.retrofit.RetrofitClient;\r\n\r\nimport retrofit2.Call;\r\nimport retrofit2.Callback;\r\nimport retrofit2.Response;\r\n\r\npublic class MainActivity extends AppCompatActivity {\r\n\r\n    EditText register_user, register_name, pass_user, register_email, NoTelepon;\r\n    RadioGroup radioGroup;\r\n    String jenis_kelamin;\r\n    Button registerButton;\r\n    TextView linkLogin;\r\n    private RegisterService registerService;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        EdgeToEdge.enable(this);\r\n        setContentView(R.layout.activity_main);\r\n        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {\r\n            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());\r\n            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);\r\n            return insets;\r\n        });\r\n\r\n        radioGroup = findViewById(R.id.radioGroup1);\r\n        registerService = RetrofitClient.getRetrofitInstance(getApplicationContext()).create(RegisterService.class);\r\n\r\n        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {\r\n            @Override\r\n            public void onCheckedChanged(RadioGroup group, int checkedId) {\r\n                // Find the selected RadioButton by ID\r\n                RadioButton selectedRadioButton = findViewById(checkedId);\r\n                if (selectedRadioButton != null) {\r\n                    // Get the text of the selected RadioButton and store it in jenis_kelamin\r\n                    jenis_kelamin = selectedRadioButton.getText().toString();\r\n\r\n                    // Show a toast (optional) to confirm the selected value\r\n                    Toast.makeText(MainActivity.this, \"Selected Gender: \" + jenis_kelamin, Toast.LENGTH_SHORT).show();\r\n                }\r\n            }\r\n        });\r\n\r\n        register_user = findViewById(R.id.userlayout);\r\n        register_name = findViewById(R.id.nama);\r\n        pass_user = findViewById(R.id.password);\r\n        register_email = findViewById(R.id.email);\r\n        NoTelepon = findViewById(R.id.telepon);\r\n\r\n        registerButton = findViewById(R.id.registerButton);\r\n\r\n        registerButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                String username = register_user.getText().toString().trim();\r\n                String email = register_email.getText().toString().trim();\r\n                String password = pass_user.getText().toString().trim();\r\n                String nama = register_name.getText().toString().trim();\r\n                String telp = NoTelepon.getText().toString().trim();\r\n                String kelamin = jenis_kelamin;\r\n                registerUser(username, email, password, nama, telp, kelamin);\r\n            }\r\n        });\r\n\r\n        linkLogin = findViewById(R.id.loginLink);\r\n        linkLogin.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                Intent i = new Intent(MainActivity.this, Login.class);\r\n                startActivity(i);\r\n            }\r\n        });\r\n    }\r\n\r\n    private void registerUser(String username, String email, String password, String nama, String telp, String kelamin) {\r\n        RegisterRequest registerRequest = new RegisterRequest(username, password, email, nama, telp, kelamin);\r\n\r\n        Call<RegisterResponse> call = registerService.registerUser(registerRequest);\r\n        call.enqueue(new Callback<RegisterResponse>() {\r\n            @Override\r\n            public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {\r\n                if (response.isSuccessful() && response.body() != null) {\r\n                    Toast.makeText(MainActivity.this, \"Registration successful!\", Toast.LENGTH_SHORT).show();\r\n                    // Navigate to another activity if needed\r\n                } else {\r\n                    Toast.makeText(MainActivity.this, \"Registration failed!\", Toast.LENGTH_SHORT).show();\r\n                }\r\n                // Navigate to the Dashboard\r\n                Intent intent = new Intent(MainActivity.this, Login.class);\r\n                startActivity(intent);\r\n                finish();\r\n            }\r\n\r\n            @Override\r\n            public void onFailure(Call<RegisterResponse> call, Throwable t) {\r\n                Toast.makeText(MainActivity.this, \"Error: \" + t.getMessage(), Toast.LENGTH_SHORT).show();\r\n            }\r\n        });\r\n    }\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hydrativa/MainActivity.java b/app/src/main/java/com/example/hydrativa/MainActivity.java
+--- a/app/src/main/java/com/example/hydrativa/MainActivity.java	(revision 685df11ba7c2a3462a44fb89e1c53ebada91e6ae)
++++ b/app/src/main/java/com/example/hydrativa/MainActivity.java	(date 1731574395116)
+@@ -51,13 +51,10 @@
+         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+             @Override
+             public void onCheckedChanged(RadioGroup group, int checkedId) {
+-                // Find the selected RadioButton by ID
+                 RadioButton selectedRadioButton = findViewById(checkedId);
+                 if (selectedRadioButton != null) {
+-                    // Get the text of the selected RadioButton and store it in jenis_kelamin
+                     jenis_kelamin = selectedRadioButton.getText().toString();
+ 
+-                    // Show a toast (optional) to confirm the selected value
+                     Toast.makeText(MainActivity.this, "Selected Gender: " + jenis_kelamin, Toast.LENGTH_SHORT).show();
+                 }
+             }
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\">\r\n\r\n    <uses-permission android:name=\"android.permission.INTERNET\" />\r\n    <uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />\r\n    <uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:dataExtractionRules=\"@xml/data_extraction_rules\"\r\n        android:fullBackupContent=\"@xml/backup_rules\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:networkSecurityConfig=\"@xml/network_security_config\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.HydraTiva\"\r\n        tools:targetApi=\"31\">\r\n        <activity\r\n            android:name=\".EditProfile\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".History\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".edit_kebun\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".detail_watering\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".tambah_kebun\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".notifikasi\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".getstarted\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".history\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".Profile\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".Forgot\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".Watering\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".Setting\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".Dashboard\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".Splash\"\r\n            android:exported=\"true\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n        <activity\r\n            android:name=\".Login\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".MainActivity\"\r\n            android:exported=\"true\" />\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	(revision 685df11ba7c2a3462a44fb89e1c53ebada91e6ae)
++++ b/app/src/main/AndroidManifest.xml	(date 1731577587830)
+@@ -17,6 +17,11 @@
+         android:supportsRtl="true"
+         android:theme="@style/Theme.HydraTiva"
+         tools:targetApi="31">
++        <service
++            android:name=".retrofit.ProfileService"
++            android:enabled="true"
++            android:exported="true"></service>
++
+         <activity
+             android:name=".EditProfile"
+             android:exported="false" />
+Index: app/src/main/java/com/example/hydrativa/models/EditProfileRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.hydrativa.models;\r\n\r\npublic class EditProfileRequest {\r\n    private String username;\r\n    private String jenis_kelamin;\r\n    private String name;\r\n    private String telp;\r\n\r\n    public EditProfileRequest(String username, String jenis_kelamin, String name, String telp) {\r\n        this.username = username;\r\n        this.jenis_kelamin = jenis_kelamin;\r\n        this.name = name;\r\n        this.telp = telp;\r\n    }\r\n    // Getters and setters, if needed\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hydrativa/models/EditProfileRequest.java b/app/src/main/java/com/example/hydrativa/models/EditProfileRequest.java
+--- a/app/src/main/java/com/example/hydrativa/models/EditProfileRequest.java	(revision 685df11ba7c2a3462a44fb89e1c53ebada91e6ae)
++++ b/app/src/main/java/com/example/hydrativa/models/EditProfileRequest.java	(date 1731589830613)
+@@ -1,16 +1,47 @@
+ package com.example.hydrativa.models;
+ 
+ public class EditProfileRequest {
++    private String name;
+     private String username;
+     private String jenis_kelamin;
+-    private String name;
+     private String telp;
+ 
+     public EditProfileRequest(String username, String jenis_kelamin, String name, String telp) {
++        this.name = name;
+         this.username = username;
+         this.jenis_kelamin = jenis_kelamin;
++        this.telp = telp;
++    }
++
++    public String getName() {
++        return name;
++    }
++
++    public void setName(String name) {
+         this.name = name;
++    }
++
++    public String getUsername() {
++        return username;
++    }
++
++    public void setUsername(String username) {
++        this.username = username;
++    }
++
++    public String getEmail() {
++        return jenis_kelamin;
++    }
++
++    public void setEmail(String jenis_kelamin) {
++        this.jenis_kelamin = jenis_kelamin;
++    }
++
++    public String getTelp() {
++        return telp;
++    }
++
++    public void setTelp(String telp) {
+         this.telp = telp;
+     }
+-    // Getters and setters, if needed
+-}
++}
+\ No newline at end of file
+Index: app/src/main/java/com/example/hydrativa/Setting.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.hydrativa;\r\n\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.activity.EdgeToEdge;\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.core.graphics.Insets;\r\nimport androidx.core.view.ViewCompat;\r\nimport androidx.core.view.WindowInsetsCompat;\r\n\r\nimport com.example.hydrativa.retrofit.LogoutService;\r\nimport com.example.hydrativa.retrofit.RetrofitClient;\r\nimport com.google.android.material.bottomnavigation.BottomNavigationView;\r\n\r\nimport retrofit2.Call;\r\nimport retrofit2.Callback;\r\nimport retrofit2.Response;\r\n\r\npublic class Setting extends AppCompatActivity {\r\n    TextView linkForgot;\r\n    TextView linkProfile;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        EdgeToEdge.enable(this);\r\n        setContentView(R.layout.activity_setting);\r\n        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {\r\n            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());\r\n            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);\r\n            return insets;\r\n        });\r\n\r\n        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomView);\r\n        bottomNavigationView.setSelectedItemId(R.id.nav_settings); // Set the default selected item\r\n\r\n        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {\r\n            if (item.getItemId() == R.id.nav_home) {\r\n                startActivity(new Intent(getApplicationContext(), Dashboard.class));\r\n                finish();\r\n                overridePendingTransition(0, 0);\r\n                return true;\r\n            } else if (item.getItemId() == R.id.nav_watering) {\r\n                startActivity(new Intent(getApplicationContext(), Watering.class));\r\n                finish();\r\n                overridePendingTransition(0, 0);\r\n                return true;\r\n            } else if (item.getItemId() == R.id.nav_settings) {\r\n                return true;\r\n            }\r\n            return false;\r\n        });\r\n        SharedPreferences sharedPreferences = getSharedPreferences(\"user_prefs\", MODE_PRIVATE);\r\n        String name = sharedPreferences.getString(\"name\", \"User\");\r\n\r\n        TextView nameText = findViewById(R.id.usernameText);\r\n        nameText.setText(name);\r\n\r\n        Button logoutButton = findViewById(R.id.logoutButton);\r\n\r\n        logoutButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                performLogout();\r\n            }\r\n        });\r\n\r\n\r\n        linkForgot = findViewById(R.id.forgotLink);\r\n        linkForgot.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                Intent i = new Intent(Setting.this, Forgot.class);\r\n                startActivity(i);\r\n            }\r\n        });\r\n\r\n        linkProfile = findViewById(R.id.profileupdateLink);\r\n        linkProfile.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                Intent i = new Intent(Setting.this, Profile.class);\r\n                startActivity(i);\r\n            }\r\n        });\r\n    }\r\n\r\n    private void performLogout() {\r\n        // Pass the current context (LogoutFunction) to the RetrofitClient\r\n        LogoutService apiService = RetrofitClient.getRetrofitInstance(Setting.this).create(LogoutService.class);\r\n        Call<Void> call = apiService.logout();\r\n\r\n        call.enqueue(new Callback<Void>() {\r\n            @Override\r\n            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {\r\n                if (response.isSuccessful()) {\r\n                    Toast.makeText(Setting.this, \"Logout berhasil\", Toast.LENGTH_SHORT).show();\r\n                    Intent intent = new Intent(Setting.this, Login.class);\r\n                    startActivity(intent);\r\n                    finish();\r\n                } else {\r\n                    Toast.makeText(Setting.this, \"Logout gagal\", Toast.LENGTH_SHORT).show();\r\n                }\r\n            }\r\n\r\n            @Override\r\n            public void onFailure(Call<Void> call, Throwable t) {\r\n                Toast.makeText(Setting.this, \"An error occurred\", Toast.LENGTH_SHORT).show();\r\n            }\r\n        });\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hydrativa/Setting.java b/app/src/main/java/com/example/hydrativa/Setting.java
+--- a/app/src/main/java/com/example/hydrativa/Setting.java	(revision 685df11ba7c2a3462a44fb89e1c53ebada91e6ae)
++++ b/app/src/main/java/com/example/hydrativa/Setting.java	(date 1731570447305)
+@@ -86,7 +86,7 @@
+         linkProfile.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+-                Intent i = new Intent(Setting.this, Profile.class);
++                Intent i = new Intent(Setting.this, EditProfileActivity.class);
+                 startActivity(i);
+             }
+         });
+Index: app/src/main/java/com/example/hydrativa/retrofit/UpdateService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/hydrativa/retrofit/UpdateService.java b/app/src/main/java/com/example/hydrativa/retrofit/UpdateService.java
+new file mode 100644
+--- /dev/null	(date 1731589886350)
++++ b/app/src/main/java/com/example/hydrativa/retrofit/UpdateService.java	(date 1731589886350)
+@@ -0,0 +1,22 @@
++package com.example.hydrativa.retrofit;
++
++import com.example.hydrativa.models.EditProfileRequest;
++
++import okhttp3.MultipartBody;
++import okhttp3.RequestBody;
++import retrofit2.Call;
++import retrofit2.http.Multipart;
++import retrofit2.http.POST;
++import retrofit2.http.Part;
++
++public interface UpdateService {
++    @Multipart
++    @POST("me/update/mobile")
++    Call<EditProfileRequest> updateProfile(
++            @Part("username") RequestBody username,
++            @Part("jenis_kelamin") RequestBody gender,
++            @Part("name") RequestBody name,
++            @Part("telp") RequestBody phone,
++            @Part MultipartBody.Part gambar
++    );
++}

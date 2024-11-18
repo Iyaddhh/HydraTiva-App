@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,9 +17,12 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.hydrativa.adapters.KebunAdapter;
 import com.example.hydrativa.models.Kebun;
+import com.example.hydrativa.models.User;
 import com.example.hydrativa.retrofit.KebunService;
+import com.example.hydrativa.retrofit.ProfileService;
 import com.example.hydrativa.retrofit.RetrofitClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -58,6 +62,41 @@ public class Watering extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Mengambil profil pengguna dari API
+        ProfileService profileService = RetrofitClient.getRetrofitInstance(Watering.this).create(ProfileService.class);
+        Call<User> profileCall = profileService.getProfile();
+        profileCall.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    User userProfile = response.body();
+                    String imageUrl = userProfile.getGambar();
+
+                    if (imageUrl != null && imageUrl.startsWith("http://")) {
+                        imageUrl = "https://" + imageUrl.substring(7); // Mengganti http:// menjadi https://
+                    }
+
+                    ImageView profileImageView = findViewById(R.id.circleImage);
+
+                    // Menggunakan Glide untuk memuat gambar profil
+                    Glide.with(Watering.this)
+                            .load(imageUrl)
+                            .circleCrop()
+                            .error(R.drawable.tehdia)
+                            .into(profileImageView);
+
+                } else {
+                    Toast.makeText(Watering.this, "Gagal memuat profil pengguna", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable throwable) {
+                Toast.makeText(Watering.this, "Error: " + throwable.toString(), Toast.LENGTH_SHORT).show();
+                Log.d("Error", "Error occurred: " + throwable);
+            }
+        });
 
         Call<List<Kebun>> call = kebunService.getKebun();
         call.enqueue(new Callback<List<Kebun>>() {
@@ -101,7 +140,7 @@ public class Watering extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
         String name = sharedPreferences.getString("name", "User");
 
-        TextView nameText = findViewById(R.id.usernameText);
+        TextView nameText = findViewById(R.id.nameText);
         nameText.setText(name);
     }
 }

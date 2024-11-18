@@ -22,10 +22,14 @@ public class LoginResponse {
     }
 
     // Inner class for user details
-    public static class User {
+    public class User {
         private String username;
         private String email;
         private String name;
+
+        public User(String username, String gender, String name, String phone) {
+
+        }
 
         // Getters and setters for User fields
         public String getUsername() {

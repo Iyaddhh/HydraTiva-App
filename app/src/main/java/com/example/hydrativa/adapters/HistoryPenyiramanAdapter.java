@@ -12,19 +12,48 @@ import com.example.hydrativa.R;
 import com.example.hydrativa.models.HistoryPenyiraman;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 public class HistoryPenyiramanAdapter extends RecyclerView.Adapter<HistoryPenyiramanAdapter.HistoryViewHolder> {
 
     private List<HistoryPenyiraman> historyList;
-    private Set<String> displayedDates; // Set untuk melacak tanggal yang sudah ditampilkan
+    private Map<String, HistoryPenyiraman> latestHistoryByDate;
 
     public HistoryPenyiramanAdapter(List<HistoryPenyiraman> historyList) {
         this.historyList = historyList;
-        this.displayedDates = new HashSet<>(); // Menggunakan HashSet untuk menghindari duplikasi
+        this.latestHistoryByDate = new HashMap<>();
+        filterLatestData();
+    }
+
+    private void filterLatestData() {
+        Collections.sort(historyList, (h1, h2) -> {
+            try {
+                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                Date date1 = inputFormat.parse(h1.getDate());
+                Date date2 = inputFormat.parse(h2.getDate());
+
+                if (date1 != null && date2 != null) {
+                    return date2.compareTo(date1);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return 0;
+        });
+
+        for (HistoryPenyiraman history : historyList) {
+            String date = history.getDate().split(" ")[0];
+            if (!latestHistoryByDate.containsKey(date)) {
+                latestHistoryByDate.put(date, history);
+            }
+        }
+
+        historyList.clear();
+        historyList.addAll(latestHistoryByDate.values());
     }
 
     @Override
@@ -37,17 +66,16 @@ public class HistoryPenyiramanAdapter extends RecyclerView.Adapter<HistoryPenyir
     public void onBindViewHolder(HistoryViewHolder holder, int position) {
         HistoryPenyiraman history = historyList.get(position);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd"); // Format yang diinginkan
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         String formattedDate = null;
 
         try {
             if (history.getDate() != null) {
-                // Format input sesuai dengan format tanggal yang diterima dari server
                 SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                Date date = inputFormat.parse(history.getDate()); // Parsing tanggal dari server
+                Date date = inputFormat.parse(history.getDate());
 
                 if (date != null) {
-                    formattedDate = dateFormat.format(date); // Menformat hanya tanggalnya
+                    formattedDate = dateFormat.format(date);
                 } else {
                     formattedDate = "Invalid Date Format";
                 }
@@ -60,20 +88,10 @@ public class HistoryPenyiramanAdapter extends RecyclerView.Adapter<HistoryPenyir
 
         Log.d("HistoryPenyiraman", "Date from server: " + history.getDate());
 
-        // Cek apakah tanggal sudah ditampilkan
-        if (!displayedDates.contains(formattedDate)) {
-            // Jika tanggal belum ada, tampilkan item dan tambahkan tanggal ke dalam set
-            holder.dateText.setText(formattedDate != null ? formattedDate : "No Date");
-            holder.moistureStatus.setText(history.getMoisture() != null ? history.getMoisture() : "No Moisture Status");
-            holder.statusValue.setText(history.getSoilCondition() != null ? history.getSoilCondition() : "No Soil Condition");
-            holder.soilPhValue.setText(history.getPhLevel() != null ? history.getPhLevel() : "No pH Level");
-
-            // Tambahkan tanggal ke set untuk memastikan tidak ada duplikasi
-            displayedDates.add(formattedDate);
-        } else {
-            // Jika tanggal sudah ditampilkan, sembunyikan CardView
-            holder.itemView.setVisibility(View.GONE);
-        }
+        holder.dateText.setText(formattedDate != null ? formattedDate : "No Date");
+        holder.moistureStatus.setText(history.getMoisture() != null ? history.getMoisture() : "No Moisture Status");
+        holder.statusValue.setText(history.getSoilCondition() != null ? history.getSoilCondition() : "No Soil Condition");
+        holder.soilPhValue.setText(history.getPhLevel() != null ? history.getPhLevel() : "No pH Level");
     }
 
     @Override

@@ -10,9 +10,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.bumptech.glide.Glide;
+import com.example.hydrativa.models.User;
 import com.example.hydrativa.retrofit.ProfileService;
 import com.example.hydrativa.retrofit.RetrofitClient;
 
@@ -28,33 +32,95 @@ import retrofit2.Response;
 public class EditProfile extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
+    private static final int STORAGE_PERMISSION_CODE = 100;
     private ImageView uploadedImage;
-    private EditText name, username, email, telp;
+    private RadioGroup radioGroup;
+    private String jenis_kelamin;
+    private EditText name, username, telp;
     private Uri imageUri;
-    private Button updateButton;
+    private Button suntingButton;
+    private ProfileService profileService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
+        ImageView settingLink = findViewById(R.id.settingLink);
+
+        settingLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EditProfile.this, Profile.class);
+                startActivity(intent);
+            }
+        });
+
+        radioGroup = findViewById(R.id.radioGroup1);
         uploadedImage = findViewById(R.id.profile_image);
         name = findViewById(R.id.input_name);
         username = findViewById(R.id.input_username);
-        email = findViewById(R.id.input_email);
         telp = findViewById(R.id.input_phone);
-        updateButton = findViewById(R.id.update_button);
+        suntingButton = findViewById(R.id.suntingButton);
 
-        name.setText("");
-        username.setText("");
-        email.setText("");
-        telp.setText("");
-        uploadedImage.setImageDrawable(null);
+        profileService = RetrofitClient.getRetrofitInstance(getApplicationContext()).create(ProfileService.class);
 
-        updateButton.setOnClickListener(new View.OnClickListener() {
+        // Memuat data pengguna
+        loadUserProfile();
+
+        suntingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateProfileData();
+            }
+        });
+    }
+
+    private void loadUserProfile() {
+        // Mengambil data profil pengguna dari API
+        Call<User> call = profileService.getProfile();
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    User user = response.body();
+
+                    // Menampilkan data pengguna ke dalam EditText dan RadioGroup
+                    name.setText(user.getName());
+                    username.setText(user.getUsername());
+                    telp.setText(user.getTelp());
+
+                    // Set jenis kelamin berdasarkan data yang diterima
+                    if (user.getJenis_kelamin() != null) {
+                        if (user.getJenis_kelamin().equalsIgnoreCase("Laki-laki")) {
+                            radioGroup.check(R.id.radio_laki);
+                        } else if (user.getJenis_kelamin().equalsIgnoreCase("Perempuan")) {
+                            radioGroup.check(R.id.radio_wanita);
+                        }
+                    }
+
+                    // Menampilkan gambar profil jika ada
+                    if (user.getGambar() != null && !user.getGambar().isEmpty()) {
+                        User userProfile = response.body();
+                        String imageUrl = userProfile.getGambar();
+
+                        if (imageUrl != null && imageUrl.startsWith("http://")) {
+                            imageUrl = "https://" + imageUrl.substring(7); // Mengganti http:// menjadi https://
+                        }
+
+                        Glide.with(EditProfile.this)
+                                .load(imageUrl)
+                                .into(uploadedImage);
+                    }
+                } else {
+                    Toast.makeText(EditProfile.this, "Failed to load profile", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(EditProfile.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -72,6 +138,8 @@ public class EditProfile extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
             uploadedImage.setImageURI(imageUri);
+        } else {
+            uploadedImage.setImageResource(R.drawable.default_profile);
         }
     }
 
@@ -91,25 +159,33 @@ public class EditProfile extends AppCompatActivity {
     private void updateProfileData() {
         String inputName = name.getText().toString().trim();
         String inputUsername = username.getText().toString().trim();
-        String inputEmail = email.getText().toString().trim();
         String inputTelp = telp.getText().toString().trim();
+        int selectedId = radioGroup.getCheckedRadioButtonId();
+        if (selectedId == R.id.radio_laki) {
+            jenis_kelamin = "Laki-laki";
+        } else if (selectedId == R.id.radio_wanita) {
+            jenis_kelamin = "Perempuan";
+        } else {
+            jenis_kelamin = null;  // jika tidak ada pilihan yang dipilih
+        }
 
-        if (inputName.isEmpty() || inputUsername.isEmpty() || inputEmail.isEmpty() || inputTelp.isEmpty()) {
+        // Validasi input
+        if (inputName.isEmpty() || inputUsername.isEmpty() || jenis_kelamin == null || inputTelp.isEmpty()) {
             Toast.makeText(this, "Harap lengkapi semua informasi", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Creating RequestBody for each input field
+        // Persiapkan data untuk dikirim
         RequestBody requestName = RequestBody.create(MediaType.parse("text/plain"), inputName);
         RequestBody requestUsername = RequestBody.create(MediaType.parse("text/plain"), inputUsername);
-        RequestBody requestEmail = RequestBody.create(MediaType.parse("text/plain"), inputEmail);
+        RequestBody requestJenis_Kelamin = RequestBody.create(MediaType.parse("text/plain"), jenis_kelamin);
         RequestBody requestTelp = RequestBody.create(MediaType.parse("text/plain"), inputTelp);
 
-        // Set imagePart only if an image is selected
+        // Menyiapkan image jika ada
         MultipartBody.Part imagePart = null;
         if (imageUri != null) {
             File file = new File(getRealPathFromURI(imageUri));
-            if (file.length() > 2048 * 1024) {
+            if (file.length() > 2048 * 1024) {  // 2MB max size
                 Toast.makeText(this, "File gambar terlalu besar", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -117,11 +193,9 @@ public class EditProfile extends AppCompatActivity {
             imagePart = MultipartBody.Part.createFormData("gambar", file.getName(), requestFile);
         }
 
-        // Make the API call to update profile
-        ProfileService apiService = RetrofitClient.getRetrofitInstance(this).create(ProfileService.class);
-        Call<Void> call = apiService.updateProfile(requestName, requestUsername, requestEmail, requestTelp, imagePart);
+        // Kirim data ke server menggunakan Retrofit
+        Call<Void> call = profileService.updateProfile(requestUsername, requestJenis_Kelamin, requestName, requestTelp, imagePart);
 
-        // Handling API response
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

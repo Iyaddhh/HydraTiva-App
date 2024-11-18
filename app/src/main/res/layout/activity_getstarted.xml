@@ -29,7 +29,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:id="@+id/photo"
-            android:src="@drawable/circle_bg"
+            android:src="@drawable/logohydrativasplashwhite"
             android:layout_marginBottom="270dp"
             android:visibility="gone"/>
     </LinearLayout>
