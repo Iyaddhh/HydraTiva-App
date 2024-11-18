@@ -61,7 +61,7 @@ public class Login extends AppCompatActivity {
                 String username = login_user.getText().toString().trim();
                 String password = pass_user.getText().toString().trim();
                 Log.d(TAG, "Attempting login with username: " + username); // Log username
-                loginUser(username, password);
+                    loginUser(username, password);
             }
         });
 

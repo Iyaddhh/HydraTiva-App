@@ -54,6 +54,15 @@ public class Dashboard extends AppCompatActivity {
             return insets;
         });
 
+        ViewPager2 viewPager = findViewById(R.id.viewpager);
+        viewPager.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://hydrativa.vercel.app"));
+                startActivity(intent);
+            }
+        });
+
         CardView cV1 = findViewById(R.id.grid1);
         CardView cV2 = findViewById(R.id.grid2);
         CardView cV3 = findViewById(R.id.grid3);

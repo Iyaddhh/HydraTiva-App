@@ -53,6 +53,8 @@ public class detail_watering extends AppCompatActivity {
                 Intent intent = new Intent(detail_watering.this, edit_kebun.class);
                 intent.putExtra("kebun_id", kebunId);
                 startActivity(intent);
+
+                kebunId = getIntent().getIntExtra("kebun_id", -1);
             }
         });
 

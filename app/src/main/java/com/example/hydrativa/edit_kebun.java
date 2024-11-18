@@ -42,6 +42,19 @@ public class edit_kebun extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_kebun);
 
+        ImageView settingLink = findViewById(R.id.kebunLink);
+
+        settingLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(edit_kebun.this, detail_watering.class);
+                intent.putExtra("kebun_id", kebunId);
+
+                startActivity(intent);
+            }
+        });
+
+
         kebunId = getIntent().getIntExtra("kebun_id", kebunId);
         uploadedImage = findViewById(R.id.uploadedImage);
         namaKebun = findViewById(R.id.namaKebun);
@@ -161,16 +174,6 @@ public class edit_kebun extends AppCompatActivity {
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(edit_kebun.this, "Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-
-        ImageView settingLink = findViewById(R.id.kebunLink);
-
-        settingLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(edit_kebun.this, detail_watering.class);
-                startActivity(intent);
             }
         });
     }
