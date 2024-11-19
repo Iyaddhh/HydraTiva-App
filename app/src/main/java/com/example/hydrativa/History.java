@@ -1,5 +1,6 @@
 package com.example.hydrativa;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +22,9 @@ import com.example.hydrativa.models.User;
 import com.example.hydrativa.retrofit.KebunService;
 import com.example.hydrativa.retrofit.ProfileService;
 import com.example.hydrativa.retrofit.RetrofitClient;
+import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,6 +58,62 @@ public class History extends AppCompatActivity {
             finish(); // Keluar dari aktivitas jika kebunId tidak valid
             return;
         }
+
+        BottomAppBar bottomAppBar = findViewById(R.id.bottomView);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
+
+        bottomNavigationView.setSelectedItemId(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.nav_home) {
+                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                finish();
+                overridePendingTransition(0, 0);
+                return true;
+            } else if (item.getItemId() == R.id.nav_settings) {
+                startActivity(new Intent(getApplicationContext(), Setting.class));
+                finish();
+                overridePendingTransition(0, 0);
+                return true;
+            }
+            return false;
+        });
+
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent(History.this, Watering.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
+        });
+
+        BottomAppBar bottomAppBar = findViewById(R.id.bottomView);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
+
+        bottomNavigationView.setSelectedItemId(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.nav_home) {
+                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                finish();
+                overridePendingTransition(0, 0);
+                return true;
+            } else if (item.getItemId() == R.id.nav_settings) {
+                startActivity(new Intent(getApplicationContext(), Setting.class));
+                finish();
+                overridePendingTransition(0, 0);
+                return true;
+            }
+            return false;
+        });
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent(History.this, Watering.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
+        });
+
 
         // Inisialisasi data bulan
         monthsList = new ArrayList<>();
