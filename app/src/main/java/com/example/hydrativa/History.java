@@ -1,5 +1,6 @@
 package com.example.hydrativa;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +22,8 @@ import com.example.hydrativa.models.User;
 import com.example.hydrativa.retrofit.KebunService;
 import com.example.hydrativa.retrofit.ProfileService;
 import com.example.hydrativa.retrofit.RetrofitClient;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,12 +51,6 @@ public class History extends AppCompatActivity {
         setContentView(R.layout.activity_history);
 
         int kebunId = getIntent().getIntExtra("kebun_id", 1); // -1 sebagai default jika tidak ada kebun_id
-
-        if (kebunId == -1) {
-            Toast.makeText(this, "Kebun ID tidak ditemukan", Toast.LENGTH_SHORT).show();
-            finish(); // Keluar dari aktivitas jika kebunId tidak valid
-            return;
-        }
 
         // Inisialisasi data bulan
         monthsList = new ArrayList<>();
@@ -216,6 +213,15 @@ public class History extends AppCompatActivity {
             filteredHistoryList.addAll(dateHistoryMap.values());
             adapter.notifyDataSetChanged();
         }
-    }
 
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
+
+        bottomNavigationView.setSelectedItemId(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
+
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent(History.this, Watering.class);
+            startActivity(intent);
+        });
+    }
 }

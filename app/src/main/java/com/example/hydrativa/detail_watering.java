@@ -62,12 +62,16 @@ public class detail_watering extends AppCompatActivity {
                 kebunId = getIntent().getIntExtra("kebun_id", kebunId);
             }
         });
-
-        BottomAppBar bottomAppBar = findViewById(R.id.bottomView);
+        
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
 
         bottomNavigationView.setSelectedItemId(R.id.fab);
         FloatingActionButton fab = findViewById(R.id.fab);
+
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent(detail_watering.this, Watering.class);
+            startActivity(intent);
+        });
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_home) {

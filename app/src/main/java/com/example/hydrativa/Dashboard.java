@@ -107,7 +107,6 @@ public class Dashboard extends AppCompatActivity {
             }
         });
 
-        BottomAppBar bottomAppBar = findViewById(R.id.bottomView);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
 
         bottomNavigationView.setSelectedItemId(R.id.nav_home);

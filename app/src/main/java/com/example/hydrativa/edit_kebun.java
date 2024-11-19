@@ -51,7 +51,6 @@ public class edit_kebun extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(edit_kebun.this, detail_watering.class);
                 intent.putExtra("KEBUN_ID", kebunId);
-                Log.d(TAG, "onClick: " + kebunId);
                 startActivity(intent);
             }
         });
