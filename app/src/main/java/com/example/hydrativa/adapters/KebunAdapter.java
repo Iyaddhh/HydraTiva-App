@@ -73,7 +73,6 @@ public class KebunAdapter extends RecyclerView.Adapter<KebunAdapter.KebunViewHol
     public int getItemCount() {
         return kebunList.size();
     }
-
     private void deleteKebun(int kebun_id, int position) {
         Call<Void> call = kebunService.deleteKebun(kebun_id);
         call.enqueue(new Callback<Void>() {

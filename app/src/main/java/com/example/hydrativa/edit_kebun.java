@@ -49,8 +49,8 @@ public class edit_kebun extends AppCompatActivity {
         settingLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(edit_kebun.this, Dashboard.class);
-                intent.putExtra("kebun_id", kebunId);
+                Intent intent = new Intent(edit_kebun.this, detail_watering.class);
+                intent.putExtra("KEBUN_ID", kebunId);
                 Log.d(TAG, "onClick: " + kebunId);
                 startActivity(intent);
             }

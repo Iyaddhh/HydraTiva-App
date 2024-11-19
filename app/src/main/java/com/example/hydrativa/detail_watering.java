@@ -95,7 +95,7 @@ public class detail_watering extends AppCompatActivity {
         tvStatus = findViewById(R.id.Status);
 
         kebunId = getIntent().getIntExtra("KEBUN_ID", kebunId);
-        Log.d(TAG, "ID NYAAAAAA: "+kebunId);
+        Log.d(TAG, "ID Detail : "+kebunId);
 
         // Mengambil profil pengguna dari API
         ProfileService profileService = RetrofitClient.getRetrofitInstance(detail_watering.this).create(ProfileService.class);
@@ -137,6 +137,8 @@ public class detail_watering extends AppCompatActivity {
         });
 
         Call<Kebun> call = kebunService.getKebunDetail(kebunId);
+        Log.d(TAG, "Call ID : "+kebunId);
+        Log.d(TAG, "URL: " + call.request().url());
         call.enqueue(new Callback<Kebun>() {
             @Override
             public void onResponse(Call<Kebun> call, Response<Kebun> response) {
