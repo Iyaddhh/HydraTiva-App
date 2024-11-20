@@ -1,0 +1,190 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".edit_kebun">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/header_kebun"
+        android:layout_width="match_parent"
+        android:layout_height="95dp"
+        android:backgroundTint="@color/primary"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sunting Kebun"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:layout_marginTop="4dp"
+            android:textSize="20sp"
+            android:fontFamily="@font/poppins"
+            android:textStyle="bold"/>
+
+        <ImageView
+            android:id="@+id/kebunLink"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/arrow_left"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="18dp"/>
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/header_kebun">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="350dp"
+            android:layout_height="200dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="15dp"
+            app:cardCornerRadius="18dp">
+
+            <ImageView
+                android:id="@+id/uploadedImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/tambah_gambar"
+                android:contentDescription="Tambah Gambar"
+                android:onClick="openImagePicker"/>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Form Fields -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="28dp"
+            android:layout_marginHorizontal="30dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="30dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nama Kebun"
+                    android:layout_marginEnd="90dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/poppins"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/nama_kebun"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="11dp"
+                    android:layout_marginEnd="11dp"
+                    android:hint="Masukan nama kebun"
+                    style="@style/CustomTextInputLayout"
+                    app:boxBackgroundMode="outline"
+                    app:boxStrokeWidth="2dp"
+                    app:boxStrokeWidthFocused="2dp"
+                    app:hintTextAppearance="@style/HintTextStyle"
+                    app:placeholderText="Masukkan nama lengkap Anda">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/namaKebun"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:padding="13dp"
+                        android:fontFamily="@font/poppins"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Luas Kebun"
+                    android:layout_marginEnd="90dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/poppins"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/Luas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="11dp"
+                    android:layout_marginEnd="11dp"
+                    android:hint="Masukan luas kebun"
+                    style="@style/CustomTextInputLayout"
+                    app:boxBackgroundMode="outline"
+                    app:boxStrokeWidth="2dp"
+                    app:boxStrokeWidthFocused="2dp"
+                    app:hintTextAppearance="@style/HintTextStyle"
+                    app:placeholderText="Masukkan nama lengkap Anda">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/luasKebun"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:padding="13dp"
+                        android:fontFamily="@font/poppins"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lokasi Kebun"
+                    android:layout_marginEnd="90dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/poppins"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/Lokasi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="11dp"
+                    android:layout_marginEnd="11dp"
+                    android:hint="Masukan lokasi kebun"
+                    style="@style/CustomTextInputLayout"
+                    app:boxBackgroundMode="outline"
+                    app:boxStrokeWidth="2dp"
+                    app:boxStrokeWidthFocused="2dp"
+                    app:hintTextAppearance="@style/HintTextStyle"
+                    app:placeholderText="Masukkan nama lengkap Anda">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/lokasiKebun"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:padding="13dp"
+                        android:fontFamily="@font/poppins"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/updateButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="11dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="11dp"
+                    android:layout_marginBottom="20dp"
+                    android:backgroundTint="@color/primary"
+                    android:fontFamily="@font/poppins"
+                    android:text="Simpan"
+                    android:textColor="@android:color/white"
+                    app:cornerRadius="8dp"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

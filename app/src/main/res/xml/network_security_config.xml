@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">hydrativa-hufme6esdvd6acfp.eastasia-01.azurewebsites.net</domain>
+    </domain-config>
+</network-security-config>

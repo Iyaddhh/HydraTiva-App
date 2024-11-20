@@ -14,8 +14,9 @@
 
     <style name="HintTextStyle" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@color/grey</item>
-        <item name="android:fontFamily">@font/poppins</item> 
+        <item name="android:fontFamily">@font/poppins</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:alpha">0.8</item>
     </style>
 
     <style name="PlaceholderTextStyle" parent="TextAppearance.MaterialComponents.Body1">
@@ -27,5 +28,11 @@
     <style name="CircleImage">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="FAB_CircularShape" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+        <item name="iconSize">60dp</item>
     </style>
 </resources>

@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/grey"
-        app:layout_constraintBottom_toTopOf="@+id/bottomView"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintHeight_default="wrap"/>
 
@@ -49,7 +48,7 @@
                     android:id="@+id/greetingText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Selamat pagi,"
+                    android:text="Halo,"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"
                     android:fontFamily="@font/poppins"
@@ -76,6 +75,7 @@
                     android:layout_height="75dp"
                     android:layout_marginEnd="40dp"
                     android:src="@drawable/circle_bg"
+                    android:scaleType="centerCrop"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -92,7 +92,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:layout_margin="24dp"
+        android:layout_margin="20dp"
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp"
         app:layout_constraintTop_toBottomOf="@id/header_setting"
@@ -112,13 +112,13 @@
                 android:gravity="center_vertical">
 
                 <TextView
+                    android:id="@+id/profileupdateLink"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Profil"
                     android:textColor="@android:color/black"
-                    android:fontFamily="@font/poppins"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/poppins_bold"
                     android:textSize="18sp" />
 
                 <ImageView
@@ -130,6 +130,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
                 android:text="Lengkapi data diri kamu sekarang!"
                 android:textColor="@android:color/darker_gray" />
 
@@ -146,12 +147,13 @@
                 android:gravity="center_vertical">
 
                 <TextView
+                    android:id="@+id/forgotLink"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Ubah Password"
                     android:textColor="@android:color/black"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/poppins_bold"
                     android:textSize="18sp" />
 
                 <ImageView
@@ -175,7 +177,7 @@
         android:layout_height="wrap_content"
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp"
-        android:layout_margin="24dp"
+        android:layout_margin="20dp"
         app:layout_constraintTop_toBottomOf="@id/cardView1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -197,9 +199,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Tentang Kami"
+                    android:fontFamily="@font/poppins_bold"
                     android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textSize="18sp"/>
 
                 <ImageView
                     android:layout_width="24dp"
@@ -211,6 +213,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tentang HydraTiva"
+                android:fontFamily="@font/poppins"
                 android:textColor="@android:color/darker_gray" />
 
             <View
@@ -232,7 +235,7 @@
                     android:text="Cara Pemakaian"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/poppins_bold"/>
 
                 <ImageView
                     android:layout_width="24dp"
@@ -243,69 +246,95 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
                 android:text="Cari tahu cara pemakaian HydraTiva disini!"
                 android:textColor="@android:color/darker_gray" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="8dp"
-                android:background="@android:color/darker_gray" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Informasi"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/arrow_right"/>
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Cari tahu cara pemakaian HydraTiva disini!"
-                android:textColor="@android:color/darker_gray" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/verifButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#00661a"
+        android:fontFamily="@font/poppins"
+        android:text="VERIFIKASI AKUN"
+        android:textColor="@android:color/white"
+        app:cornerRadius="8dp"
+        app:layout_constraintTop_toBottomOf="@id/cardView2"/>
 
     <Button
         android:id="@+id/logoutButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="80dp"
         android:backgroundTint="#880808"
         android:fontFamily="@font/poppins"
-        android:text="LOGOUT"
+        android:text="LOG OUT"
         android:textColor="@android:color/white"
         app:cornerRadius="8dp"
         app:layout_constraintTop_toBottomOf="@id/cardView2"/>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomView"
+    <!-- Bottom Navigation View -->
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:itemIconSize="40dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+        android:layout_height="130dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottomView"
+            android:layout_width="match_parent"
+            android:layout_height="95dp"
+            android:layout_gravity="bottom"
+            app:fabAlignmentMode="center"
+            app:fabAnchorMode="cradle"
+            app:fabCradleMargin="0dp"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/watering"
+            app:layout_anchor="@id/bottomView"
+            app:fabCustomSize="90dp"
+            app:maxImageSize="50dp"
+            android:tint="@null"
+            style="@style/NavBar"
+            android:contentDescription="watering"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="25dp" />
 
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Penyiraman"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppins"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="8dp"
+            android:paddingTop="20dp"/>
 
-
-
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:menu="@menu/bottom_nav_menu"
+            app:itemIconSize="35dp"
+            app:itemIconTint="@color/bottom_nav_color"
+            android:background="@android:color/transparent"
+            android:elevation="8dp"
+            android:layout_gravity="bottom"
+            app:itemIconPadding="0dp"/>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

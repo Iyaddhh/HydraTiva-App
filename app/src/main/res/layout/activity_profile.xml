@@ -17,7 +17,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Profile"
+            android:text="Profil"
             android:textColor="@color/white"
             android:layout_gravity="center"
             android:layout_marginTop="5dp"
@@ -26,6 +26,7 @@
             android:textStyle="bold"/>
 
         <ImageView
+            android:id="@+id/settingLink"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/arrow_left"
@@ -59,94 +60,60 @@
                 android:layout_marginBottom="16dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/stevia"
-                app:shapeAppearanceOverlay="@style/CircleImage"/>
+                app:shapeAppearanceOverlay="@style/CircleImage"
+                android:onClick="openImagePicker"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nama Lengkap"
                 android:layout_marginTop="15dp"
-                android:layout_marginEnd="94dp"
-                android:fontFamily="@font/poppins"/>
+                android:layout_marginEnd="84dp"
+                android:fontFamily="@font/poppins"
+                android:text="Nama Panggilan" />
+
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutName"
+                android:id="@+id/layoutUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
                 android:layout_marginEnd="11dp"
-                android:hint="Nama Lengkap"
                 style="@style/CustomTextInputLayout"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeWidth="2dp"
-                app:boxStrokeWidthFocused="2dp"
-                app:hintTextAppearance="@style/HintTextStyle"
-                app:placeholderText="Masukkan nama lengkap Anda">
+                app:boxStrokeWidthFocused="2dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:padding="13dp"
+                    android:fontFamily="@font/poppins" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="92dp"
+                android:fontFamily="@font/poppins"
+                android:text="Nama Lengkap" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="11dp"
+                android:layout_marginEnd="11dp"
+                style="@style/CustomTextInputLayout"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeWidth="2dp"
+                app:boxStrokeWidthFocused="2dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:padding="13dp"
-                    android:fontFamily="@font/poppins" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Jenis Kelamin"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="99dp"
-                android:fontFamily="@font/poppins"/>
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutGender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="11dp"
-                android:layout_marginEnd="11dp"
-                android:hint="Jenis Kelamin"
-                style="@style/CustomTextInputLayout"
-                app:boxBackgroundMode="outline"
-                app:boxStrokeWidth="2dp"
-                app:boxStrokeWidthFocused="2dp"
-                app:hintTextAppearance="@style/HintTextStyle"
-                app:placeholderText="Pilih jenis kelamin">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/input_gender"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:padding="13dp"
-                    android:fontFamily="@font/poppins" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Alamat Email"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="99dp"
-                android:fontFamily="@font/poppins"/>
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="11dp"
-                android:layout_marginEnd="11dp"
-                android:hint="Email"
-                style="@style/CustomTextInputLayout"
-                app:boxBackgroundMode="outline"
-                app:boxStrokeWidth="2dp"
-                app:boxStrokeWidthFocused="2dp"
-                app:hintTextAppearance="@style/HintTextStyle"
-                app:placeholderText="Masukkan email Anda">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/input_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
                     android:textSize="16sp"
                     android:padding="13dp"
                     android:fontFamily="@font/poppins" />
@@ -165,13 +132,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
                 android:layout_marginEnd="11dp"
-                android:hint="No. Telepon"
                 style="@style/CustomTextInputLayout"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeWidth="2dp"
-                app:boxStrokeWidthFocused="2dp"
-                app:hintTextAppearance="@style/HintTextStyle"
-                app:placeholderText="Masukkan nomor telepon Anda">
+                app:boxStrokeWidthFocused="2dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_phone"
@@ -183,8 +147,37 @@
                     android:fontFamily="@font/poppins" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="94dp"
+                android:fontFamily="@font/poppins"
+                android:text="Jenis Kelamin" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="11dp"
+                android:layout_marginEnd="11dp"
+                style="@style/CustomTextInputLayout"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeWidth="2dp"
+                app:boxStrokeWidthFocused="2dp"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_jenis_kelamin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:padding="13dp"
+                    android:fontFamily="@font/poppins" />
+            </com.google.android.material.textfield.TextInputLayout>
+
             <Button
-                android:id="@+id/loginButton"
+                android:id="@+id/suntingButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"

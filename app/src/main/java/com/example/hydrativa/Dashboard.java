@@ -1,132 +1,100 @@
 package com.example.hydrativa;
 
 import android.content.Intent;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-
+import com.bumptech.glide.Glide;
 import com.example.hydrativa.adapters.ImageAdapter;
+import com.example.hydrativa.adapters.MateriAdapter;
 import com.example.hydrativa.models.ImageItem;
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
+import com.example.hydrativa.models.MateriResponse;
+import com.example.hydrativa.models.User;
+import com.example.hydrativa.retrofit.MateriService;
+import com.example.hydrativa.retrofit.ProfileService;
+import com.example.hydrativa.retrofit.RetrofitClient;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class Dashboard extends AppCompatActivity {
 
-    ViewPager2 viewPage;
-    private ViewPager2.OnPageChangeCallback pageChangeListener;
+    private ViewPager2 viewPage;
     private ImageView[] dotsImage;
     private Handler handler;
     private int currentPage = 0;
+    private RecyclerView recyclerView;
+    private MateriAdapter materiAdapter;
+    private List<MateriResponse> materiList;
+    private MateriService materiService;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_dashboard);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
-        androidx.cardview.widget.CardView gridKebun1 = findViewById(R.id.grid1);
-        androidx.cardview.widget.CardView gridKebun2 = findViewById(R.id.grid2);
-        androidx.cardview.widget.CardView gridKebun3 = findViewById(R.id.grid3);
-        androidx.cardview.widget.CardView gridKebun4 = findViewById(R.id.grid4);
+        // Inisialisasi RecyclerView
+        recyclerView = findViewById(R.id.recyclerView);
 
-        gridKebun1.setOnClickListener(view -> {
-            String url = "https://www.youtube.com/";
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(url));
-            startActivity(intent);
-        });
+        // Menentukan GridLayoutManager dengan jumlah kolom (2 kolom)
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        recyclerView.setLayoutManager(gridLayoutManager);
 
-        gridKebun2.setOnClickListener(view -> {
-            String url = "https://www.youtube.com/";
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(url));
-            startActivity(intent);
-        });
+        // Inisialisasi MateriAdapter dengan daftar materi
+        materiList = new ArrayList<>();  // Pastikan materiList diinisialisasi
+        materiAdapter = new MateriAdapter(materiList, this, materiService);
 
-        gridKebun3.setOnClickListener(view -> {
-            String url = "https://www.youtube.com/";
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(url));
-            startActivity(intent);
-        });
+        // Set adapter untuk RecyclerView
+        recyclerView.setAdapter(materiAdapter);
 
-        gridKebun4.setOnClickListener(view -> {
-            String url = "https://www.youtube.com/";
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(url));
-            startActivity(intent);
-        });
+        // Ambil data materi dari API
+        fetchMateriData();
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomView);
-        bottomNavigationView.setSelectedItemId(R.id.nav_home); // Optional, to set a default selection
+        setupImageSlider();
+        setupUserProfile();
+        setupBottomNavigation();
+    }
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.nav_home) {
-                return true;
-            } else if (item.getItemId() == R.id.nav_watering) {
-                startActivity(new Intent(Dashboard.this, Watering.class));
-                finish();
-                overridePendingTransition(0, 0);
-                return true;
-            } else if (item.getItemId() == R.id.nav_settings) {
-                startActivity(new Intent(Dashboard.this, Setting.class));
-                finish();
-                overridePendingTransition(0, 0);
-                return true;
-            }
-            return false;
-        });
-
+    private void setupImageSlider() {
         viewPage = findViewById(R.id.viewpager);
         LinearLayout slideDot = findViewById(R.id.slider);
-
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
         params.setMargins(8, 0, 8, 0);
 
+        // Menambahkan gambar untuk slider
         ArrayList<ImageItem> imageList = new ArrayList<>();
-        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.stevia));
-        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.tehdia));
-        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.daun_bg));
-        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.stevia));
-        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.tehdia));
-        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.daun_bg));
+        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.promosi1, "https://hydrativa.vercel.app"));
+        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.promosi2, "https://hydrativa.vercel.app"));
+        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.promosi3, "https://hydrativa.vercel.app"));
 
         ImageAdapter imageAdapter = new ImageAdapter();
         viewPage.setAdapter(imageAdapter);
         imageAdapter.submitList(imageList);
 
+        // Setup dot indicators
         dotsImage = new ImageView[imageList.size()];
         for (int i = 0; i < imageList.size(); i++) {
             dotsImage[i] = new ImageView(this);
@@ -135,22 +103,20 @@ public class Dashboard extends AppCompatActivity {
         }
         dotsImage[0].setImageResource(R.drawable.active_dot);
 
-        pageChangeListener = new ViewPager2.OnPageChangeCallback() {
+        // Mengatur callback untuk perubahan halaman
+        viewPage.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 for (int i = 0; i < dotsImage.length; i++) {
-                    if (i == position) {
-                        dotsImage[i].setImageResource(R.drawable.active_dot);
-                    } else {
-                        dotsImage[i].setImageResource(R.drawable.non_active_dot);
-                    }
+                    dotsImage[i].setImageResource(
+                            i == position ? R.drawable.active_dot : R.drawable.non_active_dot
+                    );
                 }
             }
-        };
+        });
 
-        viewPage.registerOnPageChangeCallback(pageChangeListener);
-
+        // Menambahkan auto-scroll untuk gambar slider
         handler = new Handler();
         Runnable runnable = new Runnable() {
             @Override
@@ -162,15 +128,81 @@ public class Dashboard extends AppCompatActivity {
                 handler.postDelayed(this, 3000);
             }
         };
-
         handler.postDelayed(runnable, 3000);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (viewPage != null) {
-            viewPage.unregisterOnPageChangeCallback(pageChangeListener);
-        }
+    private void setupUserProfile() {
+        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String name = sharedPreferences.getString("name", "User");
+
+        TextView nameText = findViewById(R.id.usernameText);
+        nameText.setText(name);
+
+        ProfileService profileService = RetrofitClient.getRetrofitInstance(this).create(ProfileService.class);
+        Call<User> call = profileService.getProfile();
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    User userProfile = response.body();
+                    String imageUrl = userProfile.getGambar();
+                    ImageView profileImageView = findViewById(R.id.circleImage);
+
+                    Glide.with(Dashboard.this)
+                            .load(imageUrl)
+                            .circleCrop()
+                            .error(R.drawable.tehdia)
+                            .into(profileImageView);
+                } else {
+                    Toast.makeText(Dashboard.this, "Gagal memuat profil pengguna", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(Dashboard.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setupBottomNavigation() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
+        bottomNavigationView.setSelectedItemId(R.id.nav_home);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(view -> {
+            startActivity(new Intent(Dashboard.this, Watering.class));
+        });
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.nav_home) {
+                return true;
+            } else if (item.getItemId() == R.id.nav_settings) {
+                startActivity(new Intent(Dashboard.this, Setting.class));
+                return true;
+            }
+            return false;
+        });
+    }
+
+    private void fetchMateriData() {
+        MateriService materiService = RetrofitClient.getRetrofitInstance(this).create(MateriService.class);
+        Call<List<MateriResponse>> call = materiService.getMateriShow();
+
+        call.enqueue(new Callback<List<MateriResponse>>() {
+            @Override
+            public void onResponse(Call<List<MateriResponse>> call, Response<List<MateriResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    materiAdapter.updateList(response.body());
+                } else {
+                    Toast.makeText(Dashboard.this, "Gagal memuat data materi", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<MateriResponse>> call, Throwable t) {
+                Toast.makeText(Dashboard.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

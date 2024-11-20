@@ -1,6 +1,8 @@
 package com.example.hydrativa;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -19,6 +21,7 @@ public class Splash extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_splash);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -28,11 +31,20 @@ public class Splash extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(Splash.this, getstarted.class);
-                startActivity(i);
+                SharedPreferences sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+                String authToken = sharedPref.getString("auth_token", null);
+
+                if (authToken != null) {
+                    // Auth token exists, navigate to Dashboard
+                    Intent i = new Intent(Splash.this, Dashboard.class);
+                    startActivity(i);
+                } else {
+                    // No auth token, navigate to Get Started screen
+                    Intent i = new Intent(Splash.this, getstarted.class);
+                    startActivity(i);
+                }
                 finish();
             }
-          },
-        t );
+        }, t);
     }
 }
