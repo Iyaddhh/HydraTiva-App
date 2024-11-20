@@ -174,12 +174,9 @@ public class Dashboard extends AppCompatActivity {
         params.setMargins(8, 0, 8, 0);
 
         ArrayList<ImageItem> imageList = new ArrayList<>();
-        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.stevia, "https://hydrativa.vercel.app"));
-        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.tehdia, "https://hydrativa.vercel.app"));
-        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.daun_bg, "https://hydrativa.vercel.app"));
-        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.stevia, "https://hydrativa.vercel.app"));
-        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.tehdia, "https://hydrativa.vercel.app"));
-        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.daun_bg, "https://hydrativa.vercel.app"));
+        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.slider1img, "https://hydrativa.vercel.app"));
+        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.slider2img, "https://hydrativa.vercel.app"));
+        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.slider3img, "https://hydrativa.vercel.app"));
 
         ImageAdapter imageAdapter = new ImageAdapter();
         viewPage.setAdapter(imageAdapter);
