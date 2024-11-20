@@ -114,18 +114,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginStart="40dp" />
-
-                <!-- TextView for Selengkapnya -->
-
-                <!-- ImageView for Arrow Icon -->
-                <ImageView
-                    android:id="@+id/arrow"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/arrow_right"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBaseline_toBaselineOf="@id/market"
-                    android:layout_marginEnd="30dp" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- Slider Layout -->
@@ -165,18 +153,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginStart="40dp" />
-
-                <!-- TextView for Selengkapnya -->
-
-                <!-- ImageView for Arrow Icon -->
-                <ImageView
-                    android:id="@+id/arrow2"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/arrow_right"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBaseline_toBaselineOf="@id/cari"
-                    android:layout_marginEnd="30dp" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- GridLayout -->

@@ -11,7 +11,4 @@ import retrofit2.http.POST;
 public interface LoginService {
     @POST("login")
     Call<LoginResponse> loginUser(@Body LoginRequest request);
-
-    @GET("logout")
-    Call<Void> logout();
 }

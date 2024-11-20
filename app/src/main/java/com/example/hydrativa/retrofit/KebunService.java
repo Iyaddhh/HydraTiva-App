@@ -52,10 +52,4 @@ public interface KebunService {
     @GET("kebun/histori/{id}")
     Call<List<HistoryPenyiraman>> getHistori(@Path("id") int kebunId);
 
-
-    @POST("login")
-    Call<LoginResponse> loginUser(@Body LoginRequest request);
-
-    @GET("logout")
-    Call<Void> logout();
 }

@@ -125,6 +125,7 @@ public class Dashboard extends AppCompatActivity {
             }
             return false;
         });
+        
         fab.setOnClickListener(view -> {
             startActivity(new Intent(Dashboard.this, Watering.class));
             overridePendingTransition(0, 0);

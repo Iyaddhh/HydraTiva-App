@@ -34,7 +34,7 @@ public class Forgot extends AppCompatActivity {
 
         send_email.setOnClickListener(v -> sendResetLink());
 
-        ImageView backToLogin = findViewById(R.id.balikkelogin);
+        backToLogin = findViewById(R.id.balikkelogin);
         backToLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

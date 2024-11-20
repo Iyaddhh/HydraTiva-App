@@ -190,6 +190,7 @@
             android:layout_height="wrap_content"
             app:menu="@menu/bottom_nav_menu"
             app:itemIconSize="35dp"
+            app:itemActiveIndicatorStyle="@null"
             app:itemIconTint="@color/bottom_nav_color"
             android:background="@android:color/transparent"
             android:elevation="8dp"

@@ -21,6 +21,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ForumDiskusi"
+            android:exported="false" />
+        <activity
+            android:name=".ForumDiskusiList"
+            android:exported="false" />
+        <activity
+            android:name=".ForumDiskusiCard"
+            android:exported="false" />
+        <activity
             android:name=".FotgotInLogin"
             android:exported="false" />
         <activity
