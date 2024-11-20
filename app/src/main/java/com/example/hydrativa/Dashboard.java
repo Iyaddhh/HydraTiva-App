@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -45,25 +46,32 @@ public class Dashboard extends AppCompatActivity {
     private int currentPage = 0;
     private RecyclerView recyclerView;
     private MateriAdapter materiAdapter;
+    private List<MateriResponse> materiList;
+    private MateriService materiService;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        // Setup ViewPager2 untuk gambar slider
-        setupImageSlider();
-
-        // Setup RecyclerView untuk menampilkan materi
+        // Inisialisasi RecyclerView
         recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        materiAdapter = new MateriAdapter(new ArrayList<>(), this, RetrofitClient.getRetrofitInstance(Dashboard.this).create(MateriService.class));
+
+        // Menentukan GridLayoutManager dengan jumlah kolom (2 kolom)
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        recyclerView.setLayoutManager(gridLayoutManager);
+
+        // Inisialisasi MateriAdapter dengan daftar materi
+        materiList = new ArrayList<>();  // Pastikan materiList diinisialisasi
+        materiAdapter = new MateriAdapter(materiList, this, materiService);
+
+        // Set adapter untuk RecyclerView
         recyclerView.setAdapter(materiAdapter);
 
+        // Ambil data materi dari API
         fetchMateriData();
 
+        setupImageSlider();
         setupUserProfile();
-
         setupBottomNavigation();
     }
 
@@ -78,8 +86,9 @@ public class Dashboard extends AppCompatActivity {
 
         // Menambahkan gambar untuk slider
         ArrayList<ImageItem> imageList = new ArrayList<>();
-        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.stevia, "https://hydrativa.vercel.app"));
-        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.tehdia, "https://hydrativa.vercel.app"));
+        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.promosi1, "https://hydrativa.vercel.app"));
+        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.promosi2, "https://hydrativa.vercel.app"));
+        imageList.add(new ImageItem(UUID.randomUUID().toString(), R.drawable.promosi3, "https://hydrativa.vercel.app"));
 
         ImageAdapter imageAdapter = new ImageAdapter();
         viewPage.setAdapter(imageAdapter);
@@ -139,7 +148,6 @@ public class Dashboard extends AppCompatActivity {
                     String imageUrl = userProfile.getGambar();
                     ImageView profileImageView = findViewById(R.id.circleImage);
 
-                    // Memuat gambar profil pengguna menggunakan Glide
                     Glide.with(Dashboard.this)
                             .load(imageUrl)
                             .circleCrop()

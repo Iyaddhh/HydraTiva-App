@@ -42,6 +42,7 @@ public class MateriAdapter extends RecyclerView.Adapter<MateriAdapter.MateriView
     @NonNull
     @Override
     public MateriViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Inflate the item layout, assuming you are using a grid
         View view = LayoutInflater.from(context).inflate(R.layout.activity_materi_card, parent, false);
         return new MateriViewHolder(view);
     }
@@ -50,19 +51,22 @@ public class MateriAdapter extends RecyclerView.Adapter<MateriAdapter.MateriView
     public void onBindViewHolder(@NonNull MateriViewHolder holder, int position) {
         MateriResponse materi = materiList.get(position);
 
+        // Set the text for the title and description
         holder.judul.setText(materi.getJudul());
         holder.deskripsi.setText(materi.getDeskripsi());
 
+        // Load image using Glide
         Glide.with(context)
                 .load(materi.getGambar())
                 .placeholder(R.drawable.load_image)
                 .into(holder.gambar);
 
-        // Menambahkan pengendalian klik pada item
+        // Set the onClickListener for the grid item
         holder.gridKonten.setOnClickListener(v -> {
+            // Pass the materi_id as an intent extra
             Intent intent = new Intent(context, Materi.class);
             intent.putExtra("materi_id", materi.getId());
-            Log.d(TAG, "onBindViewHolder: " + materi.getId()); // Menggunakan getId() pada objek materi
+            Log.d(TAG, "onBindViewHolder: Materi ID " + materi.getId());
             context.startActivity(intent);
         });
     }
@@ -72,18 +76,18 @@ public class MateriAdapter extends RecyclerView.Adapter<MateriAdapter.MateriView
         return materiList.size();
     }
 
-    // ViewHolder class
+    // ViewHolder class to hold the item views
     public static class MateriViewHolder extends RecyclerView.ViewHolder {
         TextView judul, deskripsi;
         ImageView gambar;
-        View gridKonten; // Menambahkan deklarasi untuk gridKonten
+        View gridKonten; // The clickable view for each grid item
 
         public MateriViewHolder(@NonNull View itemView) {
             super(itemView);
             judul = itemView.findViewById(R.id.judulMateri);
             deskripsi = itemView.findViewById(R.id.isiMateri);
             gambar = itemView.findViewById(R.id.imageMateri);
-            gridKonten = itemView.findViewById(R.id.gridKonten); // Inisialisasi gridKonten
+            gridKonten = itemView.findViewById(R.id.gridKonten); // Initialize the clickable grid item
         }
     }
 }
